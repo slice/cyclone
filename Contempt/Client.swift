@@ -197,6 +197,7 @@ extension Client {
 
   /// `IDENTIFY` to the Discord gateway.
   public func identify() {
+    // Last update: 2021-11-11
     let identifyPayload: JSON = .object(.init([
       "d": .object(.init([
         "capabilities": .number(String(self.disguise.capabilities)),

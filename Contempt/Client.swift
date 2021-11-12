@@ -189,7 +189,7 @@ extension Client {
       self.heartbeat()
     }
     self.heartbeatTimer.schedule(
-      deadline: .now(),
+      deadline: .now().advanced(by: interval),
       repeating: interval
     )
     self.heartbeatTimer.resume()

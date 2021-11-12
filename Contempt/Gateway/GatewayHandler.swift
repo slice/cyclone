@@ -50,6 +50,8 @@ class GatewayHandler {
       self.client.beginHeartbeating(every: .milliseconds(heartbeatInterval))
       self.log.info("IDENTIFYing...")
       self.client.identify()
+    case .heartbeat:
+      self.client.heartbeat()
     default:
       break
     }

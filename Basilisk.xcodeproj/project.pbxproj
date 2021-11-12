@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		121B6FBB273E32D6000DD150 /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = 121B6FBA273E32D5000DD150 /* ArgumentParser */; };
 		121B6FBD273E3300000DD150 /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = 121B6FBC273E3300000DD150 /* ArgumentParser */; };
-		12897BF2273E25C700403E5B /* Ingestion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12897BF1273E25C700403E5B /* Ingestion.swift */; };
+		12897BF2273E25C700403E5B /* GatewayHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12897BF1273E25C700403E5B /* GatewayHandler.swift */; };
 		12897BF4273E2BF400403E5B /* Opcode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12897BF3273E2BF400403E5B /* Opcode.swift */; };
 		128C7673273DFD0E008FD585 /* Client.swift in Sources */ = {isa = PBXBuildFile; fileRef = 128C7672273DFD0E008FD585 /* Client.swift */; };
 		128C7675273DFF73008FD585 /* Branch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 128C7674273DFF73008FD585 /* Branch.swift */; };
@@ -21,6 +21,7 @@
 		128C768C273E10DD008FD585 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 128C768B273E10DD008FD585 /* main.swift */; };
 		128C7695273E1171008FD585 /* Contempt.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 12F4FDB3273DFCD000B6AE64 /* Contempt.framework */; };
 		128C7696273E1171008FD585 /* Contempt.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 12F4FDB3273DFCD000B6AE64 /* Contempt.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		129AF795273E653100B3851C /* GatewayPacket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 129AF794273E653100B3851C /* GatewayPacket.swift */; };
 		12C02E38273E177A00C34B18 /* NWWebSocket in Frameworks */ = {isa = PBXBuildFile; productRef = 12C02E37273E177A00C34B18 /* NWWebSocket */; };
 		12F4FD84273DFC1900B6AE64 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12F4FD83273DFC1900B6AE64 /* AppDelegate.swift */; };
 		12F4FD86273DFC1900B6AE64 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12F4FD85273DFC1900B6AE64 /* ViewController.swift */; };
@@ -117,13 +118,14 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		12897BF1273E25C700403E5B /* Ingestion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ingestion.swift; sourceTree = "<group>"; };
+		12897BF1273E25C700403E5B /* GatewayHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GatewayHandler.swift; sourceTree = "<group>"; };
 		12897BF3273E2BF400403E5B /* Opcode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Opcode.swift; sourceTree = "<group>"; };
 		128C7672273DFD0E008FD585 /* Client.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Client.swift; sourceTree = "<group>"; };
 		128C7674273DFF73008FD585 /* Branch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Branch.swift; sourceTree = "<group>"; };
 		128C7676273E04D2008FD585 /* Disguise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Disguise.swift; sourceTree = "<group>"; };
 		128C7689273E10DD008FD585 /* Glare */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Glare; sourceTree = BUILT_PRODUCTS_DIR; };
 		128C768B273E10DD008FD585 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		129AF794273E653100B3851C /* GatewayPacket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GatewayPacket.swift; sourceTree = "<group>"; };
 		12F4FD80273DFC1900B6AE64 /* Basilisk.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Basilisk.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		12F4FD83273DFC1900B6AE64 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		12F4FD85273DFC1900B6AE64 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -213,6 +215,15 @@
 			path = Glare;
 			sourceTree = "<group>";
 		};
+		129AF793273E62BC00B3851C /* Gateway */ = {
+			isa = PBXGroup;
+			children = (
+				12897BF1273E25C700403E5B /* GatewayHandler.swift */,
+				129AF794273E653100B3851C /* GatewayPacket.swift */,
+			);
+			path = Gateway;
+			sourceTree = "<group>";
+		};
 		12F4FD77273DFC1900B6AE64 = {
 			isa = PBXGroup;
 			children = (
@@ -272,12 +283,12 @@
 		12F4FDB4273DFCD000B6AE64 /* Contempt */ = {
 			isa = PBXGroup;
 			children = (
+				129AF793273E62BC00B3851C /* Gateway */,
 				12F4FDB5273DFCD000B6AE64 /* Contempt.h */,
 				12F4FDB6273DFCD000B6AE64 /* Contempt.docc */,
 				128C7672273DFD0E008FD585 /* Client.swift */,
 				128C7674273DFF73008FD585 /* Branch.swift */,
 				128C7676273E04D2008FD585 /* Disguise.swift */,
-				12897BF1273E25C700403E5B /* Ingestion.swift */,
 				12897BF3273E2BF400403E5B /* Opcode.swift */,
 			);
 			path = Contempt;
@@ -572,7 +583,8 @@
 			files = (
 				128C7673273DFD0E008FD585 /* Client.swift in Sources */,
 				128C7675273DFF73008FD585 /* Branch.swift in Sources */,
-				12897BF2273E25C700403E5B /* Ingestion.swift in Sources */,
+				12897BF2273E25C700403E5B /* GatewayHandler.swift in Sources */,
+				129AF795273E653100B3851C /* GatewayPacket.swift in Sources */,
 				12897BF4273E2BF400403E5B /* Opcode.swift in Sources */,
 				128C7677273E04D2008FD585 /* Disguise.swift in Sources */,
 				12F4FDB7273DFCD000B6AE64 /* Contempt.docc in Sources */,

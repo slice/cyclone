@@ -19,16 +19,18 @@ public class Client {
   /// The disguise to use when communicating with Discord.
   var disguise: Disguise
 
-  /// The WebSocket connection to the Discord Gateway.
+  /// The WebSocket connection to the Discord gateway.
   var gatewaySocket: NWWebSocket?
 
   private var log: Logger
 
-  /// The dispatch queue to handle Discord Gateway messages.
+  /// The dispatch queue for handling Discord gateway messages.
   var dispatchQueue = DispatchQueue(label: "contempt-gateway")
+
+  /// The timer used to manage periodic heartbeating.
   var heartbeatTimer: DispatchSourceTimer!
 
-  var ingestion: Ingestion!
+  var gatewayHandler: GatewayHandler!
   var sequence: Int?
 
   static let defaultDisguise = Disguise(
@@ -62,7 +64,7 @@ public class Client {
     self.disguise = Self.defaultDisguise
 
     self.log = Logger(subsystem: "zone.slice.Contempt", category: "client")
-    self.ingestion = Ingestion(client: self)
+    self.gatewayHandler = GatewayHandler(client: self)
   }
 
   /// Connect to Discord.
@@ -70,6 +72,7 @@ public class Client {
     let gatewayURL = URL(string: "wss://gateway.discord.gg/?encoding=json&v=9")!
 
     let options = NWWebSocket.defaultOptions
+
     // Last update: 2021-11-11
     options.setAdditionalHeaders([
       ("Accept-Encoding", "gzip, deflate, br"),
@@ -92,14 +95,17 @@ public class Client {
 
     self.log.info("[ws] starting connection to \(gatewayURL)...")
     socket.connect()
+
     self.gatewaySocket = socket
   }
 
   /// Disconnect from Discord.
-  ///
-  /// If the client isn't connected, nothing happens.
   public func disconnect() {
-    self.gatewaySocket?.disconnect()
+    guard let gatewaySocket = self.gatewaySocket else {
+      preconditionFailure("already disconnected")
+    }
+
+    gatewaySocket.disconnect()
   }
 }
 
@@ -134,7 +140,7 @@ extension Client: WebSocketConnectionDelegate {
     string text: String
   ) {
     self.log.info("[ws] -> \(text)")
-    self.ingestion.handleGatewayMessage(text: text)
+    self.gatewayHandler.handlePacket(ofJSON: text)
   }
 
   public func webSocketDidReceiveMessage(
@@ -152,6 +158,7 @@ extension Client: WebSocketConnectionDelegate {
 // MARK: Gateway Actions
 
 extension Client {
+  /// Encodes a JSON payload and sends it through the gateway socket.
   func send(json: JSON) {
     guard let socket = self.gatewaySocket else {
       preconditionFailure("cannot send JSON when not connected")
@@ -166,25 +173,30 @@ extension Client {
     socket.send(data: data)
   }
 
-  func beginHeartbeating(interval: DispatchTimeInterval) {
+  /// Sends a single heartbeat to the Discord gateway.
+  public func heartbeat() {
+    self.send(json: .object(.init([
+      "op": .number(String(Opcode.heartbeat.rawValue)),
+      "d": .number(String(self.sequence ?? 0)),
+    ])))
+  }
+
+  func beginHeartbeating(every interval: DispatchTimeInterval) {
     self.heartbeatTimer = DispatchSource
       .makeTimerSource(queue: self.dispatchQueue)
     self.heartbeatTimer.setEventHandler { [weak self] in
       guard let self = self else { return }
-      self.send(json: .object(.init([
-        "op": .number(String(Opcode.heartbeat.rawValue)),
-        "d": .number(String(self.sequence ?? 0)),
-      ])))
+      self.heartbeat()
     }
     self.heartbeatTimer.schedule(
       deadline: .now(),
-      repeating: interval,
-      leeway: .nanoseconds(0)
+      repeating: interval
     )
     self.heartbeatTimer.resume()
   }
 
-  func identify() {
+  /// `IDENTIFY` to the Discord gateway.
+  public func identify() {
     let identifyPayload: JSON = .object(.init([
       "d": .object(.init([
         "capabilities": .number(String(self.disguise.capabilities)),

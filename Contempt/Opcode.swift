@@ -1,4 +1,4 @@
-/// Discord Gateway opcodes.
+/// Discord gateway opcodes.
 enum Opcode: Int {
   case dispatch = 0
   case heartbeat = 1

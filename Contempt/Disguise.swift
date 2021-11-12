@@ -1,8 +1,8 @@
 import FineJSON
 import RichJSONParser
 
-/// A collection of constants that real Discord clients send to Discord when
-/// `IDENTIFY`ing to the Gateway, and in all requests.
+/// A collection of identifying values and metadata that real Discord clients
+/// send to Discord while `IDENTIFY`ing, and as part of all HTTP requests.
 public struct Disguise: Codable {
   let userAgent: String
   let capabilities: Int

@@ -1,17 +1,22 @@
 import Foundation
 import os
 
-/// A structure that handles incoming Discord gateway packets for a ``Client``.
-class GatewayHandler {
-  unowned var client: Client
+/// A structure that handles incoming Discord gateway packets.
+public class GatewayHandler {
   private var log: Logger
 
-  init(client: Client) {
-    self.client = client
+  /// The latest sequence number received from the gateway.
+  private(set) var sequence: Int?
+
+  public var delegate: GatewayHandlerDelegate?
+
+  init() {
     self.log = Logger(subsystem: "zone.slice.Contempt", category: "ingestion")
   }
 
-  private func handleDispatchPacket(_: GatewayPacket<Any>) {}
+  private func handleDispatchPacket(_ packet: GatewayPacket<Any>) {
+    self.delegate?.gatewaySentDispatchPacket(packet)
+  }
 
   /// Handle a single packet encoded in JSON from the Discord gateway.
   func handlePacket(ofJSON packet: String) {
@@ -31,7 +36,8 @@ class GatewayHandler {
       )
 
     if let sequence = sequence {
-      self.client.sequence = sequence
+      self.sequence = sequence
+      self.delegate?.gatewaySentNewSequenceNumber(sequence)
     }
 
     switch opcode {
@@ -45,13 +51,10 @@ class GatewayHandler {
       self.handleDispatchPacket(packet)
     case .hello:
       let heartbeatInterval = data?["heartbeat_interval"] as! Int
-      self.log.info("HELLO")
-      self.log.info("beginning to <3beat (interval: \(heartbeatInterval)ms)")
-      self.client.beginHeartbeating(every: .milliseconds(heartbeatInterval))
-      self.log.info("IDENTIFYing...")
-      self.client.identify()
+      self.delegate?
+        .gatewaySentHello(heartbeatInterval: Double(heartbeatInterval) / 1000.0)
     case .heartbeat:
-      self.client.heartbeat()
+      self.delegate?.gatewayRequestedHeartbeat()
     default:
       break
     }

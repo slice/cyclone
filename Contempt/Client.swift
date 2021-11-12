@@ -64,7 +64,8 @@ public class Client {
     self.disguise = Self.defaultDisguise
 
     self.log = Logger(subsystem: "zone.slice.Contempt", category: "client")
-    self.gatewayHandler = GatewayHandler(client: self)
+    self.gatewayHandler = GatewayHandler()
+    self.gatewayHandler.delegate = self
   }
 
   /// Connect to Discord.
@@ -106,6 +107,28 @@ public class Client {
     }
 
     gatewaySocket.disconnect()
+  }
+}
+
+// MARK: GatewayHandlerDelegate
+
+extension Client: GatewayHandlerDelegate {
+  public func gatewayRequestedHeartbeat() {
+    self.heartbeat()
+  }
+
+  public func gatewaySentNewSequenceNumber(_ sequence: Int) {
+    // The sequence number is tracked in the `GatewayHandler` itself.
+  }
+
+  public func gatewaySentHello(heartbeatInterval: TimeInterval) {
+    self.log.info("hello! <3beating every \(heartbeatInterval)s")
+    let heartbeatIntervalMilliseconds = Int(heartbeatInterval * 1000.0)
+    self.beginHeartbeating(every: .milliseconds(heartbeatIntervalMilliseconds))
+    self.identify()
+  }
+
+  public func gatewaySentDispatchPacket(_ packet: GatewayPacket<Any>) {
   }
 }
 

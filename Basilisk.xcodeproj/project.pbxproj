@@ -22,6 +22,7 @@
 		128C7695273E1171008FD585 /* Contempt.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 12F4FDB3273DFCD000B6AE64 /* Contempt.framework */; };
 		128C7696273E1171008FD585 /* Contempt.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 12F4FDB3273DFCD000B6AE64 /* Contempt.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		129AF795273E653100B3851C /* GatewayPacket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 129AF794273E653100B3851C /* GatewayPacket.swift */; };
+		129AF797273E6C8500B3851C /* GatewayHandlerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 129AF796273E6C8500B3851C /* GatewayHandlerDelegate.swift */; };
 		12C02E38273E177A00C34B18 /* NWWebSocket in Frameworks */ = {isa = PBXBuildFile; productRef = 12C02E37273E177A00C34B18 /* NWWebSocket */; };
 		12F4FD84273DFC1900B6AE64 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12F4FD83273DFC1900B6AE64 /* AppDelegate.swift */; };
 		12F4FD86273DFC1900B6AE64 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12F4FD85273DFC1900B6AE64 /* ViewController.swift */; };
@@ -126,6 +127,7 @@
 		128C7689273E10DD008FD585 /* Glare */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Glare; sourceTree = BUILT_PRODUCTS_DIR; };
 		128C768B273E10DD008FD585 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		129AF794273E653100B3851C /* GatewayPacket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GatewayPacket.swift; sourceTree = "<group>"; };
+		129AF796273E6C8500B3851C /* GatewayHandlerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GatewayHandlerDelegate.swift; sourceTree = "<group>"; };
 		12F4FD80273DFC1900B6AE64 /* Basilisk.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Basilisk.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		12F4FD83273DFC1900B6AE64 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		12F4FD85273DFC1900B6AE64 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -220,6 +222,7 @@
 			children = (
 				12897BF1273E25C700403E5B /* GatewayHandler.swift */,
 				129AF794273E653100B3851C /* GatewayPacket.swift */,
+				129AF796273E6C8500B3851C /* GatewayHandlerDelegate.swift */,
 			);
 			path = Gateway;
 			sourceTree = "<group>";
@@ -583,6 +586,7 @@
 			files = (
 				128C7673273DFD0E008FD585 /* Client.swift in Sources */,
 				128C7675273DFF73008FD585 /* Branch.swift in Sources */,
+				129AF797273E6C8500B3851C /* GatewayHandlerDelegate.swift in Sources */,
 				12897BF2273E25C700403E5B /* GatewayHandler.swift in Sources */,
 				129AF795273E653100B3851C /* GatewayPacket.swift in Sources */,
 				12897BF4273E2BF400403E5B /* Opcode.swift in Sources */,

@@ -1,7 +1,7 @@
 import Foundation
 
 /// A single packet from the Discord gateway.
-struct GatewayPacket<Data> {
+public struct GatewayPacket<Data> {
   /// The opcode for this packet (`HELLO`, `HEARTBEAT`, etc.)
   let op: Opcode
 

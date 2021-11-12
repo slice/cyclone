@@ -1,0 +1,43 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "FineJSON",
+        "repositoryURL": "https://github.com/omochi/FineJSON",
+        "state": {
+          "branch": null,
+          "revision": "05101709243cb66d80c92e645210a3b80cf4e17f",
+          "version": "1.14.0"
+        }
+      },
+      {
+        "package": "NWWebSocket",
+        "repositoryURL": "https://github.com/pusher/NWWebSocket",
+        "state": {
+          "branch": null,
+          "revision": "eed470bc3607bc4893046f461107ec463dbd1220",
+          "version": "0.5.2"
+        }
+      },
+      {
+        "package": "RichJSONParser",
+        "repositoryURL": "https://github.com/omochi/RichJSONParser",
+        "state": {
+          "branch": null,
+          "revision": "263e2ecfe88d0500fa99e4cbc8c948529d335534",
+          "version": "3.0.0"
+        }
+      },
+      {
+        "package": "swift-argument-parser",
+        "repositoryURL": "https://github.com/apple/swift-argument-parser.git",
+        "state": {
+          "branch": null,
+          "revision": "e1465042f195f374b94f915ba8ca49de24300a0d",
+          "version": "1.0.2"
+        }
+      }
+    ]
+  },
+  "version": 1
+}

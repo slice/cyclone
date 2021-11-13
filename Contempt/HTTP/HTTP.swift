@@ -13,7 +13,7 @@ public class HTTP {
 
   private var session: URLSession!
   private var cookieStorage: HTTPCookieStorage! {
-    self.session.configuration.httpCookieStorage
+    session.configuration.httpCookieStorage
   }
 
   init(baseURL: URL, token: String, disguise: Disguise) {
@@ -42,7 +42,10 @@ public class HTTP {
   public func requestLandingPage() async throws {
     var request = URLRequest(url: landingPageURL)
     request.httpMethod = "GET"
-    let _ = try await self.request(request, withSpoofedHeadersOfRequest: .navigation)
+    _ = try await self.request(
+      request,
+      withSpoofedHeadersOfRequestType: .navigation
+    )
 
     for cookie in cookieStorage.cookies ?? [] {
       log.info("initial cookie: \(cookie.name)=\(cookie.value)")
@@ -91,7 +94,7 @@ public class HTTP {
 
   public func request(
     _ request: URLRequest,
-    withSpoofedHeadersOfRequest type: SpoofedRequestType
+    withSpoofedHeadersOfRequestType type: SpoofedRequestType
   ) async throws -> Data {
     var request = request
 

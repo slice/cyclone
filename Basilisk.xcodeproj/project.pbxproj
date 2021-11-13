@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		121B6FBB273E32D6000DD150 /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = 121B6FBA273E32D5000DD150 /* ArgumentParser */; };
 		121B6FBD273E3300000DD150 /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = 121B6FBC273E3300000DD150 /* ArgumentParser */; };
+		12552C9C273F3DDA007D92B1 /* HTTP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12552C9B273F3DDA007D92B1 /* HTTP.swift */; };
+		12552C9E273F3FE2007D92B1 /* SpoofedRequestType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12552C9D273F3FE2007D92B1 /* SpoofedRequestType.swift */; };
 		12897BF2273E25C700403E5B /* GatewayConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12897BF1273E25C700403E5B /* GatewayConnection.swift */; };
 		12897BF4273E2BF400403E5B /* Opcode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12897BF3273E2BF400403E5B /* Opcode.swift */; };
 		128C7673273DFD0E008FD585 /* Client.swift in Sources */ = {isa = PBXBuildFile; fileRef = 128C7672273DFD0E008FD585 /* Client.swift */; };
@@ -119,6 +121,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		12552C9B273F3DDA007D92B1 /* HTTP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTP.swift; sourceTree = "<group>"; };
+		12552C9D273F3FE2007D92B1 /* SpoofedRequestType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpoofedRequestType.swift; sourceTree = "<group>"; };
 		12897BF1273E25C700403E5B /* GatewayConnection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GatewayConnection.swift; sourceTree = "<group>"; };
 		12897BF3273E2BF400403E5B /* Opcode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Opcode.swift; sourceTree = "<group>"; };
 		128C7672273DFD0E008FD585 /* Client.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Client.swift; sourceTree = "<group>"; };
@@ -202,6 +206,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		12552C9A273F3DD4007D92B1 /* HTTP */ = {
+			isa = PBXGroup;
+			children = (
+				12552C9B273F3DDA007D92B1 /* HTTP.swift */,
+				12552C9D273F3FE2007D92B1 /* SpoofedRequestType.swift */,
+			);
+			path = HTTP;
+			sourceTree = "<group>";
+		};
 		128C767B273E0A5C008FD585 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -286,6 +299,7 @@
 		12F4FDB4273DFCD000B6AE64 /* Contempt */ = {
 			isa = PBXGroup;
 			children = (
+				12552C9A273F3DD4007D92B1 /* HTTP */,
 				129AF793273E62BC00B3851C /* Gateway */,
 				12F4FDB5273DFCD000B6AE64 /* Contempt.h */,
 				12F4FDB6273DFCD000B6AE64 /* Contempt.docc */,
@@ -584,11 +598,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				12552C9C273F3DDA007D92B1 /* HTTP.swift in Sources */,
 				128C7673273DFD0E008FD585 /* Client.swift in Sources */,
 				128C7675273DFF73008FD585 /* Branch.swift in Sources */,
 				129AF797273E6C8500B3851C /* GatewayConnectionDelegate.swift in Sources */,
 				12897BF2273E25C700403E5B /* GatewayConnection.swift in Sources */,
 				129AF795273E653100B3851C /* GatewayPacket.swift in Sources */,
+				12552C9E273F3FE2007D92B1 /* SpoofedRequestType.swift in Sources */,
 				12897BF4273E2BF400403E5B /* Opcode.swift in Sources */,
 				128C7677273E04D2008FD585 /* Disguise.swift in Sources */,
 				12F4FDB7273DFCD000B6AE64 /* Contempt.docc in Sources */,

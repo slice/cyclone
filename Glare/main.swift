@@ -1,5 +1,6 @@
 import ArgumentParser
 import Contempt
+import os
 
 struct Chat: ParsableCommand {
   @Option(
@@ -10,7 +11,14 @@ struct Chat: ParsableCommand {
 
   mutating func run() throws {
     let client = Client(branch: .canary, token: token)
-    client.connect()
+    let log = Logger(subsystem: "zone.slice.Glare", category: "glare")
+
+    Task {
+      try! await client.http!.requestLandingPage()
+      log.info("*** requested landing page, connecting to gateway now")
+      client.connect()
+    }
+
     dispatchMain()
   }
 }

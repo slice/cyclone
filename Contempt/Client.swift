@@ -21,7 +21,11 @@ public class Client {
 
   private var log: Logger
 
-  var gatewayConnection: GatewayConnection!
+  /// The connection to the Discord gateway.
+  public var gatewayConnection: GatewayConnection!
+
+  /// The Discord API HTTP client.
+  public var http: HTTP!
 
   static let defaultDisguise = Disguise(
     userAgent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) discord/0.0.278 Chrome/91.0.4472.164 Electron/13.4.0 Safari/537.36",
@@ -59,6 +63,8 @@ public class Client {
       disguise: disguise
     )
     gatewayConnection.delegate = self
+
+    http = HTTP(baseURL: endpoint, token: token, disguise: disguise)
   }
 
   /// Connect to the Discord gateway.

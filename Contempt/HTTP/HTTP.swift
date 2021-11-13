@@ -113,6 +113,11 @@ public class HTTP {
       .info(
         "-> HTTP \(httpResponse.statusCode), \(httpResponse.expectedContentLength) byte(s)"
       )
+
+    if let string = String(data: data, encoding: .utf8) {
+      log.info("-> \(string)")
+    }
+
     return data
   }
 }

@@ -77,6 +77,9 @@ public class HTTP {
         "Sec-Fetch-Site": "same-origin",
         "Accept": "*/*",
         "X-Super-Properties": superPropertiesData.base64EncodedString(),
+        // Apple discourages doing this, but WHY? We have literally no other
+        // choice.
+        "Authorization": token,
       ], uniquingKeysWith: { _, new in new })
     case .navigation:
       headers.merge([

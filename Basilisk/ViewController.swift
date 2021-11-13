@@ -9,7 +9,7 @@ class ViewController: NSViewController {
   @IBOutlet var consoleScrollView: NSScrollView!
 
   private var client: Client?
-  private var focusedChannelID: Int?
+  private var focusedChannelID: UInt64?
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -51,7 +51,7 @@ class ViewController: NSViewController {
       }
     case "focus":
       guard let channelIDString = arguments.first,
-            let channelID = Int(channelIDString)
+            let channelID = UInt64(channelIDString)
       else {
         appendToConsole(line: "[system] provide a channel id... maybe...")
         return
@@ -115,6 +115,21 @@ class ViewController: NSViewController {
 extension ViewController: ClientDelegate {
   nonisolated func clientReceivedDispatchPacket(_ packet: GatewayPacket<Any>) {
     Task {
+      if let eventName = packet.eventName, eventName == "MESSAGE_CREATE" {
+        let data = packet.data as! [String: Any]
+
+        let channelID = UInt64(data["channel_id"] as! String)
+        guard await channelID == focusedChannelID else { return }
+        let content = data["content"] as! String
+        let author = data["author"] as! [String: Any]
+        let username = author["username"] as! String
+        let discriminator = author["discriminator"] as! String
+
+        await self
+          .appendToConsole(line: "<\(username)#\(discriminator)> \(content)")
+        return
+      }
+
       await self
         .appendToConsole(line: "[discord] sent us a \(packet.eventName!)")
     }

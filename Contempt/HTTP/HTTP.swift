@@ -70,14 +70,13 @@ public class HTTP {
     switch type {
     case .xhr:
       let superPropertiesJSONString = disguise.superPropertiesJSONString()
-      let superPropertiesBase64 =
-        Data(base64Encoded: superPropertiesJSONString)!
+      let superPropertiesData = superPropertiesJSONString.data(using: .utf8)!
       headers.merge([
         "Sec-Fetch-Dest": "empty",
         "Sec-Fetch-Mode": "cors",
         "Sec-Fetch-Site": "same-origin",
         "Accept": "*/*",
-        "X-Super-Properties": superPropertiesBase64.base64EncodedString(),
+        "X-Super-Properties": superPropertiesData.base64EncodedString(),
       ], uniquingKeysWith: { _, new in new })
     case .navigation:
       headers.merge([

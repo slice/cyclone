@@ -50,7 +50,6 @@ public class GatewayConnection {
       ("Accept-Encoding", "gzip, deflate, br"),
       ("Accept-Language", disguise.systemLocale),
       ("Cache-Control", "no-cache"),
-      ("Connection", "Upgrade"),
       ("Host", gatewayURL.host!),
       ("Origin", endpoint.absoluteString),
       ("Pragma", "no-cache"),

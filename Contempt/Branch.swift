@@ -23,7 +23,7 @@ public enum Branch: String {
 extension Branch: Encodable {
   public func encode(to encoder: Encoder) throws {
     var container = encoder.singleValueContainer()
-    try container.encode(self.rawValue)
+    try container.encode(rawValue)
   }
 }
 

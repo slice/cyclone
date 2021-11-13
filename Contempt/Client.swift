@@ -51,27 +51,27 @@ public class Client {
     self.endpoint = endpoint
 
     // TODO(skip): Don't hardcode these. Scrape the necessary values at runtime.
-    self.disguise = Self.defaultDisguise
+    disguise = Self.defaultDisguise
 
-    self.log = Logger(subsystem: "zone.slice.Contempt", category: "client")
-    self.gatewayConnection = GatewayConnection(
+    log = Logger(subsystem: "zone.slice.Contempt", category: "client")
+    gatewayConnection = GatewayConnection(
       token: self.token,
-      disguise: self.disguise
+      disguise: disguise
     )
-    self.gatewayConnection.delegate = self
+    gatewayConnection.delegate = self
   }
 
   /// Connect to the Discord gateway.
   public func connect() {
-    self.gatewayConnection.connect(
+    gatewayConnection.connect(
       toGateway: URL(string: "wss://gateway.discord.gg/?encoding=json&v=9")!,
-      fromDiscordEndpoint: self.endpoint
+      fromDiscordEndpoint: endpoint
     )
   }
 
   /// Disconnect from the Discord gateway.
   public func disconnect() {
-    self.gatewayConnection.disconnect()
+    gatewayConnection.disconnect()
   }
 }
 
@@ -79,7 +79,7 @@ public class Client {
 
 extension Client: GatewayConnectionDelegate {
   public func gatewaySentHello(heartbeatInterval: TimeInterval) {
-    self.log.info("hello! <3beating every \(heartbeatInterval)s")
+    log.info("hello! <3beating every \(heartbeatInterval)s")
   }
 
   public func gatewaySentDispatchPacket(_: GatewayPacket<Any>) {}

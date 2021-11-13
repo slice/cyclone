@@ -18,14 +18,14 @@ public struct Disguise: Codable {
 
   func superPropertiesJSON() -> JSON {
     .object(.init([
-      "os": .string(self.os),
-      "browser": .string(self.browser),
-      "release_channel": .string(self.releaseChannel.rawValue),
-      "client_version": .string(self.clientVersion),
-      "os_version": .string(self.osVersion),
-      "os_arch": .string(self.osArch),
-      "system_locale": .string(self.systemLocale),
-      "client_build_number": .number(String(self.clientBuildNumber)),
+      "os": .string(os),
+      "browser": .string(browser),
+      "release_channel": .string(releaseChannel.rawValue),
+      "client_version": .string(clientVersion),
+      "os_version": .string(osVersion),
+      "os_arch": .string(osArch),
+      "system_locale": .string(systemLocale),
+      "client_build_number": .number(String(clientBuildNumber)),
       "client_event_source": .null,
     ]))
   }
@@ -37,7 +37,7 @@ public struct Disguise: Codable {
     jsonEncoder.optionalEncodingStrategy = .explicitNull
     jsonEncoder
       .jsonSerializeOptions = JSONSerializeOptions(isPrettyPrint: false)
-    guard let data = try? jsonEncoder.encode(self.superPropertiesJSON()) else {
+    guard let data = try? jsonEncoder.encode(superPropertiesJSON()) else {
       fatalError("failed to encode super properties dictionary as JSON")
     }
     guard let text = String(data: data, encoding: .utf8) else {

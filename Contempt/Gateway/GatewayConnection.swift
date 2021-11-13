@@ -35,7 +35,7 @@ public class GatewayConnection {
   init(token: String, disguise: Disguise) {
     self.token = token
     self.disguise = disguise
-    self.log = Logger(subsystem: "zone.slice.Contempt", category: "gateway")
+    log = Logger(subsystem: "zone.slice.Contempt", category: "gateway")
   }
 
   /// Connect to the Discord gateway.
@@ -48,25 +48,25 @@ public class GatewayConnection {
     // Last update: 2021-11-11
     options.setAdditionalHeaders([
       ("Accept-Encoding", "gzip, deflate, br"),
-      ("Accept-Language", self.disguise.systemLocale),
+      ("Accept-Language", disguise.systemLocale),
       ("Cache-Control", "no-cache"),
       ("Connection", "Upgrade"),
       ("Host", gatewayURL.host!),
       ("Origin", endpoint.absoluteString),
       ("Pragma", "no-cache"),
-      ("User-Agent", self.disguise.userAgent),
+      ("User-Agent", disguise.userAgent),
     ])
 
     let socket = NWWebSocket(
       url: gatewayURL,
       connectAutomatically: false,
       options: options,
-      connectionQueue: self.dispatchQueue
+      connectionQueue: dispatchQueue
     )
     self.socket = socket
     socket.delegate = self
 
-    self.log.info("connecting to \(gatewayURL)...")
+    log.info("connecting to \(gatewayURL)...")
 
     socket.connect()
   }
@@ -75,7 +75,7 @@ public class GatewayConnection {
   public func disconnect(withCloseCode closeCode: NWProtocolWebSocket
     .CloseCode = .protocolCode(.normalClosure))
   {
-    guard let socket = self.socket else {
+    guard let socket = socket else {
       preconditionFailure("already disconnected")
     }
 
@@ -84,7 +84,7 @@ public class GatewayConnection {
 
   /// Encodes a JSON payload and sends it through the gateway socket.
   public func send(json: JSON) {
-    guard let socket = self.socket else {
+    guard let socket = socket else {
       preconditionFailure("cannot send JSON when not connected")
     }
 
@@ -95,34 +95,34 @@ public class GatewayConnection {
       fatalError("failed to encode JSON data to send")
     }
 
-    self.log.info("<- \(String(data: data, encoding: .utf8)!)")
+    log.info("<- \(String(data: data, encoding: .utf8)!)")
     socket.send(data: data)
   }
 
   /// Sends a single heartbeat to the Discord gateway.
   public func heartbeat() {
-    self.send(json: .object(.init([
+    send(json: .object(.init([
       "op": .number(String(Opcode.heartbeat.rawValue)),
-      "d": .number(String(self.sequence ?? 0)),
+      "d": .number(String(sequence ?? 0)),
     ])))
   }
 
   /// Begin heartbeating at a fixed interval.
   func beginHeartbeating(every interval: DispatchTimeInterval) {
-    self.heartbeatTimer = DispatchSource
-      .makeTimerSource(queue: self.dispatchQueue)
+    heartbeatTimer = DispatchSource
+      .makeTimerSource(queue: dispatchQueue)
 
-    self.heartbeatTimer.setEventHandler { [weak self] in
+    heartbeatTimer.setEventHandler { [weak self] in
       guard let self = self else { return }
       self.heartbeat()
     }
 
-    self.heartbeatTimer.schedule(
+    heartbeatTimer.schedule(
       deadline: .now().advanced(by: interval),
       repeating: interval
     )
 
-    self.heartbeatTimer.resume()
+    heartbeatTimer.resume()
   }
 
   /// `IDENTIFY` to the Discord gateway.
@@ -130,7 +130,7 @@ public class GatewayConnection {
     // Last update: 2021-11-11
     let identifyPayload: JSON = .object(.init([
       "d": .object(.init([
-        "capabilities": .number(String(self.disguise.capabilities)),
+        "capabilities": .number(String(disguise.capabilities)),
         "client_state": .object(.init([
           "guild_hashes": .object(.init()),
           "highest_last_message_id": .string("0"),
@@ -146,12 +146,12 @@ public class GatewayConnection {
           "since": .number("0"),
           "status": .string("online"),
         ])),
-        "properties": self.disguise.superPropertiesJSON(),
-        "token": .string(self.token),
+        "properties": disguise.superPropertiesJSON(),
+        "token": .string(token),
       ])),
       "op": .number(String(Opcode.identify.rawValue)),
     ]))
-    self.send(json: identifyPayload)
+    send(json: identifyPayload)
   }
 }
 
@@ -176,9 +176,9 @@ extension GatewayConnection: WebSocketConnectionDelegate {
     }
 
     if let closeCodeValue = closeCodeValue {
-      self.log.info("disconnected (close code: \(closeCodeValue))")
+      log.info("disconnected (close code: \(closeCodeValue))")
     } else {
-      self.log.info("disconnected (unknown close code)")
+      log.info("disconnected (unknown close code)")
     }
   }
 
@@ -196,7 +196,7 @@ extension GatewayConnection: WebSocketConnectionDelegate {
     connection _: WebSocketConnection,
     error: NWError
   ) {
-    self.log
+    log
       .error(
         "errored: \(error.localizedDescription), \(error.debugDescription)"
       )
@@ -208,19 +208,19 @@ extension GatewayConnection: WebSocketConnectionDelegate {
     connection _: WebSocketConnection,
     string text: String
   ) {
-    self.log.info("-> \(text)")
-    self.handlePacket(ofJSON: text)
+    log.info("-> \(text)")
+    handlePacket(ofJSON: text)
   }
 
   public func webSocketDidReceiveMessage(
     connection _: WebSocketConnection,
     data _: Data
   ) {
-    self.log.info("-> <binary>")
+    log.info("-> <binary>")
   }
 
   public func webSocketDidConnect(connection _: WebSocketConnection) {
-    self.log.info("connected")
+    log.info("connected")
   }
 }
 
@@ -228,7 +228,7 @@ extension GatewayConnection: WebSocketConnectionDelegate {
 
 extension GatewayConnection {
   private func handleDispatchPacket(_ packet: GatewayPacket<Any>) {
-    self.delegate?.gatewaySentDispatchPacket(packet)
+    delegate?.gatewaySentDispatchPacket(packet)
   }
 
   /// Handle a single packet encoded in JSON from the Discord gateway.
@@ -243,7 +243,7 @@ extension GatewayConnection {
     let data = decodedPacket["d"] as? [String: Any]
     let opcode = Opcode(rawValue: decodedPacket["op"] as! Int)!
 
-    self.log
+    log
       .debug(
         "t:\(String(describing: eventName)), s:\(String(describing: sequence)), op:\(opcode.rawValue)"
       )
@@ -260,15 +260,15 @@ extension GatewayConnection {
         sequence: sequence,
         eventName: eventName
       )
-      self.handleDispatchPacket(packet)
+      handleDispatchPacket(packet)
     case .hello:
       let heartbeatInterval = data?["heartbeat_interval"] as! Int
-      self.delegate?
+      delegate?
         .gatewaySentHello(heartbeatInterval: Double(heartbeatInterval) / 1000)
-      self.beginHeartbeating(every: .milliseconds(heartbeatInterval))
-      self.identify()
+      beginHeartbeating(every: .milliseconds(heartbeatInterval))
+      identify()
     case .heartbeat:
-      self.heartbeat()
+      heartbeat()
     default:
       break
     }

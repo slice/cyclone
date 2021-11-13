@@ -7,7 +7,7 @@ public class HTTP {
   private var disguise: Disguise
 
   /// The base URL to make API requests to.
-  private var baseURL: URL
+  public var baseURL: URL
 
   private var log: Logger
 

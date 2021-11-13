@@ -1,5 +1,5 @@
 /// Discord gateway opcodes.
-enum Opcode: Int {
+public enum Opcode: Int {
   case dispatch = 0
   case heartbeat = 1
   case identify = 2

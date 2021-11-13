@@ -27,6 +27,8 @@ public class Client {
   /// The Discord API HTTP client.
   public var http: HTTP!
 
+  public weak var delegate: ClientDelegate?
+
   static let defaultDisguise = Disguise(
     userAgent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) discord/0.0.278 Chrome/91.0.4472.164 Electron/13.4.0 Safari/537.36",
     capabilities: 125,
@@ -88,5 +90,7 @@ extension Client: GatewayConnectionDelegate {
     log.info("hello! <3beating every \(heartbeatInterval)s")
   }
 
-  public func gatewaySentDispatchPacket(_: GatewayPacket<Any>) {}
+  public func gatewaySentDispatchPacket(_ packet: GatewayPacket<Any>) {
+    delegate?.clientReceivedDispatchPacket(packet)
+  }
 }

@@ -647,6 +647,13 @@
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="eu3-7i-yIM"/>
+                                        <menuItem title="Gateway Inspector" keyEquivalent="0" id="zwa-jW-Fkv">
+                                            <modifierMask key="keyEquivalentModifierMask" shift="YES" command="YES"/>
+                                            <connections>
+                                                <segue destination="106-hF-K5x" kind="show" id="boc-JM-doE"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="ydZ-hM-qSQ"/>
                                         <menuItem title="Bring All to Front" id="LE2-aR-0XJ">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
@@ -700,6 +707,14 @@
                 <customObject id="Oky-zY-oP4" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="75" y="250"/>
+        </scene>
+        <!--Gateway Inspector Hosting Controller-->
+        <scene sceneID="zpj-9H-Asv">
+            <objects>
+                <hostingController showSeguePresentationStyle="single" id="106-hF-K5x" customClass="GatewayInspectorHostingController" customModule="Basilisk" customModuleProvider="target" sceneMemberID="viewController"/>
+                <customObject id="rWb-zN-ihT" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="690" y="250"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="hIz-AP-VOD">

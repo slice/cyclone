@@ -26,7 +26,13 @@
 		128C7696273E1171008FD585 /* Contempt.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 12F4FDB3273DFCD000B6AE64 /* Contempt.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		129AF795273E653100B3851C /* GatewayPacket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 129AF794273E653100B3851C /* GatewayPacket.swift */; };
 		129AF797273E6C8500B3851C /* GatewayConnectionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 129AF796273E6C8500B3851C /* GatewayConnectionDelegate.swift */; };
+		12B99C1C2740ECC60048D2DB /* GatewayInspectorHostingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12B99C1B2740ECC60048D2DB /* GatewayInspectorHostingController.swift */; };
+		12B99C1E27410A5A0048D2DB /* GatewayLogStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12B99C1D27410A5A0048D2DB /* GatewayLogStore.swift */; };
+		12B99C2027410A9F0048D2DB /* ScrollableMonospaceTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12B99C1F27410A9F0048D2DB /* ScrollableMonospaceTextView.swift */; };
+		12B99C2227410AD00048D2DB /* LogMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12B99C2127410AD00048D2DB /* LogMessage.swift */; };
+		12B99C2427410B010048D2DB /* PacketDirection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12B99C2327410B010048D2DB /* PacketDirection.swift */; };
 		12C02E38273E177A00C34B18 /* NWWebSocket in Frameworks */ = {isa = PBXBuildFile; productRef = 12C02E37273E177A00C34B18 /* NWWebSocket */; };
+		12CB09592740D47B00F28AD5 /* GatewayInspector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12CB09582740D47B00F28AD5 /* GatewayInspector.swift */; };
 		12F4FD84273DFC1900B6AE64 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12F4FD83273DFC1900B6AE64 /* AppDelegate.swift */; };
 		12F4FD86273DFC1900B6AE64 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12F4FD85273DFC1900B6AE64 /* ViewController.swift */; };
 		12F4FD88273DFC1B00B6AE64 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 12F4FD87273DFC1B00B6AE64 /* Assets.xcassets */; };
@@ -134,6 +140,12 @@
 		128C768B273E10DD008FD585 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		129AF794273E653100B3851C /* GatewayPacket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GatewayPacket.swift; sourceTree = "<group>"; };
 		129AF796273E6C8500B3851C /* GatewayConnectionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GatewayConnectionDelegate.swift; sourceTree = "<group>"; };
+		12B99C1B2740ECC60048D2DB /* GatewayInspectorHostingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GatewayInspectorHostingController.swift; sourceTree = "<group>"; };
+		12B99C1D27410A5A0048D2DB /* GatewayLogStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GatewayLogStore.swift; sourceTree = "<group>"; };
+		12B99C1F27410A9F0048D2DB /* ScrollableMonospaceTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollableMonospaceTextView.swift; sourceTree = "<group>"; };
+		12B99C2127410AD00048D2DB /* LogMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogMessage.swift; sourceTree = "<group>"; };
+		12B99C2327410B010048D2DB /* PacketDirection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PacketDirection.swift; sourceTree = "<group>"; };
+		12CB09582740D47B00F28AD5 /* GatewayInspector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GatewayInspector.swift; sourceTree = "<group>"; };
 		12F4FD80273DFC1900B6AE64 /* Basilisk.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Basilisk.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		12F4FD83273DFC1900B6AE64 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		12F4FD85273DFC1900B6AE64 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -242,6 +254,19 @@
 			path = Gateway;
 			sourceTree = "<group>";
 		};
+		12CB09572740D47000F28AD5 /* Gateway Inspector */ = {
+			isa = PBXGroup;
+			children = (
+				12CB09582740D47B00F28AD5 /* GatewayInspector.swift */,
+				12B99C1B2740ECC60048D2DB /* GatewayInspectorHostingController.swift */,
+				12B99C1D27410A5A0048D2DB /* GatewayLogStore.swift */,
+				12B99C2127410AD00048D2DB /* LogMessage.swift */,
+				12B99C1F27410A9F0048D2DB /* ScrollableMonospaceTextView.swift */,
+				12B99C2327410B010048D2DB /* PacketDirection.swift */,
+			);
+			path = "Gateway Inspector";
+			sourceTree = "<group>";
+		};
 		12F4FD77273DFC1900B6AE64 = {
 			isa = PBXGroup;
 			children = (
@@ -272,6 +297,7 @@
 		12F4FD82273DFC1900B6AE64 /* Basilisk */ = {
 			isa = PBXGroup;
 			children = (
+				12CB09572740D47000F28AD5 /* Gateway Inspector */,
 				12F4FD83273DFC1900B6AE64 /* AppDelegate.swift */,
 				12F4FD85273DFC1900B6AE64 /* ViewController.swift */,
 				12F4FD87273DFC1B00B6AE64 /* Assets.xcassets */,
@@ -575,8 +601,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				12CB09592740D47B00F28AD5 /* GatewayInspector.swift in Sources */,
+				12B99C2427410B010048D2DB /* PacketDirection.swift in Sources */,
+				12B99C2027410A9F0048D2DB /* ScrollableMonospaceTextView.swift in Sources */,
 				12F4FD86273DFC1900B6AE64 /* ViewController.swift in Sources */,
 				12F4FD84273DFC1900B6AE64 /* AppDelegate.swift in Sources */,
+				12B99C1C2740ECC60048D2DB /* GatewayInspectorHostingController.swift in Sources */,
+				12B99C1E27410A5A0048D2DB /* GatewayLogStore.swift in Sources */,
+				12B99C2227410AD00048D2DB /* LogMessage.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

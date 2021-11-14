@@ -226,10 +226,6 @@ extension GatewayConnection: WebSocketConnectionDelegate {
 // MARK: Packet Handling
 
 extension GatewayConnection {
-  private func handleDispatchPacket(_ packet: GatewayPacket<Any>) {
-    delegate?.gatewaySentDispatchPacket(packet)
-  }
-
   /// Handle a single packet encoded in JSON from the Discord gateway.
   func handlePacket(ofJSON packet: String) {
     let packetEncoded = packet.data(using: .utf8)!
@@ -251,15 +247,17 @@ extension GatewayConnection {
       self.sequence = sequence
     }
 
+    let packet = GatewayPacket<Any>(
+      op: opcode,
+      data: data as Any,
+      sequence: sequence,
+      eventName: eventName
+    )
+    delegate?.gatewaySentPacket(packet)
+
     switch opcode {
     case .dispatch:
-      let packet = GatewayPacket<Any>(
-        op: opcode,
-        data: data as Any,
-        sequence: sequence,
-        eventName: eventName
-      )
-      handleDispatchPacket(packet)
+      break
     case .hello:
       let heartbeatInterval = data?["heartbeat_interval"] as! Int
       delegate?

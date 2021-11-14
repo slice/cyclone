@@ -113,8 +113,16 @@ class ViewController: NSViewController {
 }
 
 extension ViewController: ClientDelegate {
-  nonisolated func clientReceivedDispatchPacket(_ packet: GatewayPacket<Any>) {
+  nonisolated func clientReceivedGatewayPacket(_ packet: GatewayPacket<Any>) {
     Task {
+      let logMessage = LogMessage(
+        content: "op:\(packet.op) t:\(packet.eventName ?? "<none>") d:\(packet.data)",
+        timestamp: Date.now,
+        direction: .received
+      )
+      let delegate = await NSApp.delegate as! AppDelegate
+      await delegate.gatewayLogStore.appendMessage(logMessage)
+
       if let eventName = packet.eventName, eventName == "MESSAGE_CREATE" {
         let data = packet.data as! [String: Any]
 
@@ -129,9 +137,6 @@ extension ViewController: ClientDelegate {
           .appendToConsole(line: "<\(username)#\(discriminator)> \(content)")
         return
       }
-
-      await self
-        .appendToConsole(line: "[discord] sent us a \(packet.eventName!)")
     }
   }
 }

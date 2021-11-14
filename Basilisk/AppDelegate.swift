@@ -2,6 +2,8 @@ import Cocoa
 
 @main
 class AppDelegate: NSObject, NSApplicationDelegate {
+  var gatewayLogStore = GatewayLogStore()
+
   func applicationDidFinishLaunching(_: Notification) {
     // Insert code here to initialize your application
   }

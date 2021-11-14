@@ -90,7 +90,7 @@ extension Client: GatewayConnectionDelegate {
     log.info("hello! <3beating every \(heartbeatInterval)s")
   }
 
-  public func gatewaySentDispatchPacket(_ packet: GatewayPacket<Any>) {
-    delegate?.clientReceivedDispatchPacket(packet)
+  public func gatewaySentPacket(_ packet: GatewayPacket<Any>) {
+    delegate?.clientReceivedGatewayPacket(packet)
   }
 }

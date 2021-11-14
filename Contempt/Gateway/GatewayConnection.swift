@@ -1,3 +1,4 @@
+import Combine
 import FineJSON
 import Foundation
 import Network
@@ -18,8 +19,6 @@ public class GatewayConnection {
 
   private var log: Logger
 
-  public var delegate: GatewayConnectionDelegate?
-
   /// The dispatch queue for handling Discord gateway messages.
   private var dispatchQueue =
     DispatchQueue(label: "contempt-gateway-connection")
@@ -29,6 +28,9 @@ public class GatewayConnection {
 
   /// The Discord user token to `IDENTIFY` to the gateway with.
   private var token: String
+
+  /// A Combine subject for incoming gateway packets.
+  public private(set) var packets = PassthroughSubject<GatewayPacket<Any>, Never>()
 
   /// Initializes a new Discord gateway connection with a certain user token and
   /// disguise.
@@ -253,15 +255,13 @@ extension GatewayConnection {
       sequence: sequence,
       eventName: eventName
     )
-    delegate?.gatewaySentPacket(packet)
+    packets.send(packet)
 
     switch opcode {
     case .dispatch:
       break
     case .hello:
       let heartbeatInterval = data?["heartbeat_interval"] as! Int
-      delegate?
-        .gatewaySentHello(heartbeatInterval: Double(heartbeatInterval) / 1000)
       beginHeartbeating(every: .milliseconds(heartbeatInterval))
       identify()
     case .heartbeat:

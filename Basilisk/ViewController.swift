@@ -1,15 +1,17 @@
 import Cocoa
+import Combine
 import Contempt
 import FineJSON
 import RichJSONParser
 
-class ViewController: NSViewController {
+@MainActor class ViewController: NSViewController {
   @IBOutlet var consoleTextView: NSTextView!
   @IBOutlet var inputTextField: NSTextField!
   @IBOutlet var consoleScrollView: NSScrollView!
 
   private var client: Client?
   private var focusedChannelID: UInt64?
+  private var gatewayPacketHandlerTask: Task<Void, Never>?
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -29,6 +31,57 @@ class ViewController: NSViewController {
     }
   }
 
+  private func connect(authorizingWithToken token: String) async throws {
+    let truncatedToken =
+      "\(token[token.startIndex ..< token.index(token.startIndex, offsetBy: 5)])..."
+    appendToConsole(
+      line: "[system] connecting to canary with token (\(truncatedToken))"
+    )
+
+    let client = Client(branch: .canary, token: token)
+    self.client = client
+    try await client.http.requestLandingPage()
+    client.connect()
+    self.setUpClientSinks()
+  }
+
+  private func logPacket(_ packet: GatewayPacket<Any>) {
+    let logMessage = LogMessage(
+      content: "op:\(packet.op) t:\(packet.eventName ?? "<none>") d:\(packet.data)",
+      timestamp: Date.now,
+      direction: .received
+    )
+
+    let delegate = NSApp.delegate as! AppDelegate
+    delegate.gatewayLogStore.appendMessage(logMessage)
+  }
+
+  private func setUpClientSinks() {
+    guard let client = client else { return }
+
+    gatewayPacketHandlerTask = Task.detached(priority: .high) { [weak self] in
+      for await packet in client.gatewayConnection.packets.values {
+        guard let self = self else { return }
+
+        await self.logPacket(packet)
+
+        if let eventName = packet.eventName, eventName == "MESSAGE_CREATE" {
+          let data = packet.data as! [String: Any]
+
+          let channelID = UInt64(data["channel_id"] as! String)
+          guard await channelID == self.focusedChannelID else { continue }
+          let content = data["content"] as! String
+          let author = data["author"] as! [String: Any]
+          let username = author["username"] as! String
+          let discriminator = author["discriminator"] as! String
+
+          await self
+            .appendToConsole(line: "<\(username)#\(discriminator)> \(content)")
+        }
+      }
+    }
+  }
+
   private func handleCommand(named command: String, arguments: [String]) {
     switch command {
     case "connect":
@@ -36,18 +89,13 @@ class ViewController: NSViewController {
         appendToConsole(line: "[system] you need a user token, silly!")
         return
       }
-      let tokenPreview =
-        "\(token[token.startIndex ..< token.index(token.startIndex, offsetBy: 5)])..."
-      appendToConsole(
-        line: "[system] connecting to canary with token (\(tokenPreview))"
-      )
-      client = Client(branch: .canary, token: token)
-      client!.delegate = self
 
       Task {
-        guard let client = client else { return }
-        try! await client.http.requestLandingPage()
-        client.connect()
+        do {
+          try await connect(authorizingWithToken: token)
+        } catch {
+          appendToConsole(line: "[system] failed to connect: \(error)")
+        }
       }
     case "focus":
       guard let channelIDString = arguments.first,
@@ -107,35 +155,6 @@ class ViewController: NSViewController {
           request,
           withSpoofedHeadersOfRequestType: .xhr
         )
-      }
-    }
-  }
-}
-
-extension ViewController: ClientDelegate {
-  nonisolated func clientReceivedGatewayPacket(_ packet: GatewayPacket<Any>) {
-    Task {
-      let logMessage = LogMessage(
-        content: "op:\(packet.op) t:\(packet.eventName ?? "<none>") d:\(packet.data)",
-        timestamp: Date.now,
-        direction: .received
-      )
-      let delegate = await NSApp.delegate as! AppDelegate
-      await delegate.gatewayLogStore.appendMessage(logMessage)
-
-      if let eventName = packet.eventName, eventName == "MESSAGE_CREATE" {
-        let data = packet.data as! [String: Any]
-
-        let channelID = UInt64(data["channel_id"] as! String)
-        guard await channelID == focusedChannelID else { return }
-        let content = data["content"] as! String
-        let author = data["author"] as! [String: Any]
-        let username = author["username"] as! String
-        let discriminator = author["discriminator"] as! String
-
-        await self
-          .appendToConsole(line: "<\(username)#\(discriminator)> \(content)")
-        return
       }
     }
   }

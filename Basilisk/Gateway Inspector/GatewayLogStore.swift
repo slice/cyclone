@@ -17,7 +17,7 @@ class GatewayLogStore: ObservableObject {
 
   /// Append a new message to the log store.
   @MainActor func appendMessage(_ message: LogMessage) {
-    self.messages.append(message)
-    self.objectWillChange.send()
+    messages.append(message)
+    objectWillChange.send()
   }
 }

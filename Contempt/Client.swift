@@ -75,8 +75,7 @@ public class Client {
   }
 
   /// Disconnect from the Discord gateway.
-  public func disconnect() {
-    gatewayConnection.disconnect()
+  public func disconnect() async throws {
+    try await gatewayConnection.disconnect()
   }
 }
-

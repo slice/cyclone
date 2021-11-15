@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		120A78D82741E9A70099834B /* WebSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 120A78D72741E9A70099834B /* WebSocket.swift */; };
+		120A78DB2741F9BE0099834B /* WebSocketEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 120A78DA2741F9BE0099834B /* WebSocketEvent.swift */; };
 		121B6FBB273E32D6000DD150 /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = 121B6FBA273E32D5000DD150 /* ArgumentParser */; };
 		121B6FBD273E3300000DD150 /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = 121B6FBC273E3300000DD150 /* ArgumentParser */; };
 		12552C9C273F3DDA007D92B1 /* HTTP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12552C9B273F3DDA007D92B1 /* HTTP.swift */; };
@@ -29,7 +31,6 @@
 		12B99C2027410A9F0048D2DB /* ScrollableMonospaceTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12B99C1F27410A9F0048D2DB /* ScrollableMonospaceTextView.swift */; };
 		12B99C2227410AD00048D2DB /* LogMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12B99C2127410AD00048D2DB /* LogMessage.swift */; };
 		12B99C2427410B010048D2DB /* PacketDirection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12B99C2327410B010048D2DB /* PacketDirection.swift */; };
-		12C02E38273E177A00C34B18 /* NWWebSocket in Frameworks */ = {isa = PBXBuildFile; productRef = 12C02E37273E177A00C34B18 /* NWWebSocket */; };
 		12CB09592740D47B00F28AD5 /* GatewayInspector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12CB09582740D47B00F28AD5 /* GatewayInspector.swift */; };
 		12F4FD84273DFC1900B6AE64 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12F4FD83273DFC1900B6AE64 /* AppDelegate.swift */; };
 		12F4FD86273DFC1900B6AE64 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12F4FD85273DFC1900B6AE64 /* ViewController.swift */; };
@@ -126,6 +127,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		120A78D62741D9CA0099834B /* WebSocket Testing.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = "WebSocket Testing.playground"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		120A78D72741E9A70099834B /* WebSocket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocket.swift; sourceTree = "<group>"; };
+		120A78DA2741F9BE0099834B /* WebSocketEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketEvent.swift; sourceTree = "<group>"; };
 		12552C9B273F3DDA007D92B1 /* HTTP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTP.swift; sourceTree = "<group>"; };
 		12552C9D273F3FE2007D92B1 /* SpoofedRequestType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpoofedRequestType.swift; sourceTree = "<group>"; };
 		12897BF1273E25C700403E5B /* GatewayConnection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GatewayConnection.swift; sourceTree = "<group>"; };
@@ -201,7 +205,6 @@
 			files = (
 				128C767F273E0B22008FD585 /* FineJSON in Frameworks */,
 				128C7684273E0B61008FD585 /* RichJSONParser in Frameworks */,
-				12C02E38273E177A00C34B18 /* NWWebSocket in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -216,6 +219,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		120A78D92741EC260099834B /* WebSocket */ = {
+			isa = PBXGroup;
+			children = (
+				120A78D72741E9A70099834B /* WebSocket.swift */,
+				120A78DA2741F9BE0099834B /* WebSocketEvent.swift */,
+			);
+			path = WebSocket;
+			sourceTree = "<group>";
+		};
 		12552C9A273F3DD4007D92B1 /* HTTP */ = {
 			isa = PBXGroup;
 			children = (
@@ -265,6 +277,7 @@
 		12F4FD77273DFC1900B6AE64 = {
 			isa = PBXGroup;
 			children = (
+				120A78D62741D9CA0099834B /* WebSocket Testing.playground */,
 				12F4FD82273DFC1900B6AE64 /* Basilisk */,
 				12F4FD94273DFC1B00B6AE64 /* BasiliskTests */,
 				12F4FD9E273DFC1B00B6AE64 /* BasiliskUITests */,
@@ -322,6 +335,7 @@
 		12F4FDB4273DFCD000B6AE64 /* Contempt */ = {
 			isa = PBXGroup;
 			children = (
+				120A78D92741EC260099834B /* WebSocket */,
 				12552C9A273F3DD4007D92B1 /* HTTP */,
 				129AF793273E62BC00B3851C /* Gateway */,
 				12F4FDB5273DFCD000B6AE64 /* Contempt.h */,
@@ -455,7 +469,6 @@
 			packageProductDependencies = (
 				128C767E273E0B22008FD585 /* FineJSON */,
 				128C7683273E0B61008FD585 /* RichJSONParser */,
-				12C02E37273E177A00C34B18 /* NWWebSocket */,
 			);
 			productName = Contempt;
 			productReference = 12F4FDB3273DFCD000B6AE64 /* Contempt.framework */;
@@ -525,7 +538,6 @@
 			packageReferences = (
 				128C7678273E09C5008FD585 /* XCRemoteSwiftPackageReference "FineJSON" */,
 				128C7680273E0B57008FD585 /* XCRemoteSwiftPackageReference "RichJSONParser" */,
-				12C02E36273E177A00C34B18 /* XCRemoteSwiftPackageReference "NWWebSocket" */,
 				121B6FB9273E32D5000DD150 /* XCRemoteSwiftPackageReference "swift-argument-parser" */,
 			);
 			productRefGroup = 12F4FD81273DFC1900B6AE64 /* Products */;
@@ -636,6 +648,8 @@
 				12897BF4273E2BF400403E5B /* Opcode.swift in Sources */,
 				128C7677273E04D2008FD585 /* Disguise.swift in Sources */,
 				12F4FDB7273DFCD000B6AE64 /* Contempt.docc in Sources */,
+				120A78DB2741F9BE0099834B /* WebSocketEvent.swift in Sources */,
+				120A78D82741E9A70099834B /* WebSocket.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1136,14 +1150,6 @@
 				minimumVersion = 3.0.0;
 			};
 		};
-		12C02E36273E177A00C34B18 /* XCRemoteSwiftPackageReference "NWWebSocket" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/pusher/NWWebSocket";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.5.2;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1176,11 +1182,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 128C7680273E0B57008FD585 /* XCRemoteSwiftPackageReference "RichJSONParser" */;
 			productName = RichJSONParser;
-		};
-		12C02E37273E177A00C34B18 /* NWWebSocket */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 12C02E36273E177A00C34B18 /* XCRemoteSwiftPackageReference "NWWebSocket" */;
-			productName = NWWebSocket;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

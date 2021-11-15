@@ -2,14 +2,13 @@ import Combine
 import FineJSON
 import Foundation
 import Network
-import NWWebSocket
 import os
 import RichJSONParser
 
 /// A connection to the Discord gateway.
 public class GatewayConnection {
   /// The WebSocket connection to the gateway.
-  private var socket: NWWebSocket?
+  private var socket: WebSocket?
 
   /// The disguise used in this gateway connection.
   private let disguise: Disguise
@@ -24,13 +23,21 @@ public class GatewayConnection {
     DispatchQueue(label: "contempt-gateway-connection")
 
   /// The timer used to manage periodic heartbeating.
-  private var heartbeatTimer: DispatchSourceTimer!
+  private var heartbeatTimer: AnyCancellable?
+
+  /// The Combine subscriber used to handle incoming WebSocket events.
+  private var eventHandler: AnyCancellable?
 
   /// The Discord user token to `IDENTIFY` to the gateway with.
   private var token: String
 
   /// A Combine subject for incoming gateway packets.
-  public private(set) var packets = PassthroughSubject<GatewayPacket<Any>, Never>()
+  public private(set) var packets = PassthroughSubject<GatewayPacket<Any>,
+    Never>()
+
+  deinit {
+    heartbeatTimer = nil
+  }
 
   /// Initializes a new Discord gateway connection with a certain user token and
   /// disguise.
@@ -45,10 +52,8 @@ public class GatewayConnection {
     toGateway gatewayURL: URL,
     fromDiscordEndpoint endpoint: URL
   ) {
-    let options = NWWebSocket.defaultOptions
-
     // Last update: 2021-11-11
-    options.setAdditionalHeaders([
+    let additionalHeaders = [
       ("Accept-Encoding", "gzip, deflate, br"),
       ("Accept-Language", disguise.systemLocale),
       ("Cache-Control", "no-cache"),
@@ -56,35 +61,47 @@ public class GatewayConnection {
       ("Origin", endpoint.absoluteString),
       ("Pragma", "no-cache"),
       ("User-Agent", disguise.userAgent),
-    ])
+    ]
 
-    let socket = NWWebSocket(
-      url: gatewayURL,
-      connectAutomatically: false,
-      options: options,
-      connectionQueue: dispatchQueue
+    socket = WebSocket(
+      endpoint: gatewayURL,
+      additionalHeaders: additionalHeaders
     )
-    self.socket = socket
-    socket.delegate = self
+
+    eventHandler = socket!.events.sink(receiveCompletion: { [weak self] error in
+      switch error {
+      case .finished:
+        self?.log.info("disconnected cleanly")
+      case let .failure(error):
+        self?.log.error("disconnected with error: \(error.debugDescription)")
+      }
+      self?.heartbeatTimer = nil
+    }, receiveValue: { [weak self] event in
+      guard let self = self else { return }
+
+      Task {
+        await self.handleWebSocketEvent(event)
+      }
+    })
 
     log.info("connecting to \(gatewayURL)...")
-
-    socket.connect()
+    socket!.connect()
   }
 
   /// Disconnect from the Discord gateway.
   public func disconnect(withCloseCode closeCode: NWProtocolWebSocket
-    .CloseCode = .protocolCode(.normalClosure))
+    .CloseCode = .protocolCode(.normalClosure)) async throws
   {
     guard let socket = socket else {
-      preconditionFailure("already disconnected")
+      preconditionFailure("no socket")
     }
 
-    socket.disconnect(closeCode: closeCode)
+    try await socket.disconnect(withCloseCode: closeCode)
+    heartbeatTimer = nil
   }
 
   /// Encodes a JSON payload and sends it through the gateway socket.
-  public func send(json: JSON) {
+  public func send(json: JSON) async throws {
     guard let socket = socket else {
       preconditionFailure("cannot send JSON when not connected")
     }
@@ -97,37 +114,38 @@ public class GatewayConnection {
     }
 
     log.info("<- \(String(data: data, encoding: .utf8)!)")
-    socket.send(data: data)
+    try await socket.send(data: data)
   }
 
   /// Sends a single heartbeat to the Discord gateway.
-  public func heartbeat() {
-    send(json: .object(.init([
+  public func heartbeat() async throws {
+    try await send(json: .object(.init([
       "op": .number(String(Opcode.heartbeat.rawValue)),
       "d": .number(String(sequence ?? 0)),
     ])))
   }
 
   /// Begin heartbeating at a fixed interval.
-  func beginHeartbeating(every interval: DispatchTimeInterval) {
-    heartbeatTimer = DispatchSource
-      .makeTimerSource(queue: dispatchQueue)
-
-    heartbeatTimer.setEventHandler { [weak self] in
-      guard let self = self else { return }
-      self.heartbeat()
-    }
-
-    heartbeatTimer.schedule(
-      deadline: .now().advanced(by: interval),
-      repeating: interval
+  func beginHeartbeating(every interval: TimeInterval) {
+    log.info("<3beating every \(interval)s")
+    heartbeatTimer = Timer.publish(
+      every: interval,
+      tolerance: nil,
+      on: .main,
+      in: .default
     )
+    .autoconnect()
+    .sink { [weak self] _ in
+      guard let self = self else { return }
 
-    heartbeatTimer.resume()
+      Task {
+        try await self.heartbeat()
+      }
+    }
   }
 
   /// `IDENTIFY` to the Discord gateway.
-  public func identify() {
+  public func identify() async throws {
     // Last update: 2021-11-11
     let identifyPayload: JSON = .object(.init([
       "d": .object(.init([
@@ -152,84 +170,45 @@ public class GatewayConnection {
       ])),
       "op": .number(String(Opcode.identify.rawValue)),
     ]))
-    send(json: identifyPayload)
-  }
-}
 
-// MARK: WebSocketConnectionDelegate
-
-extension GatewayConnection: WebSocketConnectionDelegate {
-  public func webSocketDidDisconnect(
-    connection _: WebSocketConnection,
-    closeCode: NWProtocolWebSocket.CloseCode,
-    reason _: Data?
-  ) {
-    var closeCodeValue: UInt16?
-    switch closeCode {
-    case let .protocolCode(definedCloseCode):
-      closeCodeValue = definedCloseCode.rawValue
-    case let .applicationCode(value):
-      closeCodeValue = value
-    case let .privateCode(value):
-      closeCodeValue = value
-    @unknown default:
-      break
-    }
-
-    if let closeCodeValue = closeCodeValue {
-      log.info("disconnected (close code: \(closeCodeValue))")
-    } else {
-      log.info("disconnected (unknown close code)")
-    }
-  }
-
-  public func webSocketViabilityDidChange(
-    connection _: WebSocketConnection,
-    isViable _: Bool
-  ) {}
-
-  public func webSocketDidAttemptBetterPathMigration(
-    result _: Result<WebSocketConnection,
-      NWError>
-  ) {}
-
-  public func webSocketDidReceiveError(
-    connection _: WebSocketConnection,
-    error: NWError
-  ) {
-    log
-      .error(
-        "errored: \(error.localizedDescription), \(error.debugDescription)"
-      )
-  }
-
-  public func webSocketDidReceivePong(connection _: WebSocketConnection) {}
-
-  public func webSocketDidReceiveMessage(
-    connection _: WebSocketConnection,
-    string text: String
-  ) {
-    log.info("-> \(text)")
-    handlePacket(ofJSON: text)
-  }
-
-  public func webSocketDidReceiveMessage(
-    connection _: WebSocketConnection,
-    data _: Data
-  ) {
-    log.info("-> <binary>")
-  }
-
-  public func webSocketDidConnect(connection _: WebSocketConnection) {
-    log.info("connected")
+    try await send(json: identifyPayload)
   }
 }
 
 // MARK: Packet Handling
 
 extension GatewayConnection {
+  private func handleWebSocketEvent(_ event: WebSocketEvent) async {
+    switch event {
+    case let .connectionStateUpdate(connectionState):
+      log
+        .info(
+          "websocket connection state is now: \(String(describing: connectionState))"
+        )
+    case .isGoingToClose(closeCode: let closeCode, reason: _):
+      log
+        .info(
+          "websocket close frame received with close code: \(String(describing: closeCode))"
+        )
+    case let .message(data):
+      guard let text = String(data: data, encoding: .utf8) else {
+        log.warning("-> received binary (length: \(data.count))")
+        return
+      }
+
+      log.info("-> \(text)")
+
+      do {
+        try await handlePacket(ofJSON: text)
+      } catch {
+        log
+          .error("failed to handle packet: \(error.localizedDescription)")
+      }
+    }
+  }
+
   /// Handle a single packet encoded in JSON from the Discord gateway.
-  func handlePacket(ofJSON packet: String) {
+  func handlePacket(ofJSON packet: String) async throws {
     let packetEncoded = packet.data(using: .utf8)!
 
     let decodedPacket = try! JSONSerialization
@@ -261,11 +240,11 @@ extension GatewayConnection {
     case .dispatch:
       break
     case .hello:
-      let heartbeatInterval = data?["heartbeat_interval"] as! Int
-      beginHeartbeating(every: .milliseconds(heartbeatInterval))
-      identify()
+      let heartbeatIntervalMilliseconds = data?["heartbeat_interval"] as! Int
+      beginHeartbeating(every: Double(heartbeatIntervalMilliseconds) / 1000.0)
+      try await identify()
     case .heartbeat:
-      heartbeat()
+      try await heartbeat()
     default:
       break
     }

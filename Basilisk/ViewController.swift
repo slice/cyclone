@@ -11,7 +11,7 @@ import RichJSONParser
 
   var client: Client?
   var focusedChannelID: UInt64?
-  var gatewayPacketHandlerTask: Task<Void, Never>?
+  var gatewayPacketHandler: Task<Void, Never>?
 
   deinit {
     NSLog("ViewController deinit")
@@ -56,7 +56,7 @@ import RichJSONParser
     self.client = client
     try await client.http.requestLandingPage()
     client.connect()
-    setUpClientSinks()
+    setUpGatewayPacketHandler()
   }
 
   private func logPacket(_ packet: GatewayPacket<Any>) {
@@ -70,36 +70,38 @@ import RichJSONParser
     delegate.gatewayLogStore.appendMessage(logMessage)
   }
 
-  private func setUpClientSinks() {
+  private func setUpGatewayPacketHandler() {
     guard let client = client else { return }
 
-    gatewayPacketHandlerTask = Task.detached(priority: .high) { [weak self] in
-      for await packet in client.gatewayConnection.packets.values {
-        guard let self = self else { return }
-
+    gatewayPacketHandler = Task.detached(priority: .high) {
+      for await packet in client.gatewayConnection.packets.bufferInfinitely()
+        .values
+      {
         await self.logPacket(packet)
-
-        if let eventName = packet.eventName, eventName == "MESSAGE_CREATE" {
-          let data = packet.data as! [String: Any]
-
-          let channelID = UInt64(data["channel_id"] as! String)
-          guard await channelID == self.focusedChannelID else { continue }
-          let content = data["content"] as! String
-          let author = data["author"] as! [String: Any]
-          let username = author["username"] as! String
-          let discriminator = author["discriminator"] as! String
-
-          await self
-            .appendToConsole(line: "<\(username)#\(discriminator)> \(content)")
-        }
+        await self.handleGatewayPacket(packet)
       }
+    }
+  }
+
+  private func handleGatewayPacket(_ packet: GatewayPacket<Any>) async {
+    if let eventName = packet.eventName, eventName == "MESSAGE_CREATE" {
+      let data = packet.data as! [String: Any]
+
+      let channelID = UInt64(data["channel_id"] as! String)
+      guard channelID == focusedChannelID else { return }
+      let content = data["content"] as! String
+      let author = data["author"] as! [String: Any]
+      let username = author["username"] as! String
+      let discriminator = author["discriminator"] as! String
+
+      appendToConsole(line: "<\(username)#\(discriminator)> \(content)")
     }
   }
 
   /// Disconnect from the gateway and tear down the Discord client.
   func tearDownClient() async throws {
     NSLog("tearing down client")
-    gatewayPacketHandlerTask?.cancel()
+    gatewayPacketHandler?.cancel()
 
     // Disconnect from the Discord gateway with a 1000 close code.
     try await client?.disconnect()

@@ -32,6 +32,7 @@
 		12B99C2227410AD00048D2DB /* LogMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12B99C2127410AD00048D2DB /* LogMessage.swift */; };
 		12B99C2427410B010048D2DB /* PacketDirection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12B99C2327410B010048D2DB /* PacketDirection.swift */; };
 		12CB09592740D47B00F28AD5 /* GatewayInspector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12CB09582740D47B00F28AD5 /* GatewayInspector.swift */; };
+		12CD0228274218AA00F136A5 /* Publisher+Buffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12CD0226274217E600F136A5 /* Publisher+Buffer.swift */; };
 		12F4FD84273DFC1900B6AE64 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12F4FD83273DFC1900B6AE64 /* AppDelegate.swift */; };
 		12F4FD86273DFC1900B6AE64 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12F4FD85273DFC1900B6AE64 /* ViewController.swift */; };
 		12F4FD88273DFC1B00B6AE64 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 12F4FD87273DFC1B00B6AE64 /* Assets.xcassets */; };
@@ -146,6 +147,7 @@
 		12B99C2127410AD00048D2DB /* LogMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogMessage.swift; sourceTree = "<group>"; };
 		12B99C2327410B010048D2DB /* PacketDirection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PacketDirection.swift; sourceTree = "<group>"; };
 		12CB09582740D47B00F28AD5 /* GatewayInspector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GatewayInspector.swift; sourceTree = "<group>"; };
+		12CD0226274217E600F136A5 /* Publisher+Buffer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Publisher+Buffer.swift"; sourceTree = "<group>"; };
 		12F4FD80273DFC1900B6AE64 /* Basilisk.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Basilisk.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		12F4FD83273DFC1900B6AE64 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		12F4FD85273DFC1900B6AE64 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -274,6 +276,14 @@
 			path = "Gateway Inspector";
 			sourceTree = "<group>";
 		};
+		12CD0225274217D800F136A5 /* Support */ = {
+			isa = PBXGroup;
+			children = (
+				12CD0226274217E600F136A5 /* Publisher+Buffer.swift */,
+			);
+			path = Support;
+			sourceTree = "<group>";
+		};
 		12F4FD77273DFC1900B6AE64 = {
 			isa = PBXGroup;
 			children = (
@@ -335,6 +345,7 @@
 		12F4FDB4273DFCD000B6AE64 /* Contempt */ = {
 			isa = PBXGroup;
 			children = (
+				12CD0225274217D800F136A5 /* Support */,
 				120A78D92741EC260099834B /* WebSocket */,
 				12552C9A273F3DD4007D92B1 /* HTTP */,
 				129AF793273E62BC00B3851C /* Gateway */,
@@ -639,6 +650,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				12CD0228274218AA00F136A5 /* Publisher+Buffer.swift in Sources */,
 				12552C9C273F3DDA007D92B1 /* HTTP.swift in Sources */,
 				128C7673273DFD0E008FD585 /* Client.swift in Sources */,
 				128C7675273DFF73008FD585 /* Branch.swift in Sources */,

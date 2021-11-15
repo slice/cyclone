@@ -26,7 +26,7 @@ public class GatewayConnection {
   private var heartbeatTimer: AnyCancellable?
 
   /// The Combine subscriber used to handle incoming WebSocket events.
-  private var eventHandler: AnyCancellable?
+  private var eventHandler: Task<Void, Never>?
 
   /// The Discord user token to `IDENTIFY` to the gateway with.
   private var token: String
@@ -68,21 +68,23 @@ public class GatewayConnection {
       additionalHeaders: additionalHeaders
     )
 
-    eventHandler = socket!.events.sink(receiveCompletion: { [weak self] error in
-      switch error {
-      case .finished:
-        self?.log.info("disconnected cleanly")
-      case let .failure(error):
-        self?.log.error("disconnected with error: \(error.debugDescription)")
-      }
-      self?.heartbeatTimer = nil
-    }, receiveValue: { [weak self] event in
-      guard let self = self else { return }
+    eventHandler = Task.detached(priority: .high) { [weak self] in
+      guard let self = self, let socket = self.socket else { return }
 
-      Task {
-        await self.handleWebSocketEvent(event)
+      do {
+        // It's important to call .bufferInfinitely here. If we don't, then any
+        // gateway packet we receive while handling one already is dropped.
+        // There's little documentation on this at the moment, but it appears
+        // that calling Publisher.values does not buffer the values at all.
+        for try await event in socket.events.bufferInfinitely().values {
+          await self.handleWebSocketEvent(event)
+        }
+
+        self.log.info("disconnected cleanly")
+      } catch {
+        self.log.error("disconnected with error: \(error.localizedDescription)")
       }
-    })
+    }
 
     log.info("connecting to \(gatewayURL)...")
     socket!.connect()

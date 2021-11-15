@@ -20,10 +20,18 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     } else {
       Task {
         for activeViewController in activeViewControllers {
-          NSLog("trying to disconnect client in \(activeViewController)")
-          try! await activeViewController.client?.disconnect()
+          NSLog(
+            "trying to disconnect client in %@",
+            String(describing: activeViewController)
+          )
+          do {
+            try await activeViewController.client?.disconnect()
+          } catch {
+            NSLog("failed to disconnect vc: %@", error.localizedDescription)
+          }
         }
 
+        NSLog("ready to terminate now")
         sender.reply(toApplicationShouldTerminate: true)
       }
 

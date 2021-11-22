@@ -1,6 +1,7 @@
 import Combine
 import FineJSON
 import Foundation
+import GenericJSON
 import Network
 import os
 import RichJSONParser
@@ -14,7 +15,7 @@ public class GatewayConnection {
   private let disguise: Disguise
 
   /// The latest sequence number received from the gateway.
-  private(set) var sequence: Int?
+  private(set) var sequence: Double?
 
   private var log: Logger
 
@@ -32,8 +33,7 @@ public class GatewayConnection {
   private var token: String
 
   /// A Combine subject for incoming gateway packets.
-  public private(set) var packets = PassthroughSubject<GatewayPacket<Any>,
-    Never>()
+  public private(set) var packets = PassthroughSubject<GatewayPacket, Never>()
 
   deinit {
     heartbeatTimer = nil
@@ -103,7 +103,7 @@ public class GatewayConnection {
   }
 
   /// Encodes a JSON payload and sends it through the gateway socket.
-  public func send(json: JSON) async throws {
+  public func send(json: RichJSONParser.JSON) async throws {
     guard let socket = socket else {
       preconditionFailure("cannot send JSON when not connected")
     }
@@ -149,7 +149,7 @@ public class GatewayConnection {
   /// `IDENTIFY` to the Discord gateway.
   public func identify() async throws {
     // Last update: 2021-11-11
-    let identifyPayload: JSON = .object(.init([
+    let identifyPayload: RichJSONParser.JSON = .object(.init([
       "d": .object(.init([
         "capabilities": .number(String(disguise.capabilities)),
         "client_state": .object(.init([
@@ -215,28 +215,42 @@ extension GatewayConnection {
   /// because the latter is used while deserializing the packet, and the former
   /// is used for tracing. There shouldn't be a discrepancy in contents between
   /// the two.
-  func handlePacket(ofJSON packetJSON: String, raw packetBytes: Data) async throws {
-    let decodedPacket = try! JSONSerialization
+  func handlePacket(
+    ofJSON packetJSON: String,
+    raw packetBytes: Data
+  ) async throws {
+    let decodedUnsafePacket = try! JSONSerialization
       .jsonObject(with: packetBytes) as! [String: Any]
 
-    let eventName = decodedPacket["t"] as? String
-    let sequence = decodedPacket["s"] as? Int
-    let data = decodedPacket["d"] as? [String: Any]
+    guard let decodedPacket = try? GenericJSON.JSON(decodedUnsafePacket)
+      .objectValue
+    else {
+      fatalError("gateway sent something that wasn't an object")
+    }
 
-    let opcodeRaw = decodedPacket["op"] as! Int
-    guard let opcode = Opcode(rawValue: opcodeRaw) else {
+    let eventName = decodedPacket["t"]?.stringValue
+    let sequence = decodedPacket["s"]?.doubleValue
+    let data = decodedPacket["d"]
+
+    guard let opcodeRaw = decodedPacket["op"]?.doubleValue else {
+      fatalError("gateway sent a payload lacking `op` field")
+    }
+    guard let opcode = Opcode(rawValue: Int(opcodeRaw)) else {
       fatalError("received unknown opcode from gateway: \(opcodeRaw)")
     }
 
-    log.debug("op: \(String(describing: opcode)) (\(opcode.rawValue)), event: \(String(describing: eventName)), seq: \(String(describing: sequence))")
+    log
+      .debug(
+        "op: \(String(describing: opcode)) (\(opcode.rawValue)), event: \(String(describing: eventName)), seq: \(String(describing: sequence))"
+      )
 
     if let sequence = sequence {
       self.sequence = sequence
     }
 
-    let packet = GatewayPacket<Any>(
+    let packet = GatewayPacket(
       op: opcode,
-      eventData: data as Any,
+      eventData: data,
       sequence: sequence,
       eventName: eventName,
       rawPayload: packetJSON
@@ -247,7 +261,11 @@ extension GatewayConnection {
     case .dispatch:
       break
     case .hello:
-      let heartbeatIntervalMilliseconds = data?["heartbeat_interval"] as! Int
+      guard let heartbeatIntervalMilliseconds = data?["heartbeat_interval"]?
+        .doubleValue
+      else {
+        fatalError("gateway didn't send a `heartbeat_interval` in HELLO")
+      }
       beginHeartbeating(every: Double(heartbeatIntervalMilliseconds) / 1000.0)
       try await identify()
     case .heartbeat:

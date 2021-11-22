@@ -59,7 +59,7 @@ import RichJSONParser
     setUpGatewayPacketHandler()
   }
 
-  private func logPacket(_ packet: GatewayPacket<Any>) {
+  private func logPacket(_ packet: GatewayPacket) {
     let logMessage = LogMessage(
       content: packet.rawPayload,
       timestamp: Date.now,
@@ -83,16 +83,16 @@ import RichJSONParser
     }
   }
 
-  private func handleGatewayPacket(_ packet: GatewayPacket<Any>) async {
+  private func handleGatewayPacket(_ packet: GatewayPacket) async {
     if let eventName = packet.eventName, eventName == "MESSAGE_CREATE" {
-      let data = packet.eventData as! [String: Any]
+      let data = packet.eventData!.objectValue!
 
-      let channelID = UInt64(data["channel_id"] as! String)
+      let channelID = UInt64(data["channel_id"]!.stringValue!)
       guard channelID == focusedChannelID else { return }
-      let content = data["content"] as! String
-      let author = data["author"] as! [String: Any]
-      let username = author["username"] as! String
-      let discriminator = author["discriminator"] as! String
+      let content = data["content"]!.stringValue!
+      let author = data["author"]!.objectValue!
+      let username = author["username"]!.stringValue!
+      let discriminator = author["discriminator"]!.stringValue!
 
       appendToConsole(line: "<\(username)#\(discriminator)> \(content)")
     }

@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="19528" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19528"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19529"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
+        <!--Gateway Inspector-->
+        <scene sceneID="iER-6A-uud">
+            <objects>
+                <controllerPlaceholder storyboardName="Gateway Inspector" id="UgZ-vc-CQU" sceneMemberID="viewController"/>
+                <customObject id="fHW-ER-KTN" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="431" y="-66"/>
+        </scene>
         <!--Application-->
         <scene sceneID="JPo-4y-FX3">
             <objects>
@@ -650,7 +658,7 @@
                                         <menuItem title="Gateway Inspector" keyEquivalent="0" id="zwa-jW-Fkv">
                                             <modifierMask key="keyEquivalentModifierMask" shift="YES" command="YES"/>
                                             <connections>
-                                                <segue destination="106-hF-K5x" kind="show" id="boc-JM-doE"/>
+                                                <segue destination="UgZ-vc-CQU" kind="show" id="10v-06-IFi"/>
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="ydZ-hM-qSQ"/>
@@ -707,14 +715,6 @@
                 <customObject id="Oky-zY-oP4" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="75" y="250"/>
-        </scene>
-        <!--Gateway Inspector Hosting Controller-->
-        <scene sceneID="zpj-9H-Asv">
-            <objects>
-                <hostingController showSeguePresentationStyle="single" id="106-hF-K5x" customClass="GatewayInspectorHostingController" customModule="Basilisk" customModuleProvider="target" sceneMemberID="viewController"/>
-                <customObject id="rWb-zN-ihT" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="690" y="250"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="hIz-AP-VOD">

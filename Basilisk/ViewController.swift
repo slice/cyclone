@@ -62,6 +62,7 @@ import RichJSONParser
   private func logPacket(_ packet: GatewayPacket) {
     let logMessage = LogMessage(
       content: packet.rawPayload,
+      gatewayPacket: packet,
       timestamp: Date.now,
       direction: .received
     )

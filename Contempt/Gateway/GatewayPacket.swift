@@ -6,11 +6,15 @@ public struct GatewayPacket<Data> {
   public let op: Opcode
 
   /// The event data for this packet.
-  public let data: Data
+  public let eventData: Data?
 
   /// The sequence number for this packet. Only present for `DISPATCH` packets.
   public let sequence: Int?
 
   /// The event name for this packet. Only present for `DISPATCH` packets.
   public let eventName: String?
+
+  /// The raw payload received over the gateway that was deserialized into this
+  /// packet.
+  public let rawPayload: String
 }

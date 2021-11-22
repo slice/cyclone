@@ -61,7 +61,7 @@ import RichJSONParser
 
   private func logPacket(_ packet: GatewayPacket<Any>) {
     let logMessage = LogMessage(
-      content: "op:\(packet.op) t:\(packet.eventName ?? "<none>") d:\(packet.data)",
+      content: packet.rawPayload,
       timestamp: Date.now,
       direction: .received
     )
@@ -85,7 +85,7 @@ import RichJSONParser
 
   private func handleGatewayPacket(_ packet: GatewayPacket<Any>) async {
     if let eventName = packet.eventName, eventName == "MESSAGE_CREATE" {
-      let data = packet.data as! [String: Any]
+      let data = packet.eventData as! [String: Any]
 
       let channelID = UInt64(data["channel_id"] as! String)
       guard channelID == focusedChannelID else { return }

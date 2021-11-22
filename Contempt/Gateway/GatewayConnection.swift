@@ -201,7 +201,7 @@ extension GatewayConnection {
       log.info("-> \(text)")
 
       do {
-        try await handlePacket(ofJSON: text)
+        try await handlePacket(ofJSON: text, raw: data)
       } catch {
         log
           .error("failed to handle packet: \(error.localizedDescription)")
@@ -210,21 +210,25 @@ extension GatewayConnection {
   }
 
   /// Handle a single packet encoded in JSON from the Discord gateway.
-  func handlePacket(ofJSON packet: String) async throws {
-    let packetEncoded = packet.data(using: .utf8)!
-
+  ///
+  /// This functions accepts the packet both as a string and as a byte buffer
+  /// because the latter is used while deserializing the packet, and the former
+  /// is used for tracing. There shouldn't be a discrepancy in contents between
+  /// the two.
+  func handlePacket(ofJSON packetJSON: String, raw packetBytes: Data) async throws {
     let decodedPacket = try! JSONSerialization
-      .jsonObject(with: packetEncoded) as! [String: Any]
+      .jsonObject(with: packetBytes) as! [String: Any]
 
     let eventName = decodedPacket["t"] as? String
     let sequence = decodedPacket["s"] as? Int
     let data = decodedPacket["d"] as? [String: Any]
-    let opcode = Opcode(rawValue: decodedPacket["op"] as! Int)!
 
-    log
-      .debug(
-        "t:\(String(describing: eventName)), s:\(String(describing: sequence)), op:\(opcode.rawValue)"
-      )
+    let opcodeRaw = decodedPacket["op"] as! Int
+    guard let opcode = Opcode(rawValue: opcodeRaw) else {
+      fatalError("received unknown opcode from gateway: \(opcodeRaw)")
+    }
+
+    log.debug("op: \(String(describing: opcode)) (\(opcode.rawValue)), event: \(String(describing: eventName)), seq: \(String(describing: sequence))")
 
     if let sequence = sequence {
       self.sequence = sequence
@@ -232,9 +236,10 @@ extension GatewayConnection {
 
     let packet = GatewayPacket<Any>(
       op: opcode,
-      data: data as Any,
+      eventData: data as Any,
       sequence: sequence,
-      eventName: eventName
+      eventName: eventName,
+      rawPayload: packetJSON
     )
     packets.send(packet)
 

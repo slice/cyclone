@@ -2,7 +2,6 @@ import Dispatch
 import FineJSON
 import Foundation
 import Network
-import NWWebSocket
 import os
 import RichJSONParser
 

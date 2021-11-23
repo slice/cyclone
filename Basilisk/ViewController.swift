@@ -51,39 +51,16 @@ extension NSUserInterfaceItemIdentifier {
       forItemWithIdentifier: .guild
     )
     guildsDataSource = makeDiffableDataSource()
-    guildsCollectionView.collectionViewLayout = makeCompositionalLayout()
+    guildsCollectionView.collectionViewLayout = makeCollectionViewLayout()
     guildsCollectionView.dataSource = guildsDataSource
   }
 
-  private func makeCompositionalLayout()
-    -> NSCollectionViewCompositionalLayout
-  {
-    let spacing = 5.0
-    let size = 60.0
-
-    let itemSize = NSCollectionLayoutSize(
-      widthDimension: .absolute(size),
-      heightDimension: .absolute(size)
-    )
-    let item = NSCollectionLayoutItem(layoutSize: itemSize)
-    item.contentInsets = NSDirectionalEdgeInsets(
-      top: spacing,
-      leading: spacing,
-      bottom: 0.0,
-      trailing: 0.0
-    )
-
-    let groupSize = NSCollectionLayoutSize(
-      widthDimension: .fractionalWidth(1.0),
-      heightDimension: .absolute(size + spacing)
-    )
-    let group = NSCollectionLayoutGroup.horizontal(
-      layoutSize: groupSize,
-      subitems: [item]
-    )
-    let section = NSCollectionLayoutSection(group: group)
-
-    return NSCollectionViewCompositionalLayout(section: section)
+  private func makeCollectionViewLayout() -> NSCollectionViewFlowLayout {
+    let layout = NSCollectionViewFlowLayout()
+    layout.minimumInteritemSpacing = 0.0
+    layout.sectionInset = NSEdgeInsets(top: 5.0, left: 5.0, bottom: 5.0, right: 5.0)
+    layout.scrollDirection = .vertical
+    return layout
   }
 
   private func makeDiffableDataSource()
@@ -96,9 +73,12 @@ extension NSUserInterfaceItemIdentifier {
         for: indexPath
       ) as! GuildsCollectionViewItem
       let guild = (self.client!.guilds.first { $0.id == identifier })!
-      let image = NSImage(byReferencing: guild.icon
-        .url(withFileExtension: "png"))
-      item.guildImageView.image = image
+      guard let icon = guild.icon else {
+        return item
+      }
+      let guildImage = NSImage(byReferencing: icon.url(withFileExtension: "png"))
+
+      item.guildImageView.image = guildImage
       return item
     }
   }

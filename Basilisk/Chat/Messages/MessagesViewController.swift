@@ -33,6 +33,11 @@ private typealias MessagesDiffableDataSource =
     MessagesSection,
     Message.ID
   >
+private typealias MessagesSnapshot =
+  NSDiffableDataSourceSnapshot<
+    MessagesSection,
+    Message.ID
+  >
 
 private extension NSUserInterfaceItemIdentifier {
   static let message: Self = .init("message")
@@ -159,8 +164,38 @@ class MessagesViewController: NSViewController {
       snapshot.appendItems([message.id], toSection: currentSection)
     }
 
+    applySnapshot(snapshot, alwaysScrollToBottom: true)
+  }
+
+  /// Appends a newly received message to the view controller and updates the
+  /// UI accordingly.
+  public func appendNewlyReceivedMessage(_ message: Message) {
+    var snapshot = dataSource.snapshot()
+
+    var lastSection = snapshot.sectionIdentifiers.last
+
+    if lastSection?.authorID != message.author.id || lastSection == nil {
+      // author differs or this is the first message, we should start a new
+      // message group
+      lastSection = MessagesSection(firstMessage: message)
+      snapshot.appendSections([lastSection!])
+    }
+
+    snapshot.appendItems([message.id], toSection: lastSection!)
+    messages.append(message)
+    applySnapshot(snapshot)
+  }
+
+  private func applySnapshot(
+    _ snapshot: MessagesSnapshot,
+    alwaysScrollToBottom: Bool = false
+  ) {
+    let wasScrolledToBottom = alwaysScrollToBottom ? true : scrollView
+      .isScrolledToBottom
     dataSource.apply(snapshot, animatingDifferences: false) { [weak self] in
-      self?.scrollView.scrollToEnd()
+      if wasScrolledToBottom {
+        self?.scrollView.scrollToEnd()
+      }
     }
   }
 

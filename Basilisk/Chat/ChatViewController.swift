@@ -273,13 +273,9 @@ import RichJSONParser
 
       let channelID = UInt64(data["channel_id"]!.stringValue!)
       guard channelID == focusedChannelID else { return }
-      let content = data["content"]!.stringValue!
-      let author = data["author"]!.objectValue!
-      let username = author["username"]!.stringValue!
-      let discriminator = author["discriminator"]!.stringValue!
 
-      messagesViewController
-        .appendToConsole(line: "<\(username)#\(discriminator)> \(content)")
+      let message = Message(json: packet.eventData!)
+      messagesViewController.appendNewlyReceivedMessage(message)
     }
   }
 

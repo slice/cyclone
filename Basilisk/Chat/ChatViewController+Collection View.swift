@@ -51,8 +51,8 @@ extension ChatViewController: NSCollectionViewDelegate {
     didSelectItemsAt indexPaths: Set<IndexPath>
   ) {
     NSLog("selected guild: \(indexPaths)")
-    guard let client = client else { return }
-    selectedGuildID = client.guilds[indexPaths.first!.item].id
+    guard let guilds = guildsSortedAccordingToUserSettings() else { return }
+    selectedGuildID = guilds[indexPaths.first!.item].id
     channelsOutlineView.reloadData()
   }
 }

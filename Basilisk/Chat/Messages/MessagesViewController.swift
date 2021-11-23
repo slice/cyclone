@@ -165,17 +165,16 @@ class MessagesViewController: NSViewController {
   }
 
   private func makeCollectionViewLayout() -> NSCollectionViewLayout {
-    let messageHeight: NSCollectionLayoutDimension = .estimated(20.0)
     let itemSize = NSCollectionLayoutSize(
       widthDimension: .fractionalWidth(1.0),
-      heightDimension: messageHeight
+      heightDimension: .fractionalHeight(1.0)
     )
     let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
     let group = NSCollectionLayoutGroup.vertical(
       layoutSize: .init(
         widthDimension: .fractionalWidth(1.0),
-        heightDimension: messageHeight
+        heightDimension: .estimated(20.0)
       ),
       subitems: [item]
     )

@@ -79,15 +79,29 @@ public class Client {
   /// Connect to the Discord gateway.
   public func connect() {
     gatewaySink = gatewayConnection.packets.sink { [weak self] packet in
-      if packet.eventName == "READY" {
-        self?.processReadyPacket(packet)
-      }
+      self?.processPacket(packet)
     }
 
     gatewayConnection.connect(
       toGateway: URL(string: "wss://gateway.discord.gg/?encoding=json&v=9")!,
       fromDiscordEndpoint: endpoint
     )
+  }
+
+  func processPacket(_ packet: GatewayPacket) {
+    guard let eventName = packet.eventName else {
+      return
+    }
+
+    switch eventName {
+    case "READY":
+      self.processReadyPacket(packet)
+    case "GUILD_CREATE":
+      self.guilds.append(Guild(json: packet.eventData!))
+      self.guildsChanged.send()
+    default:
+      break
+    }
   }
 
   func processReadyPacket(_ packet: GatewayPacket) {

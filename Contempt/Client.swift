@@ -43,7 +43,7 @@ public class Client {
     osVersion: "21.2.0",
     osArch: "x64",
     systemLocale: "en-US",
-    clientBuildNumber: 104_572,
+    clientBuildNumber: 105_780,
     clientEventSource: nil
   )
 

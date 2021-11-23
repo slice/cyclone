@@ -19,10 +19,4 @@ class RoundingView: NSView {
     layer!.masksToBounds = true
     layer!.cornerRadius = radius
   }
-
-  override func draw(_ dirtyRect: NSRect) {
-    for view in subviews {
-      view.draw(dirtyRect)
-    }
-  }
 }

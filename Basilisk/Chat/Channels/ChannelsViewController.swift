@@ -152,7 +152,10 @@ extension ChannelsViewController: NSOutlineViewDelegate {
     ) as! NSTableCellView
     let channel = (item as! ChannelRef)
 
-    cell.imageView?.image = NSImage(systemSymbolName: channel.type.systemSymbolName, accessibilityDescription: nil)
+    cell.imageView?.image = NSImage(
+      systemSymbolName: channel.type.systemSymbolName,
+      accessibilityDescription: nil
+    )
     cell.textField?.stringValue = channel.name
     return cell
   }

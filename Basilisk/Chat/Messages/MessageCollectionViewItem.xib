@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="19455" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19455"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner">
+            <connections>
+                <outlet property="view" destination="Hz6-mo-xeY" id="0bl-1N-x8E"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customView id="Hz6-mo-xeY">
+            <rect key="frame" x="0.0" y="0.0" width="330" height="16"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="o48-oU-OEL">
+                    <rect key="frame" x="-2" y="0.0" width="334" height="16"/>
+                    <textFieldCell key="cell" title="Message content" id="cAj-Zs-grH">
+                        <font key="font" usesAppearanceFont="YES"/>
+                        <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+            </subviews>
+            <constraints>
+                <constraint firstItem="o48-oU-OEL" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" id="7cl-KQ-xl6"/>
+                <constraint firstItem="o48-oU-OEL" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" id="H41-KN-dEr"/>
+                <constraint firstItem="o48-oU-OEL" firstAttribute="height" secondItem="Hz6-mo-xeY" secondAttribute="height" id="N0s-tr-V5Z"/>
+                <constraint firstItem="o48-oU-OEL" firstAttribute="width" secondItem="Hz6-mo-xeY" secondAttribute="width" id="NqA-ZC-Gvu"/>
+            </constraints>
+            <point key="canvasLocation" x="64" y="46.5"/>
+        </customView>
+        <collectionViewItem id="7Ow-tk-J0p" customClass="MessageCollectionViewItem" customModule="Basilisk" customModuleProvider="target">
+            <connections>
+                <outlet property="contentTextField" destination="o48-oU-OEL" id="bYm-Xa-lhU"/>
+                <outlet property="view" destination="Hz6-mo-xeY" id="zyv-TE-fhF"/>
+            </connections>
+        </collectionViewItem>
+    </objects>
+</document>

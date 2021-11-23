@@ -3,14 +3,17 @@ import Combine
 import Contempt
 import FineJSON
 import RichJSONParser
+import GenericJSON
 
 @MainActor class ChatViewController: NSSplitViewController {
   var guildsViewController: GuildsViewController {
     splitViewItems[0].viewController as! GuildsViewController
   }
+
   var channelsViewController: ChannelsViewController {
     splitViewItems[1].viewController as! ChannelsViewController
   }
+
   var messagesViewController: MessagesViewController {
     splitViewItems[2].viewController as! MessagesViewController
   }
@@ -53,11 +56,7 @@ import RichJSONParser
     }
 
     channelsViewController.onSelectChannel = { [weak self] id in
-      self?.focusedChannelID = id.uint64
-
-      if let channelName = self?.selectedGuild?.channels.first(where: { $0.id == id })?.name {
-        self?.view.window?.subtitle = "#\(channelName)"
-      }
+      self?.selectChannel(withID: id)
     }
     channelsViewController.getSelectedGuild = { [weak self] in
       self?.selectedGuild
@@ -70,12 +69,17 @@ import RichJSONParser
         do {
           try await self.handleCommand(named: command, arguments: args)
         } catch {
-          self.messagesViewController.appendToConsole(line: "[system] failed to handle command: \(error)")
+          self.messagesViewController
+            .appendToConsole(
+              line: "[system] failed to handle command: \(error)"
+            )
         }
       }
     }
     messagesViewController.onSendMessage = { [weak self] content in
-      if let self = self, let focusedChannelID = self.focusedChannelID, let client = self.client {
+      if let self = self, let focusedChannelID = self.focusedChannelID,
+         let client = self.client
+      {
         let url = client.http.baseURL.appendingPathComponent("api")
           .appendingPathComponent("v9")
           .appendingPathComponent("channels")
@@ -84,13 +88,14 @@ import RichJSONParser
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         let randomNumber = Int.random(in: 0 ... 1_000_000_000)
-        let json: JSON = .object(.init([
+        let json: RichJSONParser.JSON = .object(.init([
           "content": .string(content),
           "tts": .boolean(false),
           "nonce": .string(String(randomNumber)),
         ]))
         let encoder = FineJSONEncoder()
-        encoder.jsonSerializeOptions = JSONSerializeOptions(isPrettyPrint: false)
+        encoder
+          .jsonSerializeOptions = JSONSerializeOptions(isPrettyPrint: false)
         encoder.optionalEncodingStrategy = .explicitNull
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpBody = try! encoder.encode(json)
@@ -104,11 +109,43 @@ import RichJSONParser
     }
   }
 
+  func selectChannel(withID id: Snowflake) {
+    focusedChannelID = id.uint64
+
+    if let client = client,
+       let selectedGuild = selectedGuild,
+       let channelName = selectedGuild.channels.first(where: { $0.id == id })?
+       .name
+    {
+      view.window?.subtitle = "#\(channelName)"
+
+      let url = client.http.baseURL.appendingPathComponent("api")
+        .appendingPathComponent("v9")
+        .appendingPathComponent("channels")
+        .appendingPathComponent(String(id.uint64))
+        .appendingPathComponent("messages")
+
+      let queryItems = [URLQueryItem(name: "limit", value: "50")]
+      var urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: false)!
+      urlComponents.queryItems = queryItems
+
+      var request = URLRequest(url: urlComponents.url!)
+      request.httpMethod = "GET"
+
+      Task { [request] in
+        let data = try! await client.http.request(request, withSpoofedHeadersOfRequestType: .xhr)
+        let deserialized = try JSONSerialization.jsonObject(with: data, options: [])
+        let messages = try GenericJSON.JSON(deserialized).arrayValue!
+          .map(Message.init(json:))
+        self.messagesViewController.applyInitialMessages(messages)
+      }
+    }
+  }
+
   func handleCommand(
     named command: String,
     arguments: [String]
   ) async throws {
-
     let say = { message in
       self.messagesViewController.appendToConsole(line: message)
     }
@@ -116,7 +153,7 @@ import RichJSONParser
     switch command {
     case "connect":
       guard let token = arguments.first else {
-      say("[system] you need a user token, silly!")
+        say("[system] you need a user token, silly!")
         return
       }
 
@@ -232,7 +269,8 @@ import RichJSONParser
       let username = author["username"]!.stringValue!
       let discriminator = author["discriminator"]!.stringValue!
 
-      messagesViewController.appendToConsole(line: "<\(username)#\(discriminator)> \(content)")
+      messagesViewController
+        .appendToConsole(line: "<\(username)#\(discriminator)> \(content)")
     }
   }
 

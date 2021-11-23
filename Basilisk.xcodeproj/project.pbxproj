@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		120A78D82741E9A70099834B /* WebSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 120A78D72741E9A70099834B /* WebSocket.swift */; };
 		120A78DB2741F9BE0099834B /* WebSocketEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 120A78DA2741F9BE0099834B /* WebSocketEvent.swift */; };
+		12102CF9274D8ABE000F8FD9 /* MessageCollectionViewItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12102CF7274D8ABE000F8FD9 /* MessageCollectionViewItem.swift */; };
+		12102CFA274D8ABE000F8FD9 /* MessageCollectionViewItem.xib in Resources */ = {isa = PBXBuildFile; fileRef = 12102CF8274D8ABE000F8FD9 /* MessageCollectionViewItem.xib */; };
 		1210E6EA274CC18300BF8C9B /* RoundingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1210E6E9274CC18300BF8C9B /* RoundingView.swift */; };
 		121B6FBB273E32D6000DD150 /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = 121B6FBA273E32D5000DD150 /* ArgumentParser */; };
 		121B6FBD273E3300000DD150 /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = 121B6FBC273E3300000DD150 /* ArgumentParser */; };
@@ -35,6 +37,8 @@
 		128C768C273E10DD008FD585 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 128C768B273E10DD008FD585 /* main.swift */; };
 		128C7695273E1171008FD585 /* Contempt.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 12F4FDB3273DFCD000B6AE64 /* Contempt.framework */; };
 		128C7696273E1171008FD585 /* Contempt.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 12F4FDB3273DFCD000B6AE64 /* Contempt.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		12945081274D3A240024C744 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12945080274D3A240024C744 /* Message.swift */; };
+		12945083274D3A410024C744 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12945082274D3A410024C744 /* User.swift */; };
 		129AF795273E653100B3851C /* GatewayPacket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 129AF794273E653100B3851C /* GatewayPacket.swift */; };
 		12AB3D7E274C1CB400934345 /* Gateway Inspector.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 12AB3D7D274C1CB400934345 /* Gateway Inspector.storyboard */; };
 		12AB3D80274C224200934345 /* GatewayInspectorController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12AB3D7F274C224200934345 /* GatewayInspectorController.swift */; };
@@ -56,6 +60,8 @@
 		12F4FDC5273DFCD000B6AE64 /* Contempt.h in Headers */ = {isa = PBXBuildFile; fileRef = 12F4FDB5273DFCD000B6AE64 /* Contempt.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		12F4FDC8273DFCD000B6AE64 /* Contempt.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 12F4FDB3273DFCD000B6AE64 /* Contempt.framework */; };
 		12F4FDC9273DFCD000B6AE64 /* Contempt.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 12F4FDB3273DFCD000B6AE64 /* Contempt.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		12FA9AEB274D968500079393 /* MessageGroupHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12FA9AE9274D968500079393 /* MessageGroupHeader.swift */; };
+		12FA9AEC274D968500079393 /* MessageGroupHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 12FA9AEA274D968500079393 /* MessageGroupHeader.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -140,6 +146,8 @@
 /* Begin PBXFileReference section */
 		120A78D72741E9A70099834B /* WebSocket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocket.swift; sourceTree = "<group>"; };
 		120A78DA2741F9BE0099834B /* WebSocketEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketEvent.swift; sourceTree = "<group>"; };
+		12102CF7274D8ABE000F8FD9 /* MessageCollectionViewItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageCollectionViewItem.swift; sourceTree = "<group>"; };
+		12102CF8274D8ABE000F8FD9 /* MessageCollectionViewItem.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MessageCollectionViewItem.xib; sourceTree = "<group>"; };
 		1210E6E9274CC18300BF8C9B /* RoundingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundingView.swift; sourceTree = "<group>"; };
 		121F930F274CF318007F81CC /* MessagesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesViewController.swift; sourceTree = "<group>"; };
 		121F9311274CF5C1007F81CC /* ChannelsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelsViewController.swift; sourceTree = "<group>"; };
@@ -159,6 +167,8 @@
 		128C7676273E04D2008FD585 /* Disguise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Disguise.swift; sourceTree = "<group>"; };
 		128C7689273E10DD008FD585 /* Glare */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Glare; sourceTree = BUILT_PRODUCTS_DIR; };
 		128C768B273E10DD008FD585 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		12945080274D3A240024C744 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
+		12945082274D3A410024C744 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		129AF794273E653100B3851C /* GatewayPacket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GatewayPacket.swift; sourceTree = "<group>"; };
 		12AB3D7D274C1CB400934345 /* Gateway Inspector.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Gateway Inspector.storyboard"; sourceTree = "<group>"; };
 		12AB3D7F274C224200934345 /* GatewayInspectorController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GatewayInspectorController.swift; sourceTree = "<group>"; };
@@ -182,6 +192,8 @@
 		12F4FDB6273DFCD000B6AE64 /* Contempt.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = Contempt.docc; sourceTree = "<group>"; };
 		12F4FDBC273DFCD000B6AE64 /* ContemptTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ContemptTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		12F4FDC3273DFCD000B6AE64 /* ContemptTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContemptTests.swift; sourceTree = "<group>"; };
+		12FA9AE9274D968500079393 /* MessageGroupHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageGroupHeader.swift; sourceTree = "<group>"; };
+		12FA9AEA274D968500079393 /* MessageGroupHeader.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MessageGroupHeader.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -271,6 +283,10 @@
 			isa = PBXGroup;
 			children = (
 				121F930F274CF318007F81CC /* MessagesViewController.swift */,
+				12102CF7274D8ABE000F8FD9 /* MessageCollectionViewItem.swift */,
+				12102CF8274D8ABE000F8FD9 /* MessageCollectionViewItem.xib */,
+				12FA9AE9274D968500079393 /* MessageGroupHeader.swift */,
+				12FA9AEA274D968500079393 /* MessageGroupHeader.xib */,
 			);
 			path = Messages;
 			sourceTree = "<group>";
@@ -291,6 +307,8 @@
 				12894914274C8FB900850D5E /* Snowflake.swift */,
 				12894916274C904E00850D5E /* Asset.swift */,
 				12894918274C91C700850D5E /* Channel.swift */,
+				12945080274D3A240024C744 /* Message.swift */,
+				12945082274D3A410024C744 /* User.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -640,8 +658,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				12F4FD88273DFC1B00B6AE64 /* Assets.xcassets in Resources */,
+				12102CFA274D8ABE000F8FD9 /* MessageCollectionViewItem.xib in Resources */,
 				12AB3D7E274C1CB400934345 /* Gateway Inspector.storyboard in Resources */,
 				12F4FD8B273DFC1B00B6AE64 /* Main.storyboard in Resources */,
+				12FA9AEC274D968500079393 /* MessageGroupHeader.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -692,10 +712,12 @@
 				12B99C2427410B010048D2DB /* PacketDirection.swift in Sources */,
 				12F4FD86273DFC1900B6AE64 /* ChatViewController.swift in Sources */,
 				121F931C274CF841007F81CC /* GuildsViewController.swift in Sources */,
+				12FA9AEB274D968500079393 /* MessageGroupHeader.swift in Sources */,
 				12AB3D80274C224200934345 /* GatewayInspectorController.swift in Sources */,
 				12F4FD84273DFC1900B6AE64 /* AppDelegate.swift in Sources */,
 				121F9310274CF318007F81CC /* MessagesViewController.swift in Sources */,
 				121F9312274CF5C1007F81CC /* ChannelsViewController.swift in Sources */,
+				12102CF9274D8ABE000F8FD9 /* MessageCollectionViewItem.swift in Sources */,
 				1210E6EA274CC18300BF8C9B /* RoundingView.swift in Sources */,
 				12B99C1E27410A5A0048D2DB /* GatewayLogStore.swift in Sources */,
 				12B99C2227410AD00048D2DB /* LogMessage.swift in Sources */,
@@ -727,6 +749,7 @@
 				12CD0228274218AA00F136A5 /* Publisher+Buffer.swift in Sources */,
 				12894919274C91C700850D5E /* Channel.swift in Sources */,
 				12552C9C273F3DDA007D92B1 /* HTTP.swift in Sources */,
+				12945081274D3A240024C744 /* Message.swift in Sources */,
 				128C7673273DFD0E008FD585 /* Client.swift in Sources */,
 				128C7675273DFF73008FD585 /* Branch.swift in Sources */,
 				12897BF2273E25C700403E5B /* GatewayConnection.swift in Sources */,
@@ -737,6 +760,7 @@
 				12F4FDB7273DFCD000B6AE64 /* Contempt.docc in Sources */,
 				12894915274C8FB900850D5E /* Snowflake.swift in Sources */,
 				120A78DB2741F9BE0099834B /* WebSocketEvent.swift in Sources */,
+				12945083274D3A410024C744 /* User.swift in Sources */,
 				12894917274C904E00850D5E /* Asset.swift in Sources */,
 				120A78D82741E9A70099834B /* WebSocket.swift in Sources */,
 				12894913274C8FA200850D5E /* Guild.swift in Sources */,

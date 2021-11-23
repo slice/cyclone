@@ -157,5 +157,9 @@ import RichJSONParser
     // will not get a chance to respond to the disconnect, but that's fine since
     // we've already cleanly disconnected by now.
     client = nil
+
+    let snapshot = NSDiffableDataSourceSnapshot<GuildsSection, Guild.ID>()
+    guildsDataSource.apply(snapshot, animatingDifferences: true)
+    channelsOutlineView.reloadData()
   }
 }

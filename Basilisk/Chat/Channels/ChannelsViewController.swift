@@ -125,6 +125,23 @@ extension ChannelsViewController: NSOutlineViewDataSource {
   }
 }
 
+private extension ChannelType {
+  var systemSymbolName: String {
+    switch self {
+    case .category:
+      return "folder.fill"
+    case .dm:
+      return "person.crop.circle.fill"
+    case .groupDM:
+      return "person.2.circle.fill"
+    case .voice:
+      return "speaker.wave.2.fill"
+    default:
+      return "number"
+    }
+  }
+}
+
 extension ChannelsViewController: NSOutlineViewDelegate {
   func outlineView(_ outlineView: NSOutlineView, viewFor _: NSTableColumn?,
                    item: Any) -> NSView?
@@ -134,11 +151,9 @@ extension ChannelsViewController: NSOutlineViewDelegate {
       owner: nil
     ) as! NSTableCellView
     let channel = (item as! ChannelRef)
-    var name = channel.name
-    if channel.type != .category {
-      name = "#" + name
-    }
-    cell.textField!.stringValue = name
+
+    cell.imageView?.image = NSImage(systemSymbolName: channel.type.systemSymbolName, accessibilityDescription: nil)
+    cell.textField?.stringValue = channel.name
     return cell
   }
 

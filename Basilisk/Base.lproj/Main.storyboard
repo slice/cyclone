@@ -834,7 +834,7 @@
                                     <rect key="frame" x="0.0" y="0.0" width="180" height="497"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
-                                        <outlineView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnReordering="NO" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" rowHeight="24" rowSizeStyle="automatic" viewBased="YES" indentationPerLevel="13" outlineTableColumn="NCb-8h-mzO" id="Z2u-9m-m6l">
+                                        <outlineView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnReordering="NO" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" rowHeight="24" rowSizeStyle="large" viewBased="YES" indentationPerLevel="13" outlineTableColumn="NCb-8h-mzO" id="Z2u-9m-m6l">
                                             <rect key="frame" x="0.0" y="0.0" width="180" height="497"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <size key="intercellSpacing" width="17" height="0.0"/>
@@ -853,22 +853,28 @@
                                                     </textFieldCell>
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
-                                                        <tableCellView identifier="channel" id="2zw-03-ieX">
-                                                            <rect key="frame" x="18" y="0.0" width="143" height="24"/>
+                                                        <tableCellView identifier="channel" id="M4R-yu-MHn">
+                                                            <rect key="frame" x="18" y="0.0" width="143" height="17"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
-                                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="97U-O2-e8t">
-                                                                    <rect key="frame" x="0.0" y="4" width="143" height="16"/>
-                                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                                                                    <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="RMx-Mj-Oy3">
-                                                                        <font key="font" usesAppearanceFont="YES"/>
+                                                                <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ct8-bt-y4d">
+                                                                    <rect key="frame" x="3" y="0.0" width="17" height="17"/>
+                                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                    <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="NSActionTemplate" catalog="system" id="AVm-p7-5gR"/>
+                                                                </imageView>
+                                                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" allowsExpansionToolTips="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mK5-ES-WJe">
+                                                                    <rect key="frame" x="25" y="0.0" width="118" height="17"/>
+                                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                                                    <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="fQQ-un-8WW">
+                                                                        <font key="font" metaFont="system"/>
                                                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                     </textFieldCell>
                                                                 </textField>
                                                             </subviews>
                                                             <connections>
-                                                                <outlet property="textField" destination="97U-O2-e8t" id="1kA-C5-To4"/>
+                                                                <outlet property="imageView" destination="ct8-bt-y4d" id="570-yE-SA0"/>
+                                                                <outlet property="textField" destination="mK5-ES-WJe" id="lqC-s7-IM4"/>
                                                             </connections>
                                                         </tableCellView>
                                                     </prototypeCellViews>
@@ -903,7 +909,7 @@
                 </viewController>
                 <customObject id="Wfe-CF-nQA" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-522" y="1417"/>
+            <point key="canvasLocation" x="-522" y="1416.5"/>
         </scene>
         <!--Messages-->
         <scene sceneID="S0E-ES-LND">
@@ -1057,4 +1063,7 @@
             <point key="canvasLocation" x="-694" y="1416.5"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="NSActionTemplate" catalog="system" width="15" height="15"/>
+    </resources>
 </document>

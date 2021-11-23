@@ -136,6 +136,14 @@ extension ChatViewController: NSOutlineViewDelegate {
     return cell
   }
 
+  func outlineView(_ outlineView: NSOutlineView, shouldSelectItem item: Any) -> Bool {
+    if let channel = item as? ChannelRef, channel.type == .text {
+      return true
+    } else {
+      return false
+    }
+  }
+
   func outlineViewSelectionDidChange(_: Notification) {
     guard let item = channelsOutlineView
       .item(atRow: channelsOutlineView.selectedRow) as? ChannelRef

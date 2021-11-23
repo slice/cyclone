@@ -56,7 +56,7 @@ import RichJSONParser
       self?.focusedChannelID = id.uint64
 
       if let channelName = self?.selectedGuild?.channels.first(where: { $0.id == id })?.name {
-        self?.view.window?.subtitle = channelName
+        self?.view.window?.subtitle = "#\(channelName)"
       }
     }
     channelsViewController.getSelectedGuild = { [weak self] in

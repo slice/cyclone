@@ -15,14 +15,14 @@ public enum ChannelType: Int {
   case stageVoice = 13
 }
 
-public struct Channel {
-  let id: Snowflake
+public struct Channel: Identifiable {
+  public let id: Snowflake
 //  let guildID: Snowflake
-  let name: String
-  let type: ChannelType
-  let position: Int
-  let topic: String?
-  let parentID: Snowflake?
+  public let name: String
+  public let type: ChannelType
+  public let position: Int
+  public let topic: String?
+  public let parentID: Snowflake?
 
   init(json: JSON) {
     id = Snowflake(string: json["id"]!.stringValue!)

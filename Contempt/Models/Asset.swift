@@ -1,14 +1,16 @@
 public enum AssetType: String {
-  case icon = "icon"
-  case avatar = "avatar"
+  case icon
+  case avatar
 }
 
 public struct Asset {
-  let type: AssetType
-  let parent: Snowflake
-  let hash: String
+  public let type: AssetType
+  public let parent: Snowflake
+  public let hash: String
 
-  func url(withFileExtension fileExtension: String) -> URL {
-    URL(string: "https://cdn.discordapp.com/\(type.rawValue)/\(parent)/\(hash).\(fileExtension)")!
+  public func url(withFileExtension fileExtension: String) -> URL {
+    URL(
+      string: "https://cdn.discordapp.com/\(type.rawValue)s/\(parent.uint64)/\(hash).\(fileExtension)"
+    )!
   }
 }

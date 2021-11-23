@@ -4,14 +4,29 @@ import Contempt
 import FineJSON
 import RichJSONParser
 
+enum GuildsSection: CaseIterable {
+  case main
+}
+
+extension NSUserInterfaceItemIdentifier {
+  static let guild: Self = .init("guild")
+}
+
 @MainActor class ViewController: NSViewController {
   @IBOutlet var consoleTextView: NSTextView!
   @IBOutlet var inputTextField: NSTextField!
   @IBOutlet var consoleScrollView: NSScrollView!
+  @IBOutlet var guildsCollectionView: NSCollectionView!
 
   var client: Client?
   var focusedChannelID: UInt64?
   var gatewayPacketHandler: Task<Void, Never>?
+  var gatewayGuildsSink: AnyCancellable!
+
+  var guildsDataSource: NSCollectionViewDiffableDataSource<
+    GuildsSection,
+    Guild.ID
+  >!
 
   deinit {
     NSLog("ViewController deinit")
@@ -30,6 +45,62 @@ import RichJSONParser
       ofSize: 10,
       weight: .regular
     )
+
+    guildsCollectionView.register(
+      GuildsCollectionViewItem.self,
+      forItemWithIdentifier: .guild
+    )
+    guildsDataSource = makeDiffableDataSource()
+    guildsCollectionView.collectionViewLayout = makeCompositionalLayout()
+    guildsCollectionView.dataSource = guildsDataSource
+  }
+
+  private func makeCompositionalLayout()
+    -> NSCollectionViewCompositionalLayout
+  {
+    let spacing = 5.0
+    let size = 60.0
+
+    let itemSize = NSCollectionLayoutSize(
+      widthDimension: .absolute(size),
+      heightDimension: .absolute(size)
+    )
+    let item = NSCollectionLayoutItem(layoutSize: itemSize)
+    item.contentInsets = NSDirectionalEdgeInsets(
+      top: spacing,
+      leading: spacing,
+      bottom: 0.0,
+      trailing: 0.0
+    )
+
+    let groupSize = NSCollectionLayoutSize(
+      widthDimension: .fractionalWidth(1.0),
+      heightDimension: .absolute(size + spacing)
+    )
+    let group = NSCollectionLayoutGroup.horizontal(
+      layoutSize: groupSize,
+      subitems: [item]
+    )
+    let section = NSCollectionLayoutSection(group: group)
+
+    return NSCollectionViewCompositionalLayout(section: section)
+  }
+
+  private func makeDiffableDataSource()
+    -> NSCollectionViewDiffableDataSource<GuildsSection, Guild.ID>
+  {
+    NSCollectionViewDiffableDataSource(collectionView: guildsCollectionView) { [weak self] _, indexPath, identifier in
+      guard let self = self else { return nil }
+      let item = self.guildsCollectionView.makeItem(
+        withIdentifier: .guild,
+        for: indexPath
+      ) as! GuildsCollectionViewItem
+      let guild = (self.client!.guilds.first { $0.id == identifier })!
+      let image = NSImage(byReferencing: guild.icon
+        .url(withFileExtension: "png"))
+      item.guildImageView.image = image
+      return item
+    }
   }
 
   private func appendToConsole(line: String) {
@@ -57,6 +128,13 @@ import RichJSONParser
     try await client.http.requestLandingPage()
     client.connect()
     setUpGatewayPacketHandler()
+    gatewayGuildsSink = client.guildsChanged.receive(on: RunLoop.main)
+      .sink { [weak self] _ in
+        var snapshot = NSDiffableDataSourceSnapshot<GuildsSection, Guild.ID>()
+        snapshot.appendSections([.main])
+        snapshot.appendItems(client.guilds.map(\.id), toSection: .main)
+        self?.guildsDataSource.apply(snapshot, animatingDifferences: true)
+      }
   }
 
   private func logPacket(_ packet: GatewayPacket) {

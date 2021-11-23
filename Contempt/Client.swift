@@ -1,10 +1,10 @@
+import Combine
 import Dispatch
 import FineJSON
 import Foundation
 import Network
 import os
 import RichJSONParser
-import Combine
 
 // MARK: Client
 
@@ -90,7 +90,6 @@ public class Client {
     log.debug("getting READY...")
     guilds = packet.eventData!.objectValue!["guilds"]!.arrayValue!
       .map(Guild.init(json:))
-    log.debug("\(self.guilds.count) guild(s) were sent in READY!")
     guildsChanged.send()
   }
 

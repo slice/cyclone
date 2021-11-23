@@ -1,10 +1,10 @@
 import GenericJSON
 
-public struct Guild {
-  let name: String
-  let id: Snowflake
-  let icon: Asset
-  let channels: [Channel]
+public struct Guild: Identifiable {
+  public let name: String
+  public let id: Snowflake
+  public let icon: Asset
+  public let channels: [Channel]
 
   init(json: JSON) {
     let object = json.objectValue!

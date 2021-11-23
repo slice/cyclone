@@ -4,8 +4,8 @@ import Cocoa
 class AppDelegate: NSObject, NSApplicationDelegate {
   var gatewayLogStore = GatewayLogStore()
 
-  var activeViewControllers: [ViewController] {
-    NSApp.windows.compactMap { $0.contentViewController as? ViewController }
+  var activeViewControllers: [ChatViewController] {
+    NSApp.windows.compactMap { $0.contentViewController as? ChatViewController }
   }
 
   func applicationDidFinishLaunching(_: Notification) {

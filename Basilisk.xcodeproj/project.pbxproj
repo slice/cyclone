@@ -18,6 +18,8 @@
 		12894917274C904E00850D5E /* Asset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12894916274C904E00850D5E /* Asset.swift */; };
 		12894919274C91C700850D5E /* Channel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12894918274C91C700850D5E /* Channel.swift */; };
 		1289491B274C9C5100850D5E /* GuildsCollectionViewItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1289491A274C9C5100850D5E /* GuildsCollectionViewItem.swift */; };
+		1289491E274CB39800850D5E /* ChatViewController+Collection View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1289491D274CB39800850D5E /* ChatViewController+Collection View.swift */; };
+		12894920274CB3D000850D5E /* ChatViewController+Console.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1289491F274CB3D000850D5E /* ChatViewController+Console.swift */; };
 		12897BF2273E25C700403E5B /* GatewayConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12897BF1273E25C700403E5B /* GatewayConnection.swift */; };
 		12897BF4273E2BF400403E5B /* Opcode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12897BF3273E2BF400403E5B /* Opcode.swift */; };
 		128C7673273DFD0E008FD585 /* Client.swift in Sources */ = {isa = PBXBuildFile; fileRef = 128C7672273DFD0E008FD585 /* Client.swift */; };
@@ -40,7 +42,7 @@
 		12B99C2427410B010048D2DB /* PacketDirection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12B99C2327410B010048D2DB /* PacketDirection.swift */; };
 		12CD0228274218AA00F136A5 /* Publisher+Buffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12CD0226274217E600F136A5 /* Publisher+Buffer.swift */; };
 		12F4FD84273DFC1900B6AE64 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12F4FD83273DFC1900B6AE64 /* AppDelegate.swift */; };
-		12F4FD86273DFC1900B6AE64 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12F4FD85273DFC1900B6AE64 /* ViewController.swift */; };
+		12F4FD86273DFC1900B6AE64 /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12F4FD85273DFC1900B6AE64 /* ChatViewController.swift */; };
 		12F4FD88273DFC1B00B6AE64 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 12F4FD87273DFC1B00B6AE64 /* Assets.xcassets */; };
 		12F4FD8B273DFC1B00B6AE64 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 12F4FD89273DFC1B00B6AE64 /* Main.storyboard */; };
 		12F4FD96273DFC1B00B6AE64 /* BasiliskTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12F4FD95273DFC1B00B6AE64 /* BasiliskTests.swift */; };
@@ -144,6 +146,8 @@
 		12894916274C904E00850D5E /* Asset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Asset.swift; sourceTree = "<group>"; };
 		12894918274C91C700850D5E /* Channel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Channel.swift; sourceTree = "<group>"; };
 		1289491A274C9C5100850D5E /* GuildsCollectionViewItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuildsCollectionViewItem.swift; sourceTree = "<group>"; };
+		1289491D274CB39800850D5E /* ChatViewController+Collection View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChatViewController+Collection View.swift"; sourceTree = "<group>"; };
+		1289491F274CB3D000850D5E /* ChatViewController+Console.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChatViewController+Console.swift"; sourceTree = "<group>"; };
 		12897BF1273E25C700403E5B /* GatewayConnection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GatewayConnection.swift; sourceTree = "<group>"; };
 		12897BF3273E2BF400403E5B /* Opcode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Opcode.swift; sourceTree = "<group>"; };
 		128C7672273DFD0E008FD585 /* Client.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Client.swift; sourceTree = "<group>"; };
@@ -161,7 +165,7 @@
 		12CD0226274217E600F136A5 /* Publisher+Buffer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Publisher+Buffer.swift"; sourceTree = "<group>"; };
 		12F4FD80273DFC1900B6AE64 /* Basilisk.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Basilisk.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		12F4FD83273DFC1900B6AE64 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		12F4FD85273DFC1900B6AE64 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		12F4FD85273DFC1900B6AE64 /* ChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
 		12F4FD87273DFC1B00B6AE64 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		12F4FD8A273DFC1B00B6AE64 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		12F4FD8C273DFC1B00B6AE64 /* Basilisk.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Basilisk.entitlements; sourceTree = "<group>"; };
@@ -262,6 +266,17 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
+		1289491C274CB34E00850D5E /* Chat */ = {
+			isa = PBXGroup;
+			children = (
+				1289491A274C9C5100850D5E /* GuildsCollectionViewItem.swift */,
+				12F4FD85273DFC1900B6AE64 /* ChatViewController.swift */,
+				1289491D274CB39800850D5E /* ChatViewController+Collection View.swift */,
+				1289491F274CB3D000850D5E /* ChatViewController+Console.swift */,
+			);
+			path = Chat;
+			sourceTree = "<group>";
+		};
 		128C767B273E0A5C008FD585 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -339,13 +354,12 @@
 		12F4FD82273DFC1900B6AE64 /* Basilisk */ = {
 			isa = PBXGroup;
 			children = (
+				1289491C274CB34E00850D5E /* Chat */,
 				12CB09572740D47000F28AD5 /* Gateway Inspector */,
 				12F4FD83273DFC1900B6AE64 /* AppDelegate.swift */,
-				12F4FD85273DFC1900B6AE64 /* ViewController.swift */,
 				12F4FD87273DFC1B00B6AE64 /* Assets.xcassets */,
 				12F4FD89273DFC1B00B6AE64 /* Main.storyboard */,
 				12F4FD8C273DFC1B00B6AE64 /* Basilisk.entitlements */,
-				1289491A274C9C5100850D5E /* GuildsCollectionViewItem.swift */,
 			);
 			path = Basilisk;
 			sourceTree = "<group>";
@@ -648,9 +662,11 @@
 			files = (
 				12B99C2427410B010048D2DB /* PacketDirection.swift in Sources */,
 				12B99C2027410A9F0048D2DB /* ScrollableMonospaceTextView.swift in Sources */,
-				12F4FD86273DFC1900B6AE64 /* ViewController.swift in Sources */,
+				1289491E274CB39800850D5E /* ChatViewController+Collection View.swift in Sources */,
+				12F4FD86273DFC1900B6AE64 /* ChatViewController.swift in Sources */,
 				12AB3D80274C224200934345 /* GatewayInspectorController.swift in Sources */,
 				12F4FD84273DFC1900B6AE64 /* AppDelegate.swift in Sources */,
+				12894920274CB3D000850D5E /* ChatViewController+Console.swift in Sources */,
 				12B99C1E27410A5A0048D2DB /* GatewayLogStore.swift in Sources */,
 				12B99C2227410AD00048D2DB /* LogMessage.swift in Sources */,
 				1289491B274C9C5100850D5E /* GuildsCollectionViewItem.swift in Sources */,

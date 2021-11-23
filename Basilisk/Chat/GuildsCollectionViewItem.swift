@@ -21,10 +21,22 @@ class GuildsCollectionViewItem: NSCollectionViewItem {
     boxView.addSubview(guildImageView)
 
     NSLayoutConstraint.activate([
-      boxView.topAnchor.constraint(equalTo: guildImageView.topAnchor, constant: -3.0),
-      boxView.bottomAnchor.constraint(equalTo: guildImageView.bottomAnchor, constant: 3.0),
-      boxView.leadingAnchor.constraint(equalTo: guildImageView.leadingAnchor, constant: -3.0),
-      boxView.trailingAnchor.constraint(equalTo: guildImageView.trailingAnchor, constant: 3.0),
+      boxView.topAnchor.constraint(
+        equalTo: guildImageView.topAnchor,
+        constant: -3.0
+      ),
+      boxView.bottomAnchor.constraint(
+        equalTo: guildImageView.bottomAnchor,
+        constant: 3.0
+      ),
+      boxView.leadingAnchor.constraint(
+        equalTo: guildImageView.leadingAnchor,
+        constant: -3.0
+      ),
+      boxView.trailingAnchor.constraint(
+        equalTo: guildImageView.trailingAnchor,
+        constant: 3.0
+      ),
     ])
 
     view = boxView

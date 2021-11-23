@@ -1,7 +1,7 @@
 public struct Snowflake: Hashable {
-  let uint64: UInt64
+  public let uint64: UInt64
 
-  init(string: String) {
+  public init(string: String) {
     uint64 = UInt64(string)!
   }
 }

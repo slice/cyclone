@@ -2,6 +2,7 @@ import Combine
 import Dispatch
 import FineJSON
 import Foundation
+import GenericJSON
 import Network
 import os
 import RichJSONParser
@@ -28,6 +29,9 @@ public class Client {
   public var http: HTTP!
 
   var gatewaySink: AnyCancellable!
+
+  /// The user's settings, received from the `READY` packet.
+  public private(set) var userSettings: [String: GenericJSON.JSON]?
 
   /// The guilds that this client has.
   public private(set) var guilds: [Guild] = []
@@ -88,8 +92,12 @@ public class Client {
 
   func processReadyPacket(_ packet: GatewayPacket) {
     log.debug("getting READY...")
-    guilds = packet.eventData!.objectValue!["guilds"]!.arrayValue!
-      .map(Guild.init(json:))
+
+    let object = packet.eventData!.objectValue!
+
+    userSettings = object["user_settings"]!.objectValue!
+
+    guilds = object["guilds"]!.arrayValue!.map(Guild.init(json:))
     guildsChanged.send()
   }
 

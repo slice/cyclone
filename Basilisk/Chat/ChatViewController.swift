@@ -47,6 +47,22 @@ import RichJSONParser
     guildsCollectionView.dataSource = guildsDataSource
   }
 
+  /// Returns a list of the client's `Guild`s, sorted according to the user's
+  /// settings.
+  func guildsSortedAccordingToUserSettings() -> [Guild]? {
+    guard let userSettings = client?.userSettings,
+          let guildPositions = userSettings["guild_positions"]?.arrayValue?
+          .compactMap(\.stringValue).map(Snowflake.init(string:)),
+          let guilds = client?.guilds
+    else { return client?.guilds }
+
+    return guilds.sorted { thisGuild, thatGuild in
+      let thisIndex = guildPositions.firstIndex(of: thisGuild.id) ?? 0
+      let thatIndex = guildPositions.firstIndex(of: thatGuild.id) ?? 0
+      return thisIndex < thatIndex
+    }
+  }
+
   func connect(authorizingWithToken token: String) async throws {
     let truncatedToken =
       "\(token[token.startIndex ..< token.index(token.startIndex, offsetBy: 5)])..."
@@ -61,9 +77,12 @@ import RichJSONParser
     setUpGatewayPacketHandler()
     gatewayGuildsSink = client.guildsChanged.receive(on: RunLoop.main)
       .sink { [weak self] _ in
+        guard let guilds = self?.guildsSortedAccordingToUserSettings()
+        else { return }
+
         var snapshot = NSDiffableDataSourceSnapshot<GuildsSection, Guild.ID>()
         snapshot.appendSections([.main])
-        snapshot.appendItems(client.guilds.map(\.id), toSection: .main)
+        snapshot.appendItems(guilds.map(\.id), toSection: .main)
         self?.guildsDataSource.apply(snapshot, animatingDifferences: true)
       }
   }

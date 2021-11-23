@@ -61,7 +61,8 @@ extension ChatViewController {
     guard !fieldText.isEmpty else { return }
 
     if fieldText.starts(with: "/") {
-      let tokens = fieldText.split(separator: " ")
+      let tokens = fieldText.trimmingCharacters(in: .whitespacesAndNewlines)
+        .split(separator: " ")
       let firstToken = tokens.first!
       let firstTokenWithoutSlash =
         firstToken[firstToken.index(after: firstToken.startIndex) ..< firstToken

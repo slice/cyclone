@@ -4,6 +4,10 @@ public struct Snowflake: Hashable {
   public init(string: String) {
     uint64 = UInt64(string)!
   }
+
+  public init(uint64: UInt64) {
+    self.uint64 = uint64
+  }
 }
 
 extension Snowflake: Comparable {

@@ -4,12 +4,16 @@ import Contempt
 import FineJSON
 import RichJSONParser
 
-@MainActor class ChatViewController: NSViewController {
-  @IBOutlet var consoleTextView: NSTextView!
-  @IBOutlet var inputTextField: NSTextField!
-  @IBOutlet var consoleScrollView: NSScrollView!
-  @IBOutlet var guildsCollectionView: NSCollectionView!
-  @IBOutlet var channelsOutlineView: NSOutlineView!
+@MainActor class ChatViewController: NSSplitViewController {
+  var guildsViewController: GuildsViewController {
+    splitViewItems[0].viewController as! GuildsViewController
+  }
+  var channelsViewController: ChannelsViewController {
+    splitViewItems[1].viewController as! ChannelsViewController
+  }
+  var messagesViewController: MessagesViewController {
+    splitViewItems[2].viewController as! MessagesViewController
+  }
 
   var client: Client?
   var focusedChannelID: UInt64?
@@ -21,11 +25,6 @@ import RichJSONParser
   var selectedGuild: Guild? {
     client?.guilds.first { $0.id == selectedGuildID }
   }
-
-  var guildsDataSource: NSCollectionViewDiffableDataSource<
-    GuildsSection,
-    Guild.ID
-  >!
 
   deinit {
     NSLog("ViewController deinit")
@@ -40,22 +39,104 @@ import RichJSONParser
 
   override func viewDidLoad() {
     super.viewDidLoad()
-    consoleTextView.font = NSFont.monospacedSystemFont(
-      ofSize: 10,
-      weight: .regular
-    )
 
-    guildsCollectionView.register(
-      GuildsCollectionViewItem.self,
-      forItemWithIdentifier: .guild
-    )
-    guildsDataSource = makeDiffableDataSource()
-    guildsCollectionView.collectionViewLayout = makeCollectionViewLayout()
-    guildsCollectionView.dataSource = guildsDataSource
-    guildsCollectionView.delegate = self
+    guildsViewController.onSelectedGuildWithID = { [weak self] id in
+      self?.selectedGuildID = id
+      self?.channelsViewController.reloadData()
+    }
+    guildsViewController.getGuildWithID = { [weak self] id in
+      self?.client?.guilds.first { $0.id == id }
+    }
 
-    channelsOutlineView.dataSource = self
-    channelsOutlineView.delegate = self
+    channelsViewController.onSelectChannel = { [weak self] id in
+      self?.focusedChannelID = id.uint64
+    }
+    channelsViewController.getSelectedGuild = { [weak self] in
+      self?.selectedGuild
+    }
+
+    messagesViewController.onRunCommand = { [weak self] command, args in
+      guard let self = self else { return }
+
+      Task {
+        do {
+          try await self.handleCommand(named: command, arguments: args)
+        } catch {
+          self.messagesViewController.appendToConsole(line: "[system] failed to handle command: \(error)")
+        }
+      }
+    }
+    messagesViewController.onSendMessage = { [weak self] content in
+      if let self = self, let focusedChannelID = self.focusedChannelID, let client = self.client {
+        let url = client.http.baseURL.appendingPathComponent("api")
+          .appendingPathComponent("v9")
+          .appendingPathComponent("channels")
+          .appendingPathComponent(String(focusedChannelID))
+          .appendingPathComponent("messages")
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        let randomNumber = Int.random(in: 0 ... 1_000_000_000)
+        let json: JSON = .object(.init([
+          "content": .string(content),
+          "tts": .boolean(false),
+          "nonce": .string(String(randomNumber)),
+        ]))
+        let encoder = FineJSONEncoder()
+        encoder.jsonSerializeOptions = JSONSerializeOptions(isPrettyPrint: false)
+        encoder.optionalEncodingStrategy = .explicitNull
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = try! encoder.encode(json)
+        Task { [request] in
+          try! await client.http.request(
+            request,
+            withSpoofedHeadersOfRequestType: .xhr
+          )
+        }
+      }
+    }
+  }
+
+  func handleCommand(
+    named command: String,
+    arguments: [String]
+  ) async throws {
+
+    let say = { message in
+      self.messagesViewController.appendToConsole(line: message)
+    }
+
+    switch command {
+    case "connect":
+      guard let token = arguments.first else {
+      say("[system] you need a user token, silly!")
+        return
+      }
+
+      if client != nil {
+        try await tearDownClient()
+      }
+
+      do {
+        try await connect(authorizingWithToken: token)
+      } catch {
+        say("[system] failed to connect: \(error)")
+      }
+    case "focus":
+      guard let channelIDString = arguments.first,
+            let channelID = UInt64(channelIDString)
+      else {
+        say("[system] provide a channel id... maybe...")
+        return
+      }
+
+      focusedChannelID = channelID
+      say("[system] focusing into <#\(channelID)>")
+    case "disconnect":
+      try await tearDownClient()
+      say("[system] disconnected!")
+    default:
+      say("[system] dunno what \"\(command)\" is!")
+    }
   }
 
   /// Returns a list of the client's `Guild`s, sorted according to the user's
@@ -77,7 +158,8 @@ import RichJSONParser
   func connect(authorizingWithToken token: String) async throws {
     let truncatedToken =
       "\(token[token.startIndex ..< token.index(token.startIndex, offsetBy: 5)])..."
-    appendToConsole(
+
+    messagesViewController.appendToConsole(
       line: "[system] connecting to canary with token (\(truncatedToken))"
     )
 
@@ -100,13 +182,10 @@ import RichJSONParser
   }
 
   private func applyGuilds() {
-    var snapshot = NSDiffableDataSourceSnapshot<GuildsSection, Guild.ID>()
-    snapshot.appendSections([.main])
     guard let guilds = guildsSortedAccordingToUserSettings() else {
       return
     }
-    snapshot.appendItems(guilds.map(\.id), toSection: .main)
-    guildsDataSource.apply(snapshot, animatingDifferences: true)
+    guildsViewController.applyGuilds(guilds: guilds)
   }
 
   func logPacket(_ packet: GatewayPacket) {
@@ -145,7 +224,7 @@ import RichJSONParser
       let username = author["username"]!.stringValue!
       let discriminator = author["discriminator"]!.stringValue!
 
-      appendToConsole(line: "<\(username)#\(discriminator)> \(content)")
+      messagesViewController.appendToConsole(line: "<\(username)#\(discriminator)> \(content)")
     }
   }
 
@@ -170,8 +249,9 @@ import RichJSONParser
     // we've already cleanly disconnected by now.
     client = nil
 
-    let snapshot = NSDiffableDataSourceSnapshot<GuildsSection, Guild.ID>()
-    guildsDataSource.apply(snapshot, animatingDifferences: true)
-    channelsOutlineView.reloadData()
+    focusedChannelID = nil
+    selectedGuildID = nil
+    guildsViewController.applyGuilds(guilds: [])
+    channelsViewController.reloadData()
   }
 }

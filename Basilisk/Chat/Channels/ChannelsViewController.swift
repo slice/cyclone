@@ -1,26 +1,6 @@
 import Cocoa
 import Contempt
 
-/// A channel reference wrapper. This is used to ensure equality check
-/// consistency with `NSOutlineView`.
-class ChannelRef: NSObject {
-  public let id: UInt64
-  public let name: String
-  public let type: ChannelType
-  public let parentID: UInt64?
-
-  var isTopLevel: Bool {
-    type == .category || parentID == nil
-  }
-
-  init(channel: Channel) {
-    id = channel.id.uint64
-    type = channel.type
-    parentID = channel.parentID.map(\.uint64)
-    name = channel.name
-  }
-}
-
 // MARK: Channel Sorting
 
 // Discord channel sorting is complicated. To do it, assume that each channel is
@@ -77,7 +57,33 @@ private extension NSUserInterfaceItemIdentifier {
   static let channel: Self = .init("channel")
 }
 
-extension ChatViewController: NSOutlineViewDataSource {
+// MARK: View Controller
+
+class ChannelsViewController: NSViewController {
+  @IBOutlet private var outlineView: NSOutlineView!
+
+  /// Called by the view controller in order to query the currently
+  /// selected guild.
+  var getSelectedGuild: (() -> Guild?)?
+
+  /// Called by the view controller whenever a new channel is selected.
+  var onSelectChannel: ((_ channelID: Snowflake) -> Void)?
+
+  override func viewDidLoad() {
+    outlineView.dataSource = self
+    outlineView.delegate = self
+  }
+
+  func reloadData() {
+    outlineView.reloadData()
+  }
+
+  private var selectedGuild: Guild? {
+    getSelectedGuild?()
+  }
+}
+
+extension ChannelsViewController: NSOutlineViewDataSource {
   func outlineView(_: NSOutlineView, child index: Int,
                    ofItem item: Any?) -> Any
   {
@@ -119,7 +125,7 @@ extension ChatViewController: NSOutlineViewDataSource {
   }
 }
 
-extension ChatViewController: NSOutlineViewDelegate {
+extension ChannelsViewController: NSOutlineViewDelegate {
   func outlineView(_ outlineView: NSOutlineView, viewFor _: NSTableColumn?,
                    item: Any) -> NSView?
   {
@@ -145,9 +151,9 @@ extension ChatViewController: NSOutlineViewDelegate {
   }
 
   func outlineViewSelectionDidChange(_: Notification) {
-    guard let item = channelsOutlineView
-      .item(atRow: channelsOutlineView.selectedRow) as? ChannelRef
+    guard let item = outlineView
+      .item(atRow: outlineView.selectedRow) as? ChannelRef
     else { return }
-    focusedChannelID = item.id
+    onSelectChannel?(Snowflake(uint64: item.id))
   }
 }

@@ -4,6 +4,7 @@ import Foundation
 import Network
 import os
 import RichJSONParser
+import Combine
 
 // MARK: Client
 
@@ -25,6 +26,12 @@ public class Client {
 
   /// The Discord API HTTP client.
   public var http: HTTP!
+
+  var gatewaySink: AnyCancellable!
+
+  /// The guilds that this client has.
+  public private(set) var guilds: [Guild] = []
+  public private(set) var guildsChanged = PassthroughSubject<Void, Never>()
 
   static let defaultDisguise = Disguise(
     userAgent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) discord/0.0.278 Chrome/91.0.4472.164 Electron/13.4.0 Safari/537.36",
@@ -67,10 +74,24 @@ public class Client {
 
   /// Connect to the Discord gateway.
   public func connect() {
+    gatewaySink = gatewayConnection.packets.sink { [weak self] packet in
+      if packet.eventName == "READY" {
+        self?.processReadyPacket(packet)
+      }
+    }
+
     gatewayConnection.connect(
       toGateway: URL(string: "wss://gateway.discord.gg/?encoding=json&v=9")!,
       fromDiscordEndpoint: endpoint
     )
+  }
+
+  func processReadyPacket(_ packet: GatewayPacket) {
+    log.debug("getting READY...")
+    guilds = packet.eventData!.objectValue!["guilds"]!.arrayValue!
+      .map(Guild.init(json:))
+    log.debug("\(self.guilds.count) guild(s) were sent in READY!")
+    guildsChanged.send()
   }
 
   /// Disconnect from the Discord gateway.

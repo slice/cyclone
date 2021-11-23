@@ -13,6 +13,10 @@
 		121B6FBD273E3300000DD150 /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = 121B6FBC273E3300000DD150 /* ArgumentParser */; };
 		12552C9C273F3DDA007D92B1 /* HTTP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12552C9B273F3DDA007D92B1 /* HTTP.swift */; };
 		12552C9E273F3FE2007D92B1 /* SpoofedRequestType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12552C9D273F3FE2007D92B1 /* SpoofedRequestType.swift */; };
+		12894913274C8FA200850D5E /* Guild.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12894912274C8FA200850D5E /* Guild.swift */; };
+		12894915274C8FB900850D5E /* Snowflake.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12894914274C8FB900850D5E /* Snowflake.swift */; };
+		12894917274C904E00850D5E /* Asset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12894916274C904E00850D5E /* Asset.swift */; };
+		12894919274C91C700850D5E /* Channel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12894918274C91C700850D5E /* Channel.swift */; };
 		12897BF2273E25C700403E5B /* GatewayConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12897BF1273E25C700403E5B /* GatewayConnection.swift */; };
 		12897BF4273E2BF400403E5B /* Opcode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12897BF3273E2BF400403E5B /* Opcode.swift */; };
 		128C7673273DFD0E008FD585 /* Client.swift in Sources */ = {isa = PBXBuildFile; fileRef = 128C7672273DFD0E008FD585 /* Client.swift */; };
@@ -134,6 +138,10 @@
 		120A78DA2741F9BE0099834B /* WebSocketEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketEvent.swift; sourceTree = "<group>"; };
 		12552C9B273F3DDA007D92B1 /* HTTP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTP.swift; sourceTree = "<group>"; };
 		12552C9D273F3FE2007D92B1 /* SpoofedRequestType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpoofedRequestType.swift; sourceTree = "<group>"; };
+		12894912274C8FA200850D5E /* Guild.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Guild.swift; sourceTree = "<group>"; };
+		12894914274C8FB900850D5E /* Snowflake.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Snowflake.swift; sourceTree = "<group>"; };
+		12894916274C904E00850D5E /* Asset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Asset.swift; sourceTree = "<group>"; };
+		12894918274C91C700850D5E /* Channel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Channel.swift; sourceTree = "<group>"; };
 		12897BF1273E25C700403E5B /* GatewayConnection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GatewayConnection.swift; sourceTree = "<group>"; };
 		12897BF3273E2BF400403E5B /* Opcode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Opcode.swift; sourceTree = "<group>"; };
 		128C7672273DFD0E008FD585 /* Client.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Client.swift; sourceTree = "<group>"; };
@@ -239,6 +247,17 @@
 				12552C9D273F3FE2007D92B1 /* SpoofedRequestType.swift */,
 			);
 			path = HTTP;
+			sourceTree = "<group>";
+		};
+		12894911274C8F9E00850D5E /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				12894912274C8FA200850D5E /* Guild.swift */,
+				12894914274C8FB900850D5E /* Snowflake.swift */,
+				12894916274C904E00850D5E /* Asset.swift */,
+				12894918274C91C700850D5E /* Channel.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 		128C767B273E0A5C008FD585 /* Frameworks */ = {
@@ -347,6 +366,7 @@
 		12F4FDB4273DFCD000B6AE64 /* Contempt */ = {
 			isa = PBXGroup;
 			children = (
+				12894911274C8F9E00850D5E /* Models */,
 				12CD0225274217D800F136A5 /* Support */,
 				120A78D92741EC260099834B /* WebSocket */,
 				12552C9A273F3DD4007D92B1 /* HTTP */,
@@ -655,6 +675,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				12CD0228274218AA00F136A5 /* Publisher+Buffer.swift in Sources */,
+				12894919274C91C700850D5E /* Channel.swift in Sources */,
 				12552C9C273F3DDA007D92B1 /* HTTP.swift in Sources */,
 				128C7673273DFD0E008FD585 /* Client.swift in Sources */,
 				128C7675273DFF73008FD585 /* Branch.swift in Sources */,
@@ -664,8 +685,11 @@
 				12897BF4273E2BF400403E5B /* Opcode.swift in Sources */,
 				128C7677273E04D2008FD585 /* Disguise.swift in Sources */,
 				12F4FDB7273DFCD000B6AE64 /* Contempt.docc in Sources */,
+				12894915274C8FB900850D5E /* Snowflake.swift in Sources */,
 				120A78DB2741F9BE0099834B /* WebSocketEvent.swift in Sources */,
+				12894917274C904E00850D5E /* Asset.swift in Sources */,
 				120A78D82741E9A70099834B /* WebSocket.swift in Sources */,
+				12894913274C8FA200850D5E /* Guild.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

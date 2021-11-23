@@ -10,6 +10,12 @@ private extension NSScrollView {
       .height == documentView.frame.height
     return isScrolledToBottom
   }
+
+  func scrollToEnd() {
+    let totalHeight = documentView!.frame.height
+    let clipViewHeight = contentView.bounds.height
+    contentView.scroll(to: NSPoint(x: 0.0, y: totalHeight - clipViewHeight))
+  }
 }
 
 struct MessagesSection: Hashable {
@@ -126,6 +132,7 @@ class MessagesViewController: NSViewController {
   /// The most recent messages should be first.
   public func applyInitialMessages(_ messages: [Message]) {
     var snapshot = NSDiffableDataSourceSnapshot<MessagesSection, Message.ID>()
+
     guard !messages.isEmpty else {
       self.messages = []
       dataSource.apply(snapshot)
@@ -152,10 +159,9 @@ class MessagesViewController: NSViewController {
       snapshot.appendItems([message.id], toSection: currentSection)
     }
 
-    dataSource.apply(snapshot)
-    scrollView.scroll(NSPoint.zero)
-//    collectionView.scrollToEndOfDocument(nil)
-//    scrollView.scrollToEndOfDocument(nil)
+    dataSource.apply(snapshot, animatingDifferences: false) { [weak self] in
+      self?.scrollView.scrollToEnd()
+    }
   }
 
   private func makeCollectionViewLayout() -> NSCollectionViewLayout {

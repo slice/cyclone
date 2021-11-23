@@ -2,8 +2,8 @@ import Cocoa
 import Combine
 import Contempt
 import FineJSON
-import RichJSONParser
 import GenericJSON
+import RichJSONParser
 
 @MainActor class ChatViewController: NSSplitViewController {
   var guildsViewController: GuildsViewController {
@@ -126,15 +126,24 @@ import GenericJSON
         .appendingPathComponent("messages")
 
       let queryItems = [URLQueryItem(name: "limit", value: "50")]
-      var urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: false)!
+      var urlComponents = URLComponents(
+        url: url,
+        resolvingAgainstBaseURL: false
+      )!
       urlComponents.queryItems = queryItems
 
       var request = URLRequest(url: urlComponents.url!)
       request.httpMethod = "GET"
 
       Task { [request] in
-        let data = try! await client.http.request(request, withSpoofedHeadersOfRequestType: .xhr)
-        let deserialized = try JSONSerialization.jsonObject(with: data, options: [])
+        let data = try! await client.http.request(
+          request,
+          withSpoofedHeadersOfRequestType: .xhr
+        )
+        let deserialized = try JSONSerialization.jsonObject(
+          with: data,
+          options: []
+        )
         let messages = try GenericJSON.JSON(deserialized).arrayValue!
           .map(Message.init(json:))
         self.messagesViewController.applyInitialMessages(messages)

@@ -138,11 +138,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		120A78D62741D9CA0099834B /* WebSocket Testing.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = "WebSocket Testing.playground"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		120A78D72741E9A70099834B /* WebSocket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocket.swift; sourceTree = "<group>"; };
 		120A78DA2741F9BE0099834B /* WebSocketEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketEvent.swift; sourceTree = "<group>"; };
 		1210E6E9274CC18300BF8C9B /* RoundingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundingView.swift; sourceTree = "<group>"; };
-		121F930E274CD2C7007F81CC /* Channel Sorting.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = "Channel Sorting.playground"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		121F930F274CF318007F81CC /* MessagesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesViewController.swift; sourceTree = "<group>"; };
 		121F9311274CF5C1007F81CC /* ChannelsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelsViewController.swift; sourceTree = "<group>"; };
 		121F9319274CF631007F81CC /* ChannelsRef.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelsRef.swift; sourceTree = "<group>"; };
@@ -357,8 +355,6 @@
 		12F4FD77273DFC1900B6AE64 = {
 			isa = PBXGroup;
 			children = (
-				121F930E274CD2C7007F81CC /* Channel Sorting.playground */,
-				120A78D62741D9CA0099834B /* WebSocket Testing.playground */,
 				12F4FD82273DFC1900B6AE64 /* Basilisk */,
 				12F4FD94273DFC1B00B6AE64 /* BasiliskTests */,
 				12F4FD9E273DFC1B00B6AE64 /* BasiliskUITests */,

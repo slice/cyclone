@@ -43,6 +43,10 @@ import RichJSONParser
     guildsViewController.onSelectedGuildWithID = { [weak self] id in
       self?.selectedGuildID = id
       self?.channelsViewController.reloadData()
+      if let name = self?.selectedGuild?.name {
+        self?.view.window?.title = name
+      }
+      self?.view.window?.subtitle = ""
     }
     guildsViewController.getGuildWithID = { [weak self] id in
       self?.client?.guilds.first { $0.id == id }
@@ -50,6 +54,10 @@ import RichJSONParser
 
     channelsViewController.onSelectChannel = { [weak self] id in
       self?.focusedChannelID = id.uint64
+
+      if let channelName = self?.selectedGuild?.channels.first(where: { $0.id == id })?.name {
+        self?.view.window?.subtitle = channelName
+      }
     }
     channelsViewController.getSelectedGuild = { [weak self] in
       self?.selectedGuild
@@ -253,5 +261,7 @@ import RichJSONParser
     selectedGuildID = nil
     guildsViewController.applyGuilds(guilds: [])
     channelsViewController.reloadData()
+    view.window?.title = "Basilisk"
+    view.window?.subtitle = ""
   }
 }

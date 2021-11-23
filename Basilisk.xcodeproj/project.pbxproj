@@ -280,6 +280,7 @@
 		129AF793273E62BC00B3851C /* Gateway */ = {
 			isa = PBXGroup;
 			children = (
+				12897BF3273E2BF400403E5B /* Opcode.swift */,
 				12897BF1273E25C700403E5B /* GatewayConnection.swift */,
 				129AF794273E653100B3851C /* GatewayPacket.swift */,
 			);
@@ -379,7 +380,6 @@
 				128C7672273DFD0E008FD585 /* Client.swift */,
 				128C7674273DFF73008FD585 /* Branch.swift */,
 				128C7676273E04D2008FD585 /* Disguise.swift */,
-				12897BF3273E2BF400403E5B /* Opcode.swift */,
 			);
 			path = Contempt;
 			sourceTree = "<group>";

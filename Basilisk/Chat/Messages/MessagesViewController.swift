@@ -56,6 +56,7 @@ class MessagesViewController: NSViewController {
         String(firstTokenWithoutSlash),
         tokens.dropFirst().map(String.init)
       )
+      return
     }
 
     onSendMessage?(fieldText)

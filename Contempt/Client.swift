@@ -33,8 +33,18 @@ public class Client {
   /// The user's settings, received from the `READY` packet.
   public private(set) var userSettings: [String: GenericJSON.JSON]?
 
+  /// A Combine `Publisher` that publishes when the user settings have changed.
+  /// The partial data fragment sent by the gateway is published.
+  public private(set) var userSettingsChanged = PassthroughSubject<
+    [String: GenericJSON.JSON],
+    Never
+  >()
+
   /// The guilds that this client has.
   public private(set) var guilds: [Guild] = []
+
+  /// A Combine `Publisher` that publishes when the client's guild list has
+  /// changed in some way.
   public private(set) var guildsChanged = PassthroughSubject<Void, Never>()
 
   static let defaultDisguise = Disguise(
@@ -95,10 +105,17 @@ public class Client {
 
     switch eventName {
     case "READY":
-      self.processReadyPacket(packet)
+      processReadyPacket(packet)
     case "GUILD_CREATE":
-      self.guilds.append(Guild(json: packet.eventData!))
-      self.guildsChanged.send()
+      guilds.append(Guild(json: packet.eventData!))
+      guildsChanged.send()
+    case "USER_SETTINGS_UPDATE":
+      let diff = packet.eventData!.objectValue!
+      guard userSettings != nil else {
+        return
+      }
+      userSettings!.merge(diff, uniquingKeysWith: { $1 })
+      userSettingsChanged.send(diff)
     default:
       break
     }
@@ -110,6 +127,7 @@ public class Client {
     let object = packet.eventData!.objectValue!
 
     userSettings = object["user_settings"]!.objectValue!
+    userSettingsChanged.send(userSettings!)
 
     guilds = object["guilds"]!.arrayValue!.map(Guild.init(json:))
     guildsChanged.send()

@@ -15,6 +15,7 @@ import RichJSONParser
   var focusedChannelID: UInt64?
   var gatewayPacketHandler: Task<Void, Never>?
   var gatewayGuildsSink: AnyCancellable!
+  var gatewayUserSettingsSink: AnyCancellable!
   var selectedGuildID: Guild.ID?
 
   var selectedGuild: Guild? {
@@ -87,14 +88,25 @@ import RichJSONParser
     setUpGatewayPacketHandler()
     gatewayGuildsSink = client.guildsChanged.receive(on: RunLoop.main)
       .sink { [weak self] _ in
-        guard let guilds = self?.guildsSortedAccordingToUserSettings()
-        else { return }
-
-        var snapshot = NSDiffableDataSourceSnapshot<GuildsSection, Guild.ID>()
-        snapshot.appendSections([.main])
-        snapshot.appendItems(guilds.map(\.id), toSection: .main)
-        self?.guildsDataSource.apply(snapshot, animatingDifferences: true)
+        self?.applyGuilds()
       }
+    gatewayUserSettingsSink = client.userSettingsChanged
+      .receive(on: RunLoop.main)
+      .sink { [weak self] dictionary in
+        guard dictionary["guild_positions"] != nil ||
+          dictionary["guild_folders"] != nil, let self = self else { return }
+        self.applyGuilds()
+      }
+  }
+
+  private func applyGuilds() {
+    var snapshot = NSDiffableDataSourceSnapshot<GuildsSection, Guild.ID>()
+    snapshot.appendSections([.main])
+    guard let guilds = guildsSortedAccordingToUserSettings() else {
+      return
+    }
+    snapshot.appendItems(guilds.map(\.id), toSection: .main)
+    guildsDataSource.apply(snapshot, animatingDifferences: true)
   }
 
   func logPacket(_ packet: GatewayPacket) {

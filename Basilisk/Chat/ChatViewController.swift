@@ -9,11 +9,17 @@ import RichJSONParser
   @IBOutlet var inputTextField: NSTextField!
   @IBOutlet var consoleScrollView: NSScrollView!
   @IBOutlet var guildsCollectionView: NSCollectionView!
+  @IBOutlet var channelsOutlineView: NSOutlineView!
 
   var client: Client?
   var focusedChannelID: UInt64?
   var gatewayPacketHandler: Task<Void, Never>?
   var gatewayGuildsSink: AnyCancellable!
+  var selectedGuildID: Guild.ID?
+
+  var selectedGuild: Guild? {
+    client?.guilds.first { $0.id == selectedGuildID }
+  }
 
   var guildsDataSource: NSCollectionViewDiffableDataSource<
     GuildsSection,
@@ -45,6 +51,10 @@ import RichJSONParser
     guildsDataSource = makeDiffableDataSource()
     guildsCollectionView.collectionViewLayout = makeCollectionViewLayout()
     guildsCollectionView.dataSource = guildsDataSource
+    guildsCollectionView.delegate = self
+
+    channelsOutlineView.dataSource = self
+    channelsOutlineView.delegate = self
   }
 
   /// Returns a list of the client's `Guild`s, sorted according to the user's

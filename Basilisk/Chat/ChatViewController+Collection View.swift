@@ -44,3 +44,15 @@ extension ChatViewController {
     }
   }
 }
+
+extension ChatViewController: NSCollectionViewDelegate {
+  func collectionView(
+    _: NSCollectionView,
+    didSelectItemsAt indexPaths: Set<IndexPath>
+  ) {
+    NSLog("selected guild: \(indexPaths)")
+    guard let client = client else { return }
+    selectedGuildID = client.guilds[indexPaths.first!.item].id
+    channelsOutlineView.reloadData()
+  }
+}

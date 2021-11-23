@@ -183,7 +183,14 @@ extension NSUserInterfaceItemIdentifier {
     gatewayPacketHandler?.cancel()
 
     // Disconnect from the Discord gateway with a 1000 close code.
-    try await client?.disconnect()
+    do {
+      try await client?.disconnect()
+    } catch {
+      NSLog(
+        "failed to disconnect, dealloc-ing anyways: %@",
+        error.localizedDescription
+      )
+    }
     NSLog("disconnect")
 
     // Immediately (try to) dealloc the client here. Some Combine subscribers

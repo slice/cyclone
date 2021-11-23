@@ -111,6 +111,13 @@ class MessagesViewController: NSViewController {
         let name = "\(user.username)#\(user.discriminator)"
 
         supplementaryView.groupAuthorTextField.stringValue = name
+
+        if let avatar = user.avatar {
+          let image = NSImage(byReferencing: avatar.url(withFileExtension: "png"))
+          supplementaryView.groupAvatarRounding.radius = 10.0
+          supplementaryView.groupAvatarImageView.image = image
+        }
+
         return supplementaryView
       }
 

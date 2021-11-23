@@ -13,26 +13,63 @@
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <customView id="Hz6-mo-xeY" customClass="MessageGroupHeader" customModule="Basilisk" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="480" height="88"/>
+            <rect key="frame" x="0.0" y="0.0" width="480" height="30"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Gxp-BC-I8y">
-                    <rect key="frame" x="8" y="5" width="88" height="16"/>
-                    <textFieldCell key="cell" lineBreakMode="clipping" title="Group header" id="rBz-iP-J0B">
-                        <font key="font" usesAppearanceFont="YES"/>
-                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                </textField>
+                <stackView distribution="fill" orientation="horizontal" alignment="centerY" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LNm-0A-zZC">
+                    <rect key="frame" x="10" y="3" width="66" height="25"/>
+                    <subviews>
+                        <customView translatesAutoresizingMaskIntoConstraints="NO" id="lB3-uN-kCv" customClass="RoundingView" customModule="Basilisk" customModuleProvider="target">
+                            <rect key="frame" x="0.0" y="0.0" width="25" height="25"/>
+                            <subviews>
+                                <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="cxd-Dc-WYh">
+                                    <rect key="frame" x="0.0" y="-2.5" width="25" height="30"/>
+                                    <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="person.fill" catalog="system" id="EMx-GA-1qW"/>
+                                </imageView>
+                            </subviews>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="25" id="0xf-kx-azs"/>
+                                <constraint firstAttribute="bottom" secondItem="cxd-Dc-WYh" secondAttribute="bottom" id="bb9-X0-WgA"/>
+                                <constraint firstItem="cxd-Dc-WYh" firstAttribute="leading" secondItem="lB3-uN-kCv" secondAttribute="leading" id="ikd-uQ-bUT"/>
+                                <constraint firstAttribute="trailing" secondItem="cxd-Dc-WYh" secondAttribute="trailing" id="oaO-l4-fkO"/>
+                                <constraint firstItem="cxd-Dc-WYh" firstAttribute="top" secondItem="lB3-uN-kCv" secondAttribute="top" id="rjm-kz-kqB"/>
+                            </constraints>
+                        </customView>
+                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="chR-WG-ypf">
+                            <rect key="frame" x="31" y="4" width="37" height="16"/>
+                            <textFieldCell key="cell" lineBreakMode="clipping" title="Label" id="xrR-FT-xSv">
+                                <font key="font" metaFont="system"/>
+                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                            </textFieldCell>
+                        </textField>
+                    </subviews>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="25" id="L96-BT-wTa"/>
+                    </constraints>
+                    <visibilityPriorities>
+                        <integer value="1000"/>
+                        <integer value="1000"/>
+                    </visibilityPriorities>
+                    <customSpacing>
+                        <real value="3.4028234663852886e+38"/>
+                        <real value="3.4028234663852886e+38"/>
+                    </customSpacing>
+                </stackView>
             </subviews>
             <constraints>
-                <constraint firstAttribute="bottom" secondItem="Gxp-BC-I8y" secondAttribute="bottom" constant="5" id="Acb-Y8-uIe"/>
-                <constraint firstItem="Gxp-BC-I8y" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" constant="10" id="JOt-Lu-NNF"/>
+                <constraint firstItem="LNm-0A-zZC" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" constant="10" id="1Wf-To-W3x"/>
+                <constraint firstItem="LNm-0A-zZC" firstAttribute="centerY" secondItem="Hz6-mo-xeY" secondAttribute="centerY" id="wS2-Xa-1AZ"/>
             </constraints>
             <connections>
-                <outlet property="groupAuthorTextField" destination="Gxp-BC-I8y" id="mwS-gw-wvv"/>
+                <outlet property="groupAuthorTextField" destination="chR-WG-ypf" id="kly-7l-fl5"/>
+                <outlet property="groupAvatarImageView" destination="cxd-Dc-WYh" id="bee-aK-mpT"/>
+                <outlet property="groupAvatarRounding" destination="lB3-uN-kCv" id="RiI-NX-JTT"/>
             </connections>
-            <point key="canvasLocation" x="139" y="109"/>
+            <point key="canvasLocation" x="139" y="150"/>
         </customView>
     </objects>
+    <resources>
+        <image name="person.fill" catalog="system" width="14" height="14"/>
+    </resources>
 </document>

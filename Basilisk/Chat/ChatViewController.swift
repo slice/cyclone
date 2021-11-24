@@ -24,6 +24,8 @@ import RichJSONParser
   var gatewayGuildsSink: AnyCancellable!
   var gatewayUserSettingsSink: AnyCancellable!
   var selectedGuildID: Guild.ID?
+  var exhaustedMessageHistory = false
+  var requestingMoreHistory = false
 
   var selectedGuild: Guild? {
     client?.guilds.first { $0.id == selectedGuildID }
@@ -95,10 +97,53 @@ import RichJSONParser
         }
       }
     }
+    messagesViewController.onScrolledNearTop = { [weak self] in
+      self?.requestedToLoadMoreHistory()
+    }
+  }
+
+  func requestedToLoadMoreHistory() {
+    guard !exhaustedMessageHistory else {
+      NSLog("message history is exhausted, not loading more posts")
+      return
+    }
+
+    guard let client = client, !requestingMoreHistory else {
+      return
+    }
+
+    NSLog("requesting more messages")
+    requestingMoreHistory = true
+    let limit = 50
+
+    let request = try! client.http.apiRequest(
+      to: "/channels/\(focusedChannelID!)/messages",
+      query: [
+        "limit": String(limit),
+        "before": String(messagesViewController.oldestMessageID!.uint64),
+      ]
+    )!
+
+    Task { [request] in
+      let json = try! await client.http.requestParsingJSON(
+        request,
+        withSpoofedHeadersFor: .xhr
+      )
+      let messages = json.arrayValue!.map(Message.init(json:))
+      self.messagesViewController.prependOldMessages(messages)
+
+      if messages.count < limit {
+        NSLog("received %@ messages, history is exhausted")
+        exhaustedMessageHistory = true
+      }
+
+      requestingMoreHistory = false
+    }
   }
 
   func selectChannel(withID id: Snowflake) {
     focusedChannelID = id.uint64
+    exhaustedMessageHistory = false
 
     if let client = client,
        let selectedGuild = selectedGuild,
@@ -275,6 +320,7 @@ import RichJSONParser
     selectedGuildID = nil
     guildsViewController.applyGuilds(guilds: [])
     channelsViewController.reloadData()
+    messagesViewController.applyInitialMessages([])
     view.window?.title = "Basilisk"
     view.window?.subtitle = ""
   }

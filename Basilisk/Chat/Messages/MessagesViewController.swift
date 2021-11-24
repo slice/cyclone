@@ -1,4 +1,5 @@
 import Cocoa
+import Combine
 import Contempt
 import FineJSON
 
@@ -15,6 +16,11 @@ private extension NSScrollView {
     let totalHeight = documentView!.frame.height
     let clipViewHeight = contentView.bounds.height
     contentView.scroll(to: NSPoint(x: 0.0, y: totalHeight - clipViewHeight))
+  }
+
+  var scrollPercentage: Double {
+    contentView.bounds
+      .minY / (documentView!.frame.height - contentView.bounds.height)
   }
 }
 
@@ -50,8 +56,14 @@ class MessagesViewController: NSViewController {
 
   private static let messageGroupHeaderKind = "message-group-header"
 
-  /// The array of messages this view controller is showing.
+  /// The array of messages this view controller is showing, ordered from oldest
+  /// to newest.
   private var messages: [Message] = []
+
+  /// The ID of the oldest message this view controller is showing.
+  public var oldestMessageID: Message.ID? {
+    messages.first?.id
+  }
 
   /// Called when the user tries to invoke a command.
   var onRunCommand: ((_ command: String, _ arguments: [String]) -> Void)?
@@ -59,7 +71,11 @@ class MessagesViewController: NSViewController {
   /// Called when the user tries to send a message.
   var onSendMessage: ((_ content: String) -> Void)?
 
+  /// Called when the user scrolls near the top of the message history.
+  var onScrolledNearTop: (() -> Void)?
+
   private var dataSource: MessagesDiffableDataSource!
+  private var clipViewBoundsChangedSink: AnyCancellable!
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -139,6 +155,20 @@ class MessagesViewController: NSViewController {
 
     collectionView.dataSource = dataSource
     collectionView.collectionViewLayout = makeCollectionViewLayout()
+
+    let clipView = scrollView.contentView
+    clipView.postsBoundsChangedNotifications = true
+    clipViewBoundsChangedSink = NotificationCenter.default.publisher(
+      for: NSView.boundsDidChangeNotification,
+      object: clipView
+    )
+    .throttle(for: .seconds(5), scheduler: RunLoop.main, latest: true)
+    .sink { [weak self] _ in
+      guard let self = self else { return }
+      if self.scrollView.scrollPercentage < 0.25 {
+        self.onScrolledNearTop?()
+      }
+    }
   }
 
   /// Applies an array of initial `Message` objects to be displayed in the view
@@ -193,6 +223,39 @@ class MessagesViewController: NSViewController {
 
     snapshot.appendItems([message.id], toSection: lastSection!)
     messages.append(message)
+    applySnapshot(snapshot)
+  }
+
+  /// Prepends old messages to the view controller.
+  public func prependOldMessages(_ messagesNewestFirst: [Message]) {
+    var snapshot = dataSource.snapshot()
+
+    guard !messages.isEmpty else { return }
+
+    let messages: [Message] = messagesNewestFirst.reversed()
+
+    if snapshot.sectionIdentifiers.isEmpty {
+      // if we have no section identifiers, just apply the messages as if they
+      // were an initial listing
+      self.applyInitialMessages(messages)
+      return
+    }
+
+    let firstSection = snapshot.sectionIdentifiers.first!
+    var section = MessagesSection(firstMessage: messages.first!)
+    snapshot.insertSections([section], beforeSection: firstSection)
+    for message in messages {
+      if message.author.id != section.authorID {
+        // author differs, start a new message group
+        let newSection = MessagesSection(firstMessage: message)
+        snapshot.insertSections([newSection], afterSection: section)
+        section = newSection
+      }
+
+      snapshot.appendItems([message.id], toSection: section)
+    }
+
+    self.messages.insert(contentsOf: messages, at: 0)
     applySnapshot(snapshot)
   }
 

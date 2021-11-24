@@ -68,10 +68,13 @@ class GuildsViewController: NSViewController {
       else {
         return item
       }
-      let guildImage = NSImage(byReferencing: icon
-        .url(withFileExtension: "png"))
 
-      item.guildImageView.image = guildImage
+      Task {
+        let url = icon.url(withFileExtension: "png")
+        let guildImage = try await ImageCache.shared.image(at: url)
+        item.guildImageView.image = guildImage
+      }
+
       return item
     }
   }

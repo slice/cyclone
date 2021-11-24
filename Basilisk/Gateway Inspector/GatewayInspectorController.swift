@@ -72,13 +72,19 @@ class GatewayInspectorController: NSViewController {
     applyInitialSnapshot()
     messagesSink = gatewayLogStore.objectWillChange.receive(on: RunLoop.main)
       .sink { [weak self] _ in
-        if let count = self?.gatewayLogStore.messages.count {
-          let s = count == 1 ? "" : "s"
-          self?.view.window?.subtitle = "\(count) message\(s)"
-        }
-
+        self?.updateSubtitle()
         self?.applyInitialSnapshot(animatingDifferences: true)
       }
+  }
+
+  override func viewDidAppear() {
+    updateSubtitle()
+  }
+
+  private func updateSubtitle() {
+    let count = gatewayLogStore.messages.count
+    let s = count == 1 ? "" : "s"
+    view.window?.subtitle = "\(count) message\(s)"
   }
 
   func applyInitialSnapshot(animatingDifferences: Bool = false) {

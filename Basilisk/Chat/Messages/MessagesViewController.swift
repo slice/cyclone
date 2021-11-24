@@ -119,11 +119,12 @@ class MessagesViewController: NSViewController {
         // author id of this message group
         let section = currentSnapshot.sectionIdentifiers[indexPath.section]
 
-        guard let user = self.messages
-          .first(where: { $0.author.id == section.authorID })?.author
+        guard let message = self.messages
+          .first(where: { $0.author.id == section.authorID })
         else {
           fatalError("unable to find a message in state with the user")
         }
+        let user = message.author
         let name = "\(user.username)#\(user.discriminator)"
 
         supplementaryView.groupAuthorTextField.stringValue = name
@@ -136,6 +137,10 @@ class MessagesViewController: NSViewController {
             supplementaryView.groupAvatarImageView.image = image
           }
         }
+
+        supplementaryView.groupTimestampTextField.stringValue = message.id
+          .timestamp
+          .formatted(.relative(presentation: .named, unitsStyle: .narrow))
 
         return supplementaryView
       }
@@ -237,7 +242,7 @@ class MessagesViewController: NSViewController {
     if snapshot.sectionIdentifiers.isEmpty {
       // if we have no section identifiers, just apply the messages as if they
       // were an initial listing
-      self.applyInitialMessages(messages)
+      applyInitialMessages(messages)
       return
     }
 

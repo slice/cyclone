@@ -1,3 +1,5 @@
+import Foundation
+
 public struct Snowflake: Hashable {
   public let uint64: UInt64
 
@@ -7,6 +9,12 @@ public struct Snowflake: Hashable {
 
   public init(uint64: UInt64) {
     self.uint64 = uint64
+  }
+
+  public var timestamp: Date {
+    let discordEpoch: Double = 1_420_070_400_000.0
+    let timestamp: Double = (Double(uint64 >> 22) + discordEpoch) / 1000.0
+    return Date(timeIntervalSince1970: timestamp)
   }
 }
 

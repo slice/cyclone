@@ -80,30 +80,18 @@ import RichJSONParser
       if let self = self, let focusedChannelID = self.focusedChannelID,
          let client = self.client
       {
-        let url = client.http.baseURL.appendingPathComponent("api")
-          .appendingPathComponent("v9")
-          .appendingPathComponent("channels")
-          .appendingPathComponent(String(focusedChannelID))
-          .appendingPathComponent("messages")
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
         let randomNumber = Int.random(in: 0 ... 1_000_000_000)
-        let json: RichJSONParser.JSON = .object(.init([
-          "content": .string(content),
-          "tts": .boolean(false),
-          "nonce": .string(String(randomNumber)),
-        ]))
-        let encoder = FineJSONEncoder()
-        encoder
-          .jsonSerializeOptions = JSONSerializeOptions(isPrettyPrint: false)
-        encoder.optionalEncodingStrategy = .explicitNull
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.httpBody = try! encoder.encode(json)
+        let request = try! client.http.apiRequest(
+          to: "/channels/\(focusedChannelID)/messages",
+          method: .post,
+          body: .object(.init([
+            "content": .string(content),
+            "tts": .boolean(false),
+            "nonce": .string(String(randomNumber)),
+          ]))
+        )!
         Task { [request] in
-          try! await client.http.request(
-            request,
-            withSpoofedHeadersOfRequestType: .xhr
-          )
+          try! await client.http.request(request, withSpoofedHeadersFor: .xhr)
         }
       }
     }
@@ -118,34 +106,17 @@ import RichJSONParser
        .name
     {
       view.window?.subtitle = "#\(channelName)"
-
-      let url = client.http.baseURL.appendingPathComponent("api")
-        .appendingPathComponent("v9")
-        .appendingPathComponent("channels")
-        .appendingPathComponent(String(id.uint64))
-        .appendingPathComponent("messages")
-
-      let queryItems = [URLQueryItem(name: "limit", value: "50")]
-      var urlComponents = URLComponents(
-        url: url,
-        resolvingAgainstBaseURL: false
+      let request = try! client.http.apiRequest(
+        to: "/channels/\(id.uint64)/messages",
+        query: ["limit": "50"]
       )!
-      urlComponents.queryItems = queryItems
-
-      var request = URLRequest(url: urlComponents.url!)
-      request.httpMethod = "GET"
 
       Task { [request] in
-        let data = try! await client.http.request(
+        let json = try! await client.http.requestParsingJSON(
           request,
-          withSpoofedHeadersOfRequestType: .xhr
+          withSpoofedHeadersFor: .xhr
         )
-        let deserialized = try JSONSerialization.jsonObject(
-          with: data,
-          options: []
-        )
-        let messages = try GenericJSON.JSON(deserialized).arrayValue!
-          .map(Message.init(json:))
+        let messages = json.arrayValue!.map(Message.init(json:))
         self.messagesViewController.applyInitialMessages(messages)
       }
     }

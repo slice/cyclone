@@ -1,5 +1,20 @@
+import FineJSON
 import Foundation
+import GenericJSON
 import os
+import RichJSONParser
+
+public enum HTTPError: Error {
+  case httpError(httpResponse: HTTPURLResponse, data: Data)
+}
+
+public enum HTTPMethod: String {
+  case get = "GET"
+  case post = "POST"
+  case patch = "PATCH"
+  case delete = "DELETE"
+  case put = "PUT"
+}
 
 /// A facility to make HTTP requests to the Discord API.
 public class HTTP {
@@ -44,7 +59,7 @@ public class HTTP {
     request.httpMethod = "GET"
     _ = try await self.request(
       request,
-      withSpoofedHeadersOfRequestType: .navigation
+      withSpoofedHeadersFor: .navigation
     )
 
     for cookie in cookieStorage.cookies ?? [] {
@@ -94,10 +109,44 @@ public class HTTP {
     return headers
   }
 
+  /// Creates a `URLRequest` suitable to be passed to `request`.
+  public func apiRequest(
+    to pathComponents: String,
+    query: [String: String] = [:],
+    method: HTTPMethod = .get,
+    body: RichJSONParser.JSON? = nil
+  ) throws -> URLRequest? {
+    guard var urlComponents = URLComponents(
+      url: baseURL,
+      resolvingAgainstBaseURL: false
+    ) else {
+      return nil
+    }
+    urlComponents.path += "/api/v9" + pathComponents
+    urlComponents.queryItems = query.map { key, value in
+      URLQueryItem(name: key, value: value)
+    }
+
+    guard let finalURL = urlComponents.url else {
+      return nil
+    }
+    var request = URLRequest(url: finalURL)
+    request.httpMethod = method.rawValue
+    if let body = body {
+      let encoder = FineJSONEncoder()
+      encoder.jsonSerializeOptions = JSONSerializeOptions(isPrettyPrint: false)
+      encoder.optionalEncodingStrategy = .explicitNull
+      request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+      request.httpBody = try encoder.encode(body)
+    }
+    return request
+  }
+
+  /// Makes a request to a URL.
   public func request(
     _ request: URLRequest,
-    withSpoofedHeadersOfRequestType type: SpoofedRequestType
-  ) async throws -> Data {
+    withSpoofedHeadersFor type: SpoofedRequestType
+  ) async throws -> (HTTPURLResponse, Data) {
     var request = request
 
     for (name, value) in additionalRequestHeaders(
@@ -121,6 +170,21 @@ public class HTTP {
       log.info("-> \(string)")
     }
 
-    return data
+    if !(200 ..< 300).contains(httpResponse.statusCode) {
+      throw HTTPError.httpError(httpResponse: httpResponse, data: data)
+    }
+
+    return (httpResponse, data)
+  }
+
+  /// Makes a request to a URL, parsing the response as JSON.
+  public func requestParsingJSON(
+    _ request: URLRequest,
+    withSpoofedHeadersFor type: SpoofedRequestType
+  ) async throws -> GenericJSON.JSON {
+    let (_, data) = try await self.request(request, withSpoofedHeadersFor: type)
+
+    let value = try JSONSerialization.jsonObject(with: data, options: [])
+    return try JSON(value)
   }
 }

@@ -120,7 +120,7 @@ class MessagesViewController: NSViewController {
         let section = currentSnapshot.sectionIdentifiers[indexPath.section]
 
         guard let message = self.messages
-          .first(where: { $0.author.id == section.authorID })
+          .first(where: { $0.id == section.firstMessageID })
         else {
           fatalError("unable to find a message in state with the user")
         }

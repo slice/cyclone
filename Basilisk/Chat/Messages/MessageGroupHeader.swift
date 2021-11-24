@@ -7,6 +7,7 @@ class MessageGroupHeader: NSView, NSCollectionViewElement {
   @IBOutlet var groupTimestampTextField: NSTextField!
 
   override func prepareForReuse() {
+    super.prepareForReuse()
     groupAvatarImageView.image = nil
     groupAuthorTextField.stringValue = ""
     groupTimestampTextField.stringValue = ""

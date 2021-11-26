@@ -6,16 +6,12 @@ import GenericJSON
 import RichJSONParser
 
 @MainActor class ChatViewController: NSSplitViewController {
-  var guildsViewController: GuildsViewController {
-    splitViewItems[0].viewController as! GuildsViewController
-  }
-
-  var channelsViewController: ChannelsViewController {
-    splitViewItems[1].viewController as! ChannelsViewController
+  var navigatorViewController: NavigatorViewController {
+    splitViewItems[0].viewController as! NavigatorViewController
   }
 
   var messagesViewController: MessagesViewController {
-    splitViewItems[2].viewController as! MessagesViewController
+    splitViewItems[1].viewController as! MessagesViewController
   }
 
   var client: Client?
@@ -45,24 +41,7 @@ import RichJSONParser
   override func viewDidLoad() {
     super.viewDidLoad()
 
-    guildsViewController.onSelectedGuildWithID = { [weak self] id in
-      self?.selectedGuildID = id
-      self?.channelsViewController.reloadData()
-      if let name = self?.selectedGuild?.name {
-        self?.view.window?.title = name
-      }
-      self?.view.window?.subtitle = ""
-    }
-    guildsViewController.getGuildWithID = { [weak self] id in
-      self?.client?.guilds.first { $0.id == id }
-    }
-
-    channelsViewController.onSelectChannel = { [weak self] id in
-      self?.selectChannel(withID: id)
-    }
-    channelsViewController.getSelectedGuild = { [weak self] in
-      self?.selectedGuild
-    }
+    navigatorViewController.delegate = self
 
     messagesViewController.onRunCommand = { [weak self] command, args in
       guard let self = self else { return }
@@ -108,7 +87,9 @@ import RichJSONParser
       return
     }
 
-    guard let client = client, !requestingMoreHistory else {
+    guard let client = client, !requestingMoreHistory,
+          let focusedChannelID = focusedChannelID
+    else {
       return
     }
 
@@ -117,7 +98,7 @@ import RichJSONParser
     let limit = 50
 
     let request = try! client.http.apiRequest(
-      to: "/channels/\(focusedChannelID!)/messages",
+      to: "/channels/\(focusedChannelID)/messages",
       query: [
         "limit": String(limit),
         "before": String(messagesViewController.oldestMessageID!.uint64),
@@ -255,7 +236,8 @@ import RichJSONParser
     guard let guilds = guildsSortedAccordingToUserSettings() else {
       return
     }
-    guildsViewController.applyGuilds(guilds: guilds)
+
+    navigatorViewController.reloadWithGuildIDs(guilds.map(\.id))
   }
 
   func logPacket(_ packet: GatewayPacket) {
@@ -318,10 +300,31 @@ import RichJSONParser
 
     focusedChannelID = nil
     selectedGuildID = nil
-    guildsViewController.applyGuilds(guilds: [])
-    channelsViewController.reloadData()
+    navigatorViewController.reloadWithGuildIDs([])
     messagesViewController.applyInitialMessages([])
     view.window?.title = "Basilisk"
     view.window?.subtitle = ""
+  }
+}
+
+extension ChatViewController: NavigatorViewControllerDelegate {
+  func navigatorViewController(
+    _: NavigatorViewController,
+    didSelectChannelWithID channelID: Channel.ID,
+    inGuildWithID guildID: Guild.ID
+  ) {
+    selectedGuildID = guildID
+    selectChannel(withID: channelID)
+  }
+
+  func navigatorViewController(
+    _: NavigatorViewController,
+    requestingGuildWithID id: Guild.ID
+  ) -> Guild {
+    guard let guild = client?.guilds.first(where: { $0.id == id }) else {
+      fatalError("navigator requested client when we don't have one")
+    }
+
+    return guild
   }
 }

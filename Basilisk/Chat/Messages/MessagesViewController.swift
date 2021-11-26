@@ -1,6 +1,8 @@
 import Cocoa
 import Combine
 import Contempt
+import CoreImage
+import CoreImage.CIFilterBuiltins
 import FineJSON
 
 private extension NSScrollView {

@@ -5,11 +5,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <customObject id="-2" userLabel="File's Owner">
-            <connections>
-                <outlet property="view" destination="Hz6-mo-xeY" id="0bl-1N-x8E"/>
-            </connections>
-        </customObject>
+        <customObject id="-2" userLabel="File's Owner"/>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <customView id="Hz6-mo-xeY">
@@ -28,7 +24,7 @@
             <constraints>
                 <constraint firstItem="o48-oU-OEL" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" id="7cl-KQ-xl6"/>
                 <constraint firstItem="o48-oU-OEL" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" id="H41-KN-dEr"/>
-                <constraint firstItem="o48-oU-OEL" firstAttribute="height" secondItem="Hz6-mo-xeY" secondAttribute="height" id="N0s-tr-V5Z"/>
+                <constraint firstItem="o48-oU-OEL" firstAttribute="height" secondItem="Hz6-mo-xeY" secondAttribute="height" id="J3e-ov-bjR"/>
                 <constraint firstItem="o48-oU-OEL" firstAttribute="width" secondItem="Hz6-mo-xeY" secondAttribute="width" id="NqA-ZC-Gvu"/>
             </constraints>
             <point key="canvasLocation" x="64" y="46.5"/>

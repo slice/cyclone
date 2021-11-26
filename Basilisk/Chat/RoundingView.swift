@@ -8,5 +8,6 @@ class RoundingView: NSView {
   override func updateLayer() {
     layer!.masksToBounds = true
     layer!.cornerRadius = radius
+    layer!.cornerCurve = .continuous
   }
 }

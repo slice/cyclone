@@ -1,4 +1,4 @@
-import Foundation
+import GenericJSON
 
 public struct Snowflake: Hashable {
   public let uint64: UInt64
@@ -9,6 +9,10 @@ public struct Snowflake: Hashable {
 
   public init(uint64: UInt64) {
     self.uint64 = uint64
+  }
+  
+  public init(json: JSON?) {
+    uint64 = json.flatMap { $0.stringValue }.flatMap { UInt64($0) }!
   }
 
   public var timestamp: Date {

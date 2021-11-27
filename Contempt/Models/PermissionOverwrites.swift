@@ -46,15 +46,18 @@ struct Permissions: OptionSet {
 
 extension Permissions {
   init(_ json: JSON?) {
-    self = json.flatMap { $0.stringValue }.flatMap { Int($0) }.map { Permissions(rawValue: $0) }!
+    self = json.flatMap(\.stringValue).flatMap { Int($0) }
+      .map { Permissions(rawValue: $0) }!
   }
 }
 
 public enum PermissionOverwritesType: String {
   case role, member
-  
+
   init?(_ json: JSON?) {
-    if let overwrites = json.flatMap({ $0.stringValue }).flatMap({ PermissionOverwritesType(rawValue: $0) }) {
+    if let overwrites = json.flatMap(\.stringValue)
+      .flatMap({ PermissionOverwritesType(rawValue: $0) })
+    {
       self = overwrites
     } else {
       return nil
@@ -67,7 +70,7 @@ public struct PermissionOverwrites {
   let allow: Permissions
   let id: Snowflake
   let type: PermissionOverwritesType?
-  
+
   init(json: JSON) {
     deny = Permissions(json["deny"])
     allow = Permissions(json["allow"])

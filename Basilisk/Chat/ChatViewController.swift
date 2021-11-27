@@ -308,18 +308,15 @@ import RichJSONParser
 }
 
 extension ChatViewController: NavigatorViewControllerDelegate {
-  func navigatorViewController(
-    _: NavigatorViewController,
-    didSelectChannelWithID channelID: Channel.ID,
-    inGuildWithID guildID: Guild.ID
-  ) {
+  func navigatorViewController(_ navigatorViewController: NavigatorViewController,
+                               didSelectChannelWithID channelID: Channel.ID,
+                               inGuildWithID guildID: Guild.ID) {
     selectedGuildID = guildID
     selectChannel(withID: channelID)
   }
 
-  func navigatorViewController(
-    _: NavigatorViewController,
-    requestingGuildWithID id: Guild.ID
+  func navigatorViewController(_ navigatorViewController: NavigatorViewController,
+                               requestingGuildWithID id: Guild.ID
   ) -> Guild {
     guard let guild = client?.guilds.first(where: { $0.id == id }) else {
       fatalError("navigator requested client when we don't have one")
@@ -327,10 +324,9 @@ extension ChatViewController: NavigatorViewControllerDelegate {
 
     return guild
   }
-  
-  func navigatorViewController(
-    _ navigatorViewController: NavigatorViewController,
-    didRequestCurrentUserID: Void
+
+  func navigatorViewController(_ navigatorViewController: NavigatorViewController,
+                               didRequestCurrentUserID _: Void
   ) -> Snowflake? {
     client?.currentUser?.id
   }

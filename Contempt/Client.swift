@@ -129,7 +129,7 @@ public class Client {
 
     userSettings = object["user_settings"]!.objectValue!
     userSettingsChanged.send(userSettings!)
-    
+
     currentUser = CurrentUser(json: object["user"]!)
 
     guilds = object["guilds"]!.arrayValue!.map(Guild.init(json:))

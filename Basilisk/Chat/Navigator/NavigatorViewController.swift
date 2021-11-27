@@ -113,7 +113,11 @@ private extension Array where Element == Channel {
 private extension Guild {
   func sortedTopLevelChannels(forUserWith userID: Snowflake?) -> [Channel] {
     // You can't nest categories (yet!)
-    channels.filter { ($0.type == .category || $0.parentID == nil) && $0.overwrites.isChannelVisible(for: userID) }
+    channels
+      .filter {
+        ($0.type == .category || $0.parentID == nil) && $0.overwrites
+          .isChannelVisible(for: userID)
+      }
       .sortedByTypeAndPosition()
   }
 }
@@ -313,7 +317,7 @@ extension NavigatorViewController: NSOutlineViewDelegate {
 
   func outlineViewSelectionDidChange(_: Notification) {
     guard outlineView.selectedRow > 0 else { return }
-    
+
     let channel = outlineView
       .item(atRow: outlineView.selectedRow) as! ChannelRef
     delegate?.navigatorViewController(
@@ -326,6 +330,6 @@ extension NavigatorViewController: NSOutlineViewDelegate {
   func outlineView(_: NSOutlineView,
                    tintConfigurationForItem _: Any) -> NSTintConfiguration?
   {
-    return .monochrome
+    .monochrome
   }
 }

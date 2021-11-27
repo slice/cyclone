@@ -36,12 +36,13 @@ struct MessagesSection: Hashable {
   }
 }
 
-private typealias MessagesDiffableDataSource =
+typealias MessagesDiffableDataSource =
   NSCollectionViewDiffableDataSource<
     MessagesSection,
     Message.ID
   >
-private typealias MessagesSnapshot =
+
+typealias MessagesSnapshot =
   NSDiffableDataSourceSnapshot<
     MessagesSection,
     Message.ID
@@ -57,10 +58,11 @@ class MessagesViewController: NSViewController {
   @IBOutlet var collectionView: NSCollectionView!
 
   private static let messageGroupHeaderKind = "message-group-header"
+  var cachedMessageSizes: [Message.ID: NSSize] = [:]
 
   /// The array of messages this view controller is showing, ordered from oldest
   /// to newest.
-  private var messages: [Message] = []
+  var messages: [Message] = []
 
   /// The ID of the oldest message this view controller is showing.
   public var oldestMessageID: Message.ID? {
@@ -108,7 +110,7 @@ class MessagesViewController: NSViewController {
         guard let self = self else { return MessageGroupHeader() }
 
         let supplementaryView = collectionView.makeSupplementaryView(
-          ofKind: Self.messageGroupHeaderKind,
+          ofKind: NSCollectionView.elementKindSectionHeader,
           withIdentifier: .messageGroupHeader,
           for: indexPath
         ) as! MessageGroupHeader
@@ -151,21 +153,14 @@ class MessagesViewController: NSViewController {
         return supplementaryView
       }
 
-    let messageNib = NSNib(nibNamed: "MessageCollectionViewItem", bundle: nil)
-    collectionView.register(messageNib, forItemWithIdentifier: .message)
-
-    let messageGroupHeaderNib = NSNib(
-      nibNamed: "MessageGroupHeader",
-      bundle: nil
-    )
-    collectionView.register(
-      messageGroupHeaderNib,
-      forSupplementaryViewOfKind: Self.messageGroupHeaderKind,
-      withIdentifier: .messageGroupHeader
-    )
+    collectionView.register(MessageCollectionViewItem.nib!, forItemWithIdentifier: .message)
+    collectionView.register(MessageGroupHeader.nib!,
+                            forSupplementaryViewOfKind: NSCollectionView.elementKindSectionHeader,
+                            withIdentifier: .messageGroupHeader)
 
     collectionView.dataSource = dataSource
     collectionView.collectionViewLayout = makeCollectionViewLayout()
+    collectionView.delegate = self
 
     let clipView = scrollView.contentView
     clipView.postsBoundsChangedNotifications = true
@@ -181,6 +176,8 @@ class MessagesViewController: NSViewController {
       }
     }
   }
+
+  // MARK: - Applying Messages
 
   /// Applies an array of initial `Message` objects to be displayed in the view
   /// controller.
@@ -216,6 +213,16 @@ class MessagesViewController: NSViewController {
     }
 
     applySnapshot(snapshot, alwaysScrollToBottom: true)
+
+    // immediately invalidate the compositional layout.
+    //
+    // for some reason, applying the initial batch of messages leaves messages
+    // with multiline text awkwardly clipped. this fixes itself when a new
+    // message is received, which indirectly invalidates the layout. so, do it
+    // now so we get the correct layout ASAP. we are using estimated item
+    // dimensions to facilitate variable height items, so it's possible there's
+    // some rough edges with this. investigate further?
+    collectionView.collectionViewLayout!.invalidateLayout()
   }
 
   /// Appends a newly received message to the view controller and updates the
@@ -283,42 +290,20 @@ class MessagesViewController: NSViewController {
     }
   }
 
+  // MARK: - Collection View Layout
+
   private func makeCollectionViewLayout() -> NSCollectionViewLayout {
-    let itemSize = NSCollectionLayoutSize(
-      widthDimension: .fractionalWidth(1.0),
-      heightDimension: .fractionalHeight(1.0)
-    )
-    let item = NSCollectionLayoutItem(layoutSize: itemSize)
-
-    let group = NSCollectionLayoutGroup.vertical(
-      layoutSize: .init(
-        widthDimension: .fractionalWidth(1.0),
-        heightDimension: .estimated(20.0)
-      ),
-      subitems: [item]
-    )
-    group.contentInsets = .init(top: 0, leading: 10.0, bottom: 0, trailing: 0)
-
-    let section = NSCollectionLayoutSection(group: group)
-    let messageGroupHeader = NSCollectionLayoutBoundarySupplementaryItem(
-      layoutSize: .init(
-        widthDimension: .fractionalWidth(1.0),
-        heightDimension: .absolute(30.0)
-      ),
-      elementKind: Self.messageGroupHeaderKind,
-      alignment: .top
-    )
-    section.boundarySupplementaryItems = [messageGroupHeader]
-
-    return NSCollectionViewCompositionalLayout(section: section)
+    let layout = InvalidatingCollectionViewFlowLayout()
+    layout.minimumLineSpacing = 5.0
+    layout.minimumInteritemSpacing = 0.0
+    layout.sectionInset = NSEdgeInsets(top: 0.0, left: 11.0, bottom: 0.0,
+                                       right: 0.0)
+    layout.scrollDirection = .vertical
+    return layout
   }
 
   func appendToConsole(line _: String) {
-//    consoleTextView.string += line + "\n"
-//
-//    if consoleScrollView.isScrolledToBottom {
-//      consoleTextView.scrollToEndOfDocument(self)
-//    }
+    // TODO(skip): add a virtual message
   }
 
   @IBAction func inputTextFieldAction(_ sender: NSTextField) {

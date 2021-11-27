@@ -2,7 +2,7 @@ import GenericJSON
 
 public struct User: Identifiable {
   public let username: String
-  public let publicFlags: Int
+  public let publicFlags: Int?
   public let id: Snowflake
   public let discriminator: String
   public let avatar: Asset?
@@ -10,7 +10,7 @@ public struct User: Identifiable {
   init(json: JSON) {
     let object = json.objectValue!
     username = object["username"]!.stringValue!
-    publicFlags = Int(object["public_flags"]!.doubleValue!)
+    publicFlags = object["public_flags"].flatMap(\.doubleValue).map(Int.init)
     let id = Snowflake(string: object["id"]!.stringValue!)
     discriminator = object["discriminator"]!.stringValue!
     avatar = object["avatar"]?.stringValue.map { hash in

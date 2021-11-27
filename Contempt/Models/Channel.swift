@@ -25,6 +25,12 @@ public struct Channel: Identifiable {
   public let parentID: Snowflake?
   public let overwrites: [PermissionOverwrites]
 
+  /// Returns whether the channel is not within a category, or is a category
+  /// itself.
+  public var isTopLevel: Bool {
+    type == .category || parentID == nil
+  }
+
   init(json: JSON) {
     id = Snowflake(string: json["id"]!.stringValue!)
 //    guildID = Snowflake(string: json["guild_id"]!.stringValue!)

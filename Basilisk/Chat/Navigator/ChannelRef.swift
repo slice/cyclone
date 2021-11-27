@@ -1,7 +1,13 @@
 import Contempt
 
-/// A channel reference wrapper. This is used to maintain equality check
-/// consistency with `NSOutlineView`, which relies on `isEqual` from `NSObject`.
+/// A channel reference wrapper.
+///
+/// Objects of this type are returned as "items" by the outline view's delegate
+/// and data source. They are representative of channels (including categories)
+/// within a guild.
+///
+/// This class is a reference type in order to maintain the `NSObject` identity
+/// semantics that `NSOutlineView` desires.
 class ChannelRef: NSObject {
   public let guildID: UInt64
   public let id: UInt64
@@ -10,6 +16,8 @@ class ChannelRef: NSObject {
   public let parentID: UInt64?
   public let overwrites: [PermissionOverwrites]
 
+  /// Returns whether the channel is not within a category, or is a category
+  /// itself.
   var isTopLevel: Bool {
     type == .category || parentID == nil
   }
@@ -24,9 +32,7 @@ class ChannelRef: NSObject {
   }
 
   override func isEqual(_ object: Any?) -> Bool {
-    if let channel = object as? ChannelRef, channel.guildID == guildID,
-       channel.id == id, channel.name == name, channel.parentID == parentID
-    {
+    if let channel = object as? ChannelRef, channel.id == id {
       return true
     }
 

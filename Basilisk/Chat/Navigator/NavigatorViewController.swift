@@ -35,93 +35,6 @@ class NavigatorViewController: NSViewController {
   }
 }
 
-class NavigatorOutlineItem: NSObject {
-  public enum Kind: Hashable {
-    case section
-    case guild
-  }
-
-  public let kind: Kind
-  public let id: String
-
-  public init(kind: Kind, id: String) {
-    self.kind = kind
-    self.id = id
-  }
-
-  override func isEqual(_ object: Any?) -> Bool {
-    if case let item as NavigatorOutlineItem = object,
-       item.id == id, item.kind == kind
-    {
-      return true
-    }
-
-    return false
-  }
-}
-
-private let rootNavigatorItems: [NavigatorOutlineItem] = [
-  NavigatorOutlineItem(kind: .section, id: "pinned"),
-  NavigatorOutlineItem(kind: .section, id: "dms"),
-  NavigatorOutlineItem(kind: .section, id: "guilds"),
-]
-
-// MARK: Channel Sorting
-
-// Discord channel sorting is complicated. To do it, assume that each channel is
-// within a category. (Any channel that isn't within a category can be assumed
-// to be in a special category that is always ordered first.)
-//
-// Then, sort the categories according to their position, falling back to the
-// ID. Then, within each category, sort the channels according to their type
-// (text comes before voice), then position, then ID.
-//
-// Assume positions to only be unique within each (category, type).
-//
-// For example:
-//
-// [Text: 0]
-// [Text: 1]
-// [Voice: 0]
-// [Category: 0]
-//   [Text: 0]
-//   [Text: 5]
-//   [Text: 7]
-// [Category: 1]
-//   [Text: 1]
-//   [Text: 2]
-//   [Voice: 0]
-// [Category: 3]
-//   [Text: 4]
-//   [Text: 9]
-//   [Voice: 1]
-//   [Voice: 3]
-//
-// Kudos to Danny#0007 and some friends in Dannyware for their assistance.
-
-private extension Array where Element == Channel {
-  /// Sorts an array of channels according to their type, then position, then
-  /// ID.
-  func sortedByTypeAndPosition() -> [Channel] {
-    sorted {
-      ($0.type.rawValue, $0.position, $0.id) <
-        ($1.type.rawValue, $1.position, $1.id)
-    }
-  }
-}
-
-private extension Guild {
-  func sortedTopLevelChannels(forUserWith userID: Snowflake?) -> [Channel] {
-    // You can't nest categories (yet!)
-    channels
-      .filter {
-        ($0.type == .category || $0.parentID == nil) && $0.overwrites
-          .isChannelVisible(for: userID)
-      }
-      .sortedByTypeAndPosition()
-  }
-}
-
 extension NavigatorViewController: NSOutlineViewDataSource {
   func outlineView(_: NSOutlineView, child index: Int,
                    ofItem item: Any?) -> Any
@@ -130,7 +43,7 @@ extension NavigatorViewController: NSOutlineViewDataSource {
     
     if item == nil {
       // root items are direct messages, pins, and guilds
-      return rootNavigatorItems[index]
+      return NavigatorOutlineItem.rootItems[index]
     }
 
     switch item {
@@ -188,7 +101,7 @@ extension NavigatorViewController: NSOutlineViewDataSource {
     let userID = delegate?.navigatorViewController(self, didRequestCurrentUserID: ())
     
     if item == nil {
-      return rootNavigatorItems.count
+      return NavigatorOutlineItem.rootItems.count
     }
 
     switch item {

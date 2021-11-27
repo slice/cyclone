@@ -8,6 +8,7 @@ class ChannelRef: NSObject {
   public let name: String
   public let type: ChannelType
   public let parentID: UInt64?
+  public let overwrites: [PermissionOverwrites]
 
   var isTopLevel: Bool {
     type == .category || parentID == nil
@@ -19,6 +20,7 @@ class ChannelRef: NSObject {
     type = channel.type
     parentID = channel.parentID.map(\.uint64)
     name = channel.name
+    overwrites = channel.overwrites
   }
 
   override func isEqual(_ object: Any?) -> Bool {

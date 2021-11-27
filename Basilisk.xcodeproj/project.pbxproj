@@ -63,6 +63,8 @@
 		12F4FDC9273DFCD000B6AE64 /* Contempt.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 12F4FDB3273DFCD000B6AE64 /* Contempt.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		12FA9AEB274D968500079393 /* MessageGroupHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12FA9AE9274D968500079393 /* MessageGroupHeader.swift */; };
 		12FA9AEC274D968500079393 /* MessageGroupHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 12FA9AEA274D968500079393 /* MessageGroupHeader.xib */; };
+		B8EFC2F6275197ED0010B894 /* PermissionOverwrites.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8EFC2F5275197ED0010B894 /* PermissionOverwrites.swift */; };
+		B8EFC2FA2751A9350010B894 /* CurrentUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8EFC2F92751A9350010B894 /* CurrentUser.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -196,6 +198,8 @@
 		12F4FDC3273DFCD000B6AE64 /* ContemptTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContemptTests.swift; sourceTree = "<group>"; };
 		12FA9AE9274D968500079393 /* MessageGroupHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageGroupHeader.swift; sourceTree = "<group>"; };
 		12FA9AEA274D968500079393 /* MessageGroupHeader.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MessageGroupHeader.xib; sourceTree = "<group>"; };
+		B8EFC2F5275197ED0010B894 /* PermissionOverwrites.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionOverwrites.swift; sourceTree = "<group>"; };
+		B8EFC2F92751A9350010B894 /* CurrentUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentUser.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -304,6 +308,8 @@
 				12894918274C91C700850D5E /* Channel.swift */,
 				12945080274D3A240024C744 /* Message.swift */,
 				12945082274D3A410024C744 /* User.swift */,
+				B8EFC2F5275197ED0010B894 /* PermissionOverwrites.swift */,
+				B8EFC2F92751A9350010B894 /* CurrentUser.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -747,12 +753,14 @@
 				12CD0228274218AA00F136A5 /* Publisher+Buffer.swift in Sources */,
 				12894919274C91C700850D5E /* Channel.swift in Sources */,
 				12552C9C273F3DDA007D92B1 /* HTTP.swift in Sources */,
+				B8EFC2F6275197ED0010B894 /* PermissionOverwrites.swift in Sources */,
 				12945081274D3A240024C744 /* Message.swift in Sources */,
 				128C7673273DFD0E008FD585 /* Client.swift in Sources */,
 				128C7675273DFF73008FD585 /* Branch.swift in Sources */,
 				12897BF2273E25C700403E5B /* GatewayConnection.swift in Sources */,
 				129AF795273E653100B3851C /* GatewayPacket.swift in Sources */,
 				12552C9E273F3FE2007D92B1 /* SpoofedRequestType.swift in Sources */,
+				B8EFC2FA2751A9350010B894 /* CurrentUser.swift in Sources */,
 				12897BF4273E2BF400403E5B /* Opcode.swift in Sources */,
 				128C7677273E04D2008FD585 /* Disguise.swift in Sources */,
 				12F4FDB7273DFCD000B6AE64 /* Contempt.docc in Sources */,

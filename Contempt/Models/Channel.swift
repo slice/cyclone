@@ -23,6 +23,7 @@ public struct Channel: Identifiable {
   public let position: Int
   public let topic: String?
   public let parentID: Snowflake?
+  public let overwrites: [PermissionOverwrites]
 
   init(json: JSON) {
     id = Snowflake(string: json["id"]!.stringValue!)
@@ -32,5 +33,7 @@ public struct Channel: Identifiable {
     position = Int(json["position"]!.doubleValue!)
     topic = json["topic"]?.stringValue
     parentID = json["parent_id"]?.stringValue.map(Snowflake.init(string:))
+    overwrites = json["permission_overwrites"]!.arrayValue!
+      .map { PermissionOverwrites(json: $0) }
   }
 }

@@ -111,9 +111,9 @@ private extension Array where Element == Channel {
 }
 
 private extension Guild {
-  var sortedTopLevelChannels: [Channel] {
+  func sortedTopLevelChannels(forUserWith userID: Snowflake?) -> [Channel] {
     // You can't nest categories (yet!)
-    channels.filter { $0.type == .category || $0.parentID == nil }
+    channels.filter { ($0.type == .category || $0.parentID == nil) && $0.overwrites.isChannelVisible(for: userID) }
       .sortedByTypeAndPosition()
   }
 }
@@ -122,6 +122,8 @@ extension NavigatorViewController: NSOutlineViewDataSource {
   func outlineView(_: NSOutlineView, child index: Int,
                    ofItem item: Any?) -> Any
   {
+    let userID = delegate?.navigatorViewController(self, didRequestCurrentUserID: ())
+    
     if item == nil {
       // root items are direct messages, pins, and guilds
       return rootNavigatorItems[index]
@@ -141,7 +143,7 @@ extension NavigatorViewController: NSOutlineViewDataSource {
         }
       case .guild:
         let guild = guild(withID: Snowflake(string: item.id))
-        let sortedTopLevelChannels = guild.sortedTopLevelChannels
+        let sortedTopLevelChannels = guild.sortedTopLevelChannels(forUserWith: userID)
         return ChannelRef(guild: guild, channel: sortedTopLevelChannels[index])
       }
     case let channel as ChannelRef:
@@ -153,7 +155,7 @@ extension NavigatorViewController: NSOutlineViewDataSource {
       }
 
       let guild = guild(withID: Snowflake(uint64: channel.guildID))
-      let channels = guild.channels.filter { $0.parentID?.uint64 == channel.id }
+      let channels = guild.channels.filter { $0.parentID?.uint64 == channel.id && $0.overwrites.isChannelVisible(for: userID) }
         .sortedByTypeAndPosition()
       return ChannelRef(guild: guild, channel: channels[index])
     default: return NSNull()
@@ -179,6 +181,8 @@ extension NavigatorViewController: NSOutlineViewDataSource {
   }
 
   func outlineView(_: NSOutlineView, numberOfChildrenOfItem item: Any?) -> Int {
+    let userID = delegate?.navigatorViewController(self, didRequestCurrentUserID: ())
+    
     if item == nil {
       return rootNavigatorItems.count
     }
@@ -195,14 +199,14 @@ extension NavigatorViewController: NSOutlineViewDataSource {
         }
       case .guild:
         let guild = guild(withID: Snowflake(string: item.id))
-        return guild.sortedTopLevelChannels.count
+        return guild.sortedTopLevelChannels(forUserWith: userID).count
       }
     case let channel as ChannelRef:
       guard channel.type == .category else {
         return 0
       }
       let guild = guild(withID: Snowflake(uint64: channel.guildID))
-      return guild.channels.filter { $0.parentID?.uint64 == channel.id }.count
+      return guild.channels.filter { $0.parentID?.uint64 == channel.id && $0.overwrites.isChannelVisible(for: userID) }.count
     default: return 0
     }
   }
@@ -308,6 +312,8 @@ extension NavigatorViewController: NSOutlineViewDelegate {
   }
 
   func outlineViewSelectionDidChange(_: Notification) {
+    guard outlineView.selectedRow > 0 else { return }
+    
     let channel = outlineView
       .item(atRow: outlineView.selectedRow) as! ChannelRef
     delegate?.navigatorViewController(

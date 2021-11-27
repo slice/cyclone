@@ -32,6 +32,7 @@ public class Client {
 
   /// The user's settings, received from the `READY` packet.
   public private(set) var userSettings: [String: GenericJSON.JSON]?
+  public private(set) var currentUser: CurrentUser?
 
   /// A Combine `Publisher` that publishes when the user settings have changed.
   /// The partial data fragment sent by the gateway is published.
@@ -128,6 +129,8 @@ public class Client {
 
     userSettings = object["user_settings"]!.objectValue!
     userSettingsChanged.send(userSettings!)
+    
+    currentUser = CurrentUser(json: object["user"]!)
 
     guilds = object["guilds"]!.arrayValue!.map(Guild.init(json:))
     guildsChanged.send()

@@ -138,10 +138,10 @@ import RichJSONParser
       )!
 
       Task { [request] in
-        let json = try! await client.http.requestParsingJSON(
+        guard let json = try? await client.http.requestParsingJSON(
           request,
           withSpoofedHeadersFor: .xhr
-        )
+        ) else { return }
         let messages = json.arrayValue!.map(Message.init(json:))
         self.messagesViewController.applyInitialMessages(messages)
       }
@@ -326,5 +326,12 @@ extension ChatViewController: NavigatorViewControllerDelegate {
     }
 
     return guild
+  }
+  
+  func navigatorViewController(
+    _ navigatorViewController: NavigatorViewController,
+    didRequestCurrentUserID: Void
+  ) -> Snowflake? {
+    client?.currentUser?.id
   }
 }

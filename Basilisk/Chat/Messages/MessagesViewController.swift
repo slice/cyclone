@@ -131,8 +131,12 @@ class MessagesViewController: NSViewController {
 
         supplementaryView.groupAuthorTextField.stringValue = name
 
+        if let task = supplementaryView.avatarLoadingTask {
+          task.cancel()
+        }
+
         if let avatar = user.avatar {
-          Task {
+          supplementaryView.avatarLoadingTask = Task {
             let url = avatar.url(withFileExtension: "png")
             let image = try await ImageCache.shared.image(at: url)
             supplementaryView.groupAvatarRounding.radius = 10.0

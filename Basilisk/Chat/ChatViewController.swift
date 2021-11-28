@@ -41,6 +41,8 @@ import RichJSONParser
   override func viewDidLoad() {
     super.viewDidLoad()
 
+    splitViewItems[1].titlebarSeparatorStyle = .shadow
+
     navigatorViewController.delegate = self
 
     messagesViewController.onRunCommand = { [weak self] command, args in

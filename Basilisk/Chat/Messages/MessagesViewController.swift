@@ -7,12 +7,12 @@ import FineJSON
 import os.log
 
 private extension NSScrollView {
+  var scrollPosition: CGFloat {
+    return contentView.bounds.origin.y
+  }
+
   var isScrolledToBottom: Bool {
-    let clipView = contentView
-    let documentView = documentView!
-    let isScrolledToBottom = clipView.bounds.origin.y + clipView.bounds
-      .height == documentView.frame.height
-    return isScrolledToBottom
+    return scrollPosition + contentView.bounds.height == documentView!.frame.height
   }
 
   func scrollToEnd() {
@@ -22,8 +22,7 @@ private extension NSScrollView {
   }
 
   var scrollPercentage: Double {
-    contentView.bounds
-      .minY / (documentView!.frame.height - contentView.bounds.height)
+    return contentView.bounds.minY / (documentView!.frame.height - contentView.bounds.height)
   }
 }
 
@@ -190,7 +189,6 @@ class MessagesViewController: NSViewController {
       for: NSView.boundsDidChangeNotification,
       object: clipView
     )
-    .throttle(for: .seconds(5), scheduler: RunLoop.main, latest: true)
     .sink { [weak self] _ in
       guard let self = self else { return }
       if self.scrollView.scrollPercentage < 0.25 {
@@ -296,19 +294,44 @@ class MessagesViewController: NSViewController {
     }
 
     self.messages.insert(contentsOf: messages, at: 0)
-    applySnapshot(snapshot)
+
+    let scrollView = collectionView.enclosingScrollView!
+    let savedScrollPosition = scrollView.scrollPosition
+    let savedContentHeight = scrollView.documentView!.bounds.height
+    applySnapshot(snapshot) {
+      // when prepending messages, the scroll view ends up becoming positioned
+      // in a similarly to where it was before we prepended the messages
+      // at all. i.e. if you are near the top, after we prepend a chunk of
+      // messages, we will still be near the top. thus, all of the messages
+      // that were previously onscreen will all move downwards and offscreen
+      // after prepending.
+      //
+      // to prevent loading messages infinitely when we scroll near the
+      // top of the message view, reposition the scroll view to be near the
+      // oldest messages onscreen from before the load. this just "feels better",
+      // too.
+      let newHeight = scrollView.documentView!.bounds.height
+      guard newHeight != savedContentHeight else {
+        NSLog("[warning] no height was added after prepending older messages, this should never happen")
+        return
+      }
+
+      let newPosition = (newHeight - savedContentHeight) + savedScrollPosition
+      scrollView.contentView.scroll(to: NSPoint(x: 0.0, y: newPosition))
+      NSLog("adjusting scroll offset from \(savedScrollPosition) to \(newPosition)")
+    }
   }
 
-  private func applySnapshot(
-    _ snapshot: MessagesSnapshot,
-    alwaysScrollToBottom: Bool = false
-  ) {
+  private func applySnapshot(_ snapshot: MessagesSnapshot,
+                             alwaysScrollToBottom: Bool = false,
+                             completion: (() -> Void)? = nil) {
     let wasScrolledToBottom = alwaysScrollToBottom ? true : scrollView
       .isScrolledToBottom
     dataSource.apply(snapshot, animatingDifferences: false) { [weak self] in
       if wasScrolledToBottom {
         self?.scrollView.scrollToEnd()
       }
+      completion?()
     }
   }
 

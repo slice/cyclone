@@ -7,7 +7,7 @@ import Cocoa
 /// not happen by default.
 class InvalidatingCollectionViewFlowLayout: NSCollectionViewFlowLayout {
   override func shouldInvalidateLayout(forBoundsChange newBounds: NSRect) -> Bool {
-    true
+    return true
   }
 
   override func invalidationContext(forBoundsChange newBounds: NSRect) -> NSCollectionViewLayoutInvalidationContext {

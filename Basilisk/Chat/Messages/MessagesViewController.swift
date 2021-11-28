@@ -4,6 +4,7 @@ import Contempt
 import CoreImage
 import CoreImage.CIFilterBuiltins
 import FineJSON
+import os.log
 
 private extension NSScrollView {
   var isScrolledToBottom: Bool {
@@ -78,11 +79,28 @@ class MessagesViewController: NSViewController {
   /// Called when the user scrolls near the top of the message history.
   var onScrolledNearTop: (() -> Void)?
 
+  /// A message view that is used to measure message heights. It is never
+  /// drawn to the screen.
+  var messageSizingTemplate: MessageCollectionViewItem!
+
   private var dataSource: MessagesDiffableDataSource!
   private var clipViewBoundsChangedSink: AnyCancellable!
 
+  var signposter = OSSignposter()
+
   override func viewDidLoad() {
     super.viewDidLoad()
+
+    var views: NSArray? = []
+    guard MessageCollectionViewItem.nib!
+            .instantiate(withOwner: messageSizingTemplate, topLevelObjects: &views) else {
+      preconditionFailure("failed to instantiate message sizing template nib")
+    }
+    let messageSizingTemplate = views?.filter { $0 is MessageCollectionViewItem }.first
+    guard let messageSizingTemplate = messageSizingTemplate as? MessageCollectionViewItem else {
+      preconditionFailure("failed to locate message sizing template from instantiated nib")
+    }
+    self.messageSizingTemplate = messageSizingTemplate
 
     dataSource =
       MessagesDiffableDataSource(collectionView: collectionView) { [weak self] collectionView, indexPath, identifier in
@@ -93,12 +111,14 @@ class MessagesViewController: NSViewController {
           for: indexPath
         ) as! MessageCollectionViewItem
 
+        // TODO(skip): replace this with an O(1) operation.
         guard let message = self.messages.first(where: { $0.id == identifier })
         else {
           fatalError("tried to make item for message not present in state")
         }
 
-        item.contentTextField.stringValue = message.content
+        item.configure(withMessage: message)
+
         return item
       }
 

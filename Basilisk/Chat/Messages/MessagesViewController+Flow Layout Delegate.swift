@@ -29,15 +29,15 @@ extension MessagesViewController: NSCollectionViewDelegateFlowLayout {
       }
     }
 
-    let label = NSTextField(labelWithString: message.content)
-    label.usesSingleLineMode = false
-    label.maximumNumberOfLines = .max
-    label.lineBreakMode = .byWordWrapping
-    label.preferredMaxLayoutWidth = fullWidth
+    let signpostID = signposter.makeSignpostID()
+    let name: StaticString = "Message Height Measurement"
+    let signpostState = signposter.beginInterval(name, id: signpostID)
+    messageSizingTemplate.configure(withMessage: message)
+    let size = messageSizingTemplate.view.fittingSize
+    signposter.endInterval(name, signpostState)
 
-    let usedTextSize = label.fittingSize
-    cachedMessageSizes[message.id] = usedTextSize
-    return NSSize(width: fullWidth, height: usedTextSize.height)
+    cachedMessageSizes[message.id] = size
+    return NSSize(width: fullWidth, height: size.height)
   }
 
   func collectionView(_ collectionView: NSCollectionView, layout collectionViewLayout: NSCollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> NSSize {

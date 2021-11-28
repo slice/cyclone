@@ -756,20 +756,20 @@
             <objects>
                 <viewController title="Messages" id="MzX-Gf-CvU" customClass="MessagesViewController" customModule="Basilisk" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="Bxq-5h-XEy">
-                        <rect key="frame" x="0.0" y="0.0" width="608" height="497"/>
+                        <rect key="frame" x="0.0" y="0.0" width="608" height="533"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="0.0" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hq9-lN-oH1">
-                                <rect key="frame" x="0.0" y="0.0" width="608" height="497"/>
+                                <rect key="frame" x="0.0" y="0.0" width="608" height="533"/>
                                 <subviews>
                                     <scrollView wantsLayer="YES" borderType="none" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="x0q-AY-O3S">
-                                        <rect key="frame" x="0.0" y="50" width="608" height="447"/>
+                                        <rect key="frame" x="0.0" y="50" width="608" height="483"/>
                                         <clipView key="contentView" id="oi0-4r-hGk">
-                                            <rect key="frame" x="0.0" y="0.0" width="608" height="447"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="608" height="483"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <collectionView id="tld-Y7-t6y">
-                                                    <rect key="frame" x="0.0" y="0.0" width="608" height="447"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="608" height="483"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
                                                     <collectionViewFlowLayout key="collectionViewLayout" minimumInteritemSpacing="10" minimumLineSpacing="10" id="8HM-Yd-lbW">
                                                         <size key="itemSize" width="50" height="50"/>
@@ -787,31 +787,36 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
                                     </scrollView>
-                                    <customView translatesAutoresizingMaskIntoConstraints="NO" id="ZMV-Q8-EI7">
+                                    <box boxType="custom" borderType="line" borderWidth="0.0" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="xUq-Ts-Pc4">
                                         <rect key="frame" x="0.0" y="0.0" width="608" height="50"/>
-                                        <subviews>
-                                            <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="PcU-uJ-c3j">
-                                                <rect key="frame" x="10" y="10" width="588" height="30"/>
-                                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" borderStyle="bezel" alignment="left" bezelStyle="round" id="zM8-kt-LTR">
-                                                    <font key="font" usesAppearanceFont="YES"/>
-                                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                </textFieldCell>
-                                                <connections>
-                                                    <action selector="inputTextFieldAction:" target="MzX-Gf-CvU" id="j3q-4a-OUz"/>
-                                                </connections>
-                                            </textField>
-                                        </subviews>
+                                        <view key="contentView" id="waz-Ye-8dd">
+                                            <rect key="frame" x="0.0" y="0.0" width="608" height="50"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <subviews>
+                                                <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="PcU-uJ-c3j">
+                                                    <rect key="frame" x="10" y="10" width="588" height="30"/>
+                                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" borderStyle="bezel" alignment="left" bezelStyle="round" id="zM8-kt-LTR">
+                                                        <font key="font" usesAppearanceFont="YES"/>
+                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                    </textFieldCell>
+                                                    <connections>
+                                                        <action selector="inputTextFieldAction:" target="MzX-Gf-CvU" id="j3q-4a-OUz"/>
+                                                    </connections>
+                                                </textField>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="bottom" secondItem="PcU-uJ-c3j" secondAttribute="bottom" constant="10" id="Klw-uF-REd"/>
+                                                <constraint firstAttribute="trailing" secondItem="PcU-uJ-c3j" secondAttribute="trailing" constant="10" id="MlX-p2-gtV"/>
+                                                <constraint firstItem="PcU-uJ-c3j" firstAttribute="leading" secondItem="waz-Ye-8dd" secondAttribute="leading" constant="10" id="MtG-hr-Z84"/>
+                                                <constraint firstItem="PcU-uJ-c3j" firstAttribute="top" secondItem="waz-Ye-8dd" secondAttribute="top" constant="10" id="d9R-NF-uV8"/>
+                                            </constraints>
+                                        </view>
                                         <constraints>
-                                            <constraint firstAttribute="trailing" secondItem="PcU-uJ-c3j" secondAttribute="trailing" constant="10" id="4SP-Ol-cOA"/>
-                                            <constraint firstItem="PcU-uJ-c3j" firstAttribute="centerY" secondItem="ZMV-Q8-EI7" secondAttribute="centerY" id="GM0-N3-CFx"/>
-                                            <constraint firstAttribute="height" constant="50" id="KKd-wQ-EZP"/>
-                                            <constraint firstItem="PcU-uJ-c3j" firstAttribute="centerX" secondItem="ZMV-Q8-EI7" secondAttribute="centerX" id="QuU-FC-I0B"/>
-                                            <constraint firstItem="PcU-uJ-c3j" firstAttribute="top" secondItem="ZMV-Q8-EI7" secondAttribute="top" constant="10" id="l2L-dE-S6Y"/>
-                                            <constraint firstAttribute="bottom" secondItem="PcU-uJ-c3j" secondAttribute="bottom" constant="10" id="oGK-Uu-7Gg"/>
-                                            <constraint firstItem="PcU-uJ-c3j" firstAttribute="leading" secondItem="ZMV-Q8-EI7" secondAttribute="leading" constant="10" id="sH0-KX-pC4"/>
+                                            <constraint firstAttribute="height" constant="50" id="o9J-es-OKY"/>
                                         </constraints>
-                                    </customView>
+                                        <color key="fillColor" name="gridColor" catalog="System" colorSpace="catalog"/>
+                                    </box>
                                 </subviews>
                                 <constraints>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="300" id="Zpl-Y8-hpc"/>
@@ -851,13 +856,13 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="24" horizontalPageScroll="10" verticalLineScroll="24" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="h0D-su-6jd">
-                                <rect key="frame" x="0.0" y="0.0" width="152" height="529"/>
+                                <rect key="frame" x="0.0" y="0.0" width="152" height="545"/>
                                 <clipView key="contentView" drawsBackground="NO" id="TGt-zi-MMF">
-                                    <rect key="frame" x="0.0" y="0.0" width="152" height="529"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="152" height="545"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <outlineView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" selectionHighlightStyle="sourceList" multipleSelection="NO" autosaveColumns="NO" rowHeight="24" rowSizeStyle="systemDefault" viewBased="YES" floatsGroupRows="NO" indentationPerLevel="13" outlineTableColumn="03T-OW-czf" id="o1E-3Y-zAB">
-                                            <rect key="frame" x="0.0" y="0.0" width="152" height="529"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="152" height="545"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <size key="intercellSpacing" width="3" height="0.0"/>
                                             <color key="backgroundColor" name="_sourceListBackgroundColor" catalog="System" colorSpace="catalog"/>

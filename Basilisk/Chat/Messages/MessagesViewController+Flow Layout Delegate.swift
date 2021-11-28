@@ -3,8 +3,7 @@ import Contempt
 
 extension MessagesViewController: NSCollectionViewDelegateFlowLayout {
   private func fullWidthOfCollectionView(_ collectionView: NSCollectionView) -> Double {
-    let insets = collectionView.collectionViewLayout as! NSCollectionViewFlowLayout
-    return collectionView.bounds.width - (insets.sectionInset.left + insets.sectionInset.right)
+    return collectionView.bounds.width - (horizontalMessageSectionInset * 2.0)
   }
 
   func collectionView(_ collectionView: NSCollectionView, layout collectionViewLayout: NSCollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> NSSize {
@@ -32,8 +31,11 @@ extension MessagesViewController: NSCollectionViewDelegateFlowLayout {
     let signpostID = signposter.makeSignpostID()
     let name: StaticString = "Message Height Measurement"
     let signpostState = signposter.beginInterval(name, id: signpostID)
+
     messageSizingTemplate.configure(withMessage: message)
+    messageSizingTemplate.contentTextField.preferredMaxLayoutWidth = fullWidth
     let size = messageSizingTemplate.view.fittingSize
+
     signposter.endInterval(name, signpostState)
 
     cachedMessageSizes[message.id] = size
@@ -41,10 +43,17 @@ extension MessagesViewController: NSCollectionViewDelegateFlowLayout {
   }
 
   func collectionView(_ collectionView: NSCollectionView, layout collectionViewLayout: NSCollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> NSSize {
-    let baseHeight = 30.0
-    let spaceFromHeaderToFirstMessage = 5.0
-    let extraSpacing = 10.0
-    return NSSize(width: fullWidthOfCollectionView(collectionView),
-                  height: baseHeight + extraSpacing + spaceFromHeaderToFirstMessage)
+    return NSSize(width: fullWidthOfCollectionView(collectionView), height: 30.0)
+  }
+
+  func collectionView(_ collectionView: NSCollectionView, layout collectionViewLayout: NSCollectionViewLayout, insetForSectionAt section: Int) -> NSEdgeInsets {
+    let collectionViewLayout = collectionViewLayout as! NSCollectionViewFlowLayout
+    let spacingBetweenMessages = collectionViewLayout.minimumLineSpacing
+
+    let verticalInset = 15.0
+    return NSEdgeInsets(top: spacingBetweenMessages,
+                        left: horizontalMessageSectionInset,
+                        bottom: verticalInset,
+                        right: horizontalMessageSectionInset)
   }
 }

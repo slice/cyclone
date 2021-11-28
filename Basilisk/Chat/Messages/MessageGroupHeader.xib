@@ -13,22 +13,22 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <customView translatesAutoresizingMaskIntoConstraints="NO" id="qm4-3A-YHK">
-                    <rect key="frame" x="11" y="5" width="469" height="30"/>
+                    <rect key="frame" x="11" y="0.0" width="469" height="30"/>
                     <subviews>
                         <customView translatesAutoresizingMaskIntoConstraints="NO" id="lB3-uN-kCv" customClass="RoundingView" customModule="Basilisk" customModuleProvider="target">
                             <rect key="frame" x="0.0" y="0.0" width="30" height="30"/>
                             <subviews>
                                 <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="cxd-Dc-WYh">
                                     <rect key="frame" x="0.0" y="-2.5" width="30" height="35"/>
-                                    <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="person.fill" catalog="system" id="EMx-GA-1qW"/>
+                                    <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyUpOrDown" image="person.fill" catalog="system" id="EMx-GA-1qW"/>
                                 </imageView>
                             </subviews>
                             <constraints>
-                                <constraint firstAttribute="width" constant="30" id="0xf-kx-azs"/>
-                                <constraint firstAttribute="bottom" secondItem="cxd-Dc-WYh" secondAttribute="bottom" id="bb9-X0-WgA"/>
-                                <constraint firstItem="cxd-Dc-WYh" firstAttribute="leading" secondItem="lB3-uN-kCv" secondAttribute="leading" id="ikd-uQ-bUT"/>
-                                <constraint firstAttribute="trailing" secondItem="cxd-Dc-WYh" secondAttribute="trailing" id="oaO-l4-fkO"/>
-                                <constraint firstItem="cxd-Dc-WYh" firstAttribute="top" secondItem="lB3-uN-kCv" secondAttribute="top" id="rjm-kz-kqB"/>
+                                <constraint firstItem="cxd-Dc-WYh" firstAttribute="top" secondItem="lB3-uN-kCv" secondAttribute="top" id="DNa-d7-IIc"/>
+                                <constraint firstAttribute="trailing" secondItem="cxd-Dc-WYh" secondAttribute="trailing" id="Tkm-Dd-8SE"/>
+                                <constraint firstItem="cxd-Dc-WYh" firstAttribute="leading" secondItem="lB3-uN-kCv" secondAttribute="leading" id="VTZ-cW-Er2"/>
+                                <constraint firstAttribute="width" secondItem="lB3-uN-kCv" secondAttribute="height" multiplier="1:1" id="XgM-8x-R2d"/>
+                                <constraint firstAttribute="bottom" secondItem="cxd-Dc-WYh" secondAttribute="bottom" id="oAM-Xd-KvX"/>
                             </constraints>
                         </customView>
                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="chR-WG-ypf">
@@ -62,7 +62,7 @@
             </subviews>
             <constraints>
                 <constraint firstItem="qm4-3A-YHK" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" constant="11" id="7JQ-Z4-Oen"/>
-                <constraint firstAttribute="bottom" secondItem="qm4-3A-YHK" secondAttribute="bottom" constant="5" id="LD0-a0-ixf"/>
+                <constraint firstAttribute="bottom" secondItem="qm4-3A-YHK" secondAttribute="bottom" id="LD0-a0-ixf"/>
                 <constraint firstAttribute="trailing" secondItem="qm4-3A-YHK" secondAttribute="trailing" id="sMI-n6-8Ch"/>
             </constraints>
             <connections>

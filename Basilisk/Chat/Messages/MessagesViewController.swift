@@ -86,6 +86,8 @@ class MessagesViewController: NSViewController {
   private var dataSource: MessagesDiffableDataSource!
   private var clipViewBoundsChangedSink: AnyCancellable!
 
+  let horizontalMessageSectionInset = 11.0
+
   var signposter = OSSignposter()
 
   override func viewDidLoad() {
@@ -314,10 +316,10 @@ class MessagesViewController: NSViewController {
 
   private func makeCollectionViewLayout() -> NSCollectionViewLayout {
     let layout = InvalidatingCollectionViewFlowLayout()
-    layout.minimumLineSpacing = 5.0
+    let spacingBetweenMessages = 5.0
+    layout.minimumLineSpacing = spacingBetweenMessages
     layout.minimumInteritemSpacing = 0.0
-    layout.sectionInset = NSEdgeInsets(top: 0.0, left: 11.0, bottom: 0.0,
-                                       right: 0.0)
+    // section insets are returned dynamically from the delegate
     layout.scrollDirection = .vertical
     return layout
   }

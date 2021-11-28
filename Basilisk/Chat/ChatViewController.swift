@@ -133,6 +133,7 @@ import RichJSONParser
        let channelName = selectedGuild.channels.first(where: { $0.id == id })?
        .name
     {
+      view.window?.title = selectedGuild.name
       view.window?.subtitle = "#\(channelName)"
       let request = try! client.http.apiRequest(
         to: "/channels/\(id.uint64)/messages",

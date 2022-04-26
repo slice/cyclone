@@ -1,20 +1,19 @@
-import GenericJSON
-
 public struct Guild: Identifiable {
   public let name: String
   public let id: Snowflake
   public let icon: Asset?
   public let channels: [Channel]
+}
 
-  init(json: JSON) {
-    let object = json.objectValue!
-    name = object["name"]!.stringValue!
-    id = Snowflake(string: object["id"]!.stringValue!)
-    if let iconHash = object["icon"]?.stringValue {
+extension Guild: Decodable {
+  public init(from decoder: Decoder) throws {
+    name = try decoder.decode("name")
+    id = try decoder.decode("id")
+    if let iconHash = try decoder.decode("icon", as: String?.self) {
       icon = Asset(type: .icon, parent: id, hash: iconHash)
     } else {
       icon = nil
     }
-    channels = object["channels"]!.arrayValue!.map(Channel.init(json:))
+    channels = try decoder.decode("channels")
   }
 }

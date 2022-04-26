@@ -1,5 +1,5 @@
 /// Discord gateway opcodes.
-public enum Opcode: Int {
+public enum Opcode: Int, Codable {
   case dispatch = 0
   case heartbeat = 1
   case identify = 2
@@ -12,7 +12,7 @@ public enum Opcode: Int {
   case invalidSession = 9
   case hello = 10
   case heartbeatAck = 11
-  // 12?
+  case guildSync = 12
   case callConnect = 13
   case updateGuildSubscriptions = 14
   case lobbyConnect = 15

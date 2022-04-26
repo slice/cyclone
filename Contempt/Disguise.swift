@@ -1,5 +1,48 @@
-import FineJSON
-import RichJSONParser
+import Codextended
+import Darwin
+
+internal struct SuperProperties: Codable {
+  enum CodingKeys: String, CodingKey {
+    case os
+    case browser
+    case releaseChannel = "release_channel"
+    case clientVersion = "client_version"
+    case osVersion = "os_version"
+    case osArch = "os_arch"
+    case systemLocale = "system_locale"
+    case clientBuildNumber = "client_build_number"
+    case clientEventSource = "client_event_source"
+  }
+
+  let os: String
+  let browser: String
+  let releaseChannel: String
+  let clientVersion: String
+  let osVersion: String
+  let osArch: String
+  let systemLocale: String
+  let clientBuildNumber: Int
+  let clientEventSource: String?
+
+  func encode(to encoder: Encoder) throws {
+    var container = encoder.container(keyedBy: CodingKeys.self)
+    try container.encode(os, forKey: .os)
+    try container.encode(browser, forKey: .browser)
+    try container.encode(releaseChannel, forKey: .releaseChannel)
+    try container.encode(clientVersion, forKey: .clientVersion)
+    try container.encode(osVersion, forKey: .osVersion)
+    try container.encode(osArch, forKey: .osArch)
+    try container.encode(systemLocale, forKey: .systemLocale)
+    try container.encode(clientBuildNumber, forKey: .clientBuildNumber)
+
+    // Encode the optional event source directly, so it's present with a `null`
+    // value.
+    //
+    // If we didn't do this, then the key would be left out, and we want to
+    // resemble first-party Discord clients as accurately as possible.
+    try container.encode(clientEventSource, forKey: .clientEventSource)
+  }
+}
 
 /// A collection of identifying values and metadata that real Discord clients
 /// send to Discord while `IDENTIFY`ing, and as part of all HTTP requests.
@@ -16,33 +59,12 @@ public struct Disguise: Codable {
   let clientBuildNumber: Int
   let clientEventSource: String?
 
-  func superPropertiesJSON() -> JSON {
-    .object(.init([
-      "os": .string(os),
-      "browser": .string(browser),
-      "release_channel": .string(releaseChannel.rawValue),
-      "client_version": .string(clientVersion),
-      "os_version": .string(osVersion),
-      "os_arch": .string(osArch),
-      "system_locale": .string(systemLocale),
-      "client_build_number": .number(String(clientBuildNumber)),
-      "client_event_source": .null,
-    ]))
-  }
-
-  /// Returns this `Disguise` as a JSON string that is suitable to use as a
-  /// value in `X-Super-Properties` as well as when `IDENTIFY`ing.
-  func superPropertiesJSONString() -> String {
-    let jsonEncoder = FineJSONEncoder()
-    jsonEncoder.optionalEncodingStrategy = .explicitNull
-    jsonEncoder
-      .jsonSerializeOptions = JSONSerializeOptions(isPrettyPrint: false)
-    guard let data = try? jsonEncoder.encode(superPropertiesJSON()) else {
-      fatalError("failed to encode super properties dictionary as JSON")
-    }
-    guard let text = String(data: data, encoding: .utf8) else {
-      fatalError("encoded super properties dictionary was not valid UTF-8 text")
-    }
-    return text
+  var superProperties: SuperProperties {
+    SuperProperties(
+      os: os, browser: browser, releaseChannel: releaseChannel.rawValue,
+      clientVersion: clientVersion, osVersion: osVersion, osArch: osArch,
+      systemLocale: systemLocale, clientBuildNumber: clientBuildNumber,
+      clientEventSource: clientEventSource
+    )
   }
 }

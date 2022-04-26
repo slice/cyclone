@@ -1,10 +1,8 @@
 import Combine
-import FineJSON
 import Foundation
-import GenericJSON
 import Network
 import os
-import RichJSONParser
+import SwiftyJSON
 
 /// A connection to the Discord gateway.
 public class GatewayConnection {
@@ -32,8 +30,11 @@ public class GatewayConnection {
   /// The Discord user token to `IDENTIFY` to the gateway with.
   private var token: String
 
-  /// A Combine subject for incoming gateway packets.
-  public private(set) var packets = PassthroughSubject<GatewayPacket, Never>()
+  /// A Combine subject for received gateway packets.
+  public private(set) var receivedPackets = PassthroughSubject<AnyGatewayPacket, Never>()
+
+  /// A Combine subject for sent gateway packets.
+  public private(set) var sentPackets = PassthroughSubject<(JSON, String), Never>()
 
   deinit {
     heartbeatTimer = nil
@@ -103,28 +104,31 @@ public class GatewayConnection {
   }
 
   /// Encodes a JSON payload and sends it through the gateway socket.
-  public func send(json: RichJSONParser.JSON) async throws {
+  public func send(json: JSON) async throws {
     guard let socket = socket else {
       preconditionFailure("cannot send JSON when not connected")
     }
 
-    let encoder = FineJSONEncoder()
-    encoder.optionalEncodingStrategy = .explicitNull
-    encoder.jsonSerializeOptions = JSONSerializeOptions(isPrettyPrint: false)
-    guard let data = try? encoder.encode(json) else {
+    guard let data = try? json.encoded() else {
       fatalError("failed to encode JSON data to send")
     }
 
-    log.info("<- \(String(data: data, encoding: .utf8)!)")
+    guard let string = String(data: data, encoding: .utf8) else {
+      fatalError("failed to encode outgoing JSON data as UTF-8")
+    }
+
+    log.info("<- \(string)")
     try await socket.send(data: data)
+
+    sentPackets.send((json, string))
   }
 
   /// Sends a single heartbeat to the Discord gateway.
   public func heartbeat() async throws {
-    try await send(json: .object(.init([
-      "op": .number(String(Opcode.heartbeat.rawValue)),
-      "d": .number(String(sequence ?? 0)),
-    ])))
+    try await send(json: [
+      "op": Opcode.heartbeat.rawValue,
+      "d": sequence ?? 0,
+    ])
   }
 
   /// Begin heartbeating at a fixed interval.
@@ -149,29 +153,31 @@ public class GatewayConnection {
   /// `IDENTIFY` to the Discord gateway.
   public func identify() async throws {
     // Last update: 2021-11-11
-    let identifyPayload: RichJSONParser.JSON = .object(.init([
-      "d": .object(.init([
-        "capabilities": .number(String(disguise.capabilities)),
-        "client_state": .object(.init([
-          "guild_hashes": .object(.init()),
-          "highest_last_message_id": .string("0"),
-          "read_state_version": .number("0"),
-          "user_guild_settings_version": .number("-1"),
-          "user_settings_version": .number("-1"),
-        ])),
+    let superProperties = JSON(try disguise.superProperties.encoded())
+
+    let identifyPayload: JSON = [
+      "d": [
+        "capabilities": disguise.capabilities,
+        "client_state": [
+          "guild_hashes": [:],
+          "highest_last_message_id": "0",
+          "read_state_version": 0,
+          "user_guild_settings_version": -1,
+          "user_settings_version": -1
+        ],
         // TODO(skip): Implement compression.
-        "compress": .boolean(false),
-        "presence": .object(.init([
-          "activities": .array([]),
-          "afk": .boolean(false),
-          "since": .number("0"),
-          "status": .string("online"),
-        ])),
-        "properties": disguise.superPropertiesJSON(),
-        "token": .string(token),
-      ])),
-      "op": .number(String(Opcode.identify.rawValue)),
-    ]))
+        "compress": false,
+        "presence": [
+          "activities": [],
+          "afk": false,
+          "since": 0,
+          "status": "online"
+        ],
+        "properties": superProperties,
+        "token": token,
+      ],
+      "op": Opcode.identify.rawValue
+    ]
 
     try await send(json: identifyPayload)
   }
@@ -219,51 +225,30 @@ extension GatewayConnection {
     ofJSON packetJSON: String,
     raw packetBytes: Data
   ) async throws {
-    let decodedUnsafePacket = try! JSONSerialization
-      .jsonObject(with: packetBytes) as! [String: Any]
+    let decoder = JSONDecoder()
 
-    guard let decodedPacket = try? GenericJSON.JSON(decodedUnsafePacket)
-      .objectValue
-    else {
-      fatalError("gateway sent something that wasn't an object")
-    }
-
-    let eventName = decodedPacket["t"]?.stringValue
-    let sequence = decodedPacket["s"]?.doubleValue
-    let data = decodedPacket["d"]
-
-    guard let opcodeRaw = decodedPacket["op"]?.doubleValue else {
-      fatalError("gateway sent a payload lacking `op` field")
-    }
-    guard let opcode = Opcode(rawValue: Int(opcodeRaw)) else {
-      fatalError("received unknown opcode from gateway: \(opcodeRaw)")
-    }
+    let packet = try decoder.decode(GatewayPacket<JSON>.self, from: packetBytes)
+    let op = packet.op
+    let data = packet.eventData
+    let eventName = packet.eventName
+    let sequence = packet.sequence
 
     log
       .debug(
-        "op: \(String(describing: opcode)) (\(opcode.rawValue)), event: \(String(describing: eventName)), seq: \(String(describing: sequence))"
+        "op: \(String(describing: op)) (\(op.rawValue)), event: \(String(describing: eventName)), seq: \(String(describing: sequence))"
       )
 
     if let sequence = sequence {
       self.sequence = sequence
     }
 
-    let packet = GatewayPacket(
-      op: opcode,
-      eventData: data,
-      sequence: sequence,
-      eventName: eventName,
-      rawPayload: packetJSON
-    )
-    packets.send(packet)
+    receivedPackets.send(AnyGatewayPacket(packet: packet, raw: packetBytes))
 
-    switch opcode {
+    switch op {
     case .dispatch:
       break
     case .hello:
-      guard let heartbeatIntervalMilliseconds = data?["heartbeat_interval"]?
-        .doubleValue
-      else {
+      guard let heartbeatIntervalMilliseconds = data?["heartbeat_interval"].double else {
         fatalError("gateway didn't send a `heartbeat_interval` in HELLO")
       }
       beginHeartbeating(every: Double(heartbeatIntervalMilliseconds) / 1000.0)

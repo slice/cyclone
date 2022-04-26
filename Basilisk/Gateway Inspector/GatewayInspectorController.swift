@@ -47,11 +47,11 @@ class GatewayInspectorController: NSViewController {
         )!
         return NSImageView(image: image)
       case .opcode:
-        text = message.gatewayPacket.map { String(describing: $0.op) }
+        text = message.gatewayPacket.map { String(describing: $0.packet.op) }
       case .sequence:
-        text = message.gatewayPacket?.sequence.map { String(Int($0)) }
+        text = message.gatewayPacket?.packet.sequence.map { String(Int($0)) }
       case .eventName:
-        text = message.gatewayPacket?.eventName
+        text = message.gatewayPacket?.packet.eventName
       default:
         break
       }
@@ -103,7 +103,9 @@ extension GatewayInspectorController: NSTableViewDelegate {
     let selectedRow = messagesTableView.selectedRow
     guard selectedRow > 0 else { return }
     let message = gatewayLogStore.messages[selectedRow]
-    messageDetailView.string = message.gatewayPacket?
-      .rawPayload ?? "<no packet>"
+
+    let raw = message.gatewayPacket?.raw
+    messageDetailView.string =
+      raw.flatMap { String(data: $0, encoding: .utf8) } ?? "<no raw packet data found>"
   }
 }

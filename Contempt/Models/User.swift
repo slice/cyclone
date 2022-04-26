@@ -1,5 +1,3 @@
-import GenericJSON
-
 public struct User: Identifiable {
   public let username: String
   public let publicFlags: Int?
@@ -7,23 +5,21 @@ public struct User: Identifiable {
   public let discriminator: String
   public let avatar: Asset?
 
-  init(json: JSON) {
-    let object = json.objectValue!
-    username = object["username"]!.stringValue!
-    publicFlags = object["public_flags"].flatMap(\.doubleValue).map(Int.init)
-    let id = Snowflake(string: object["id"]!.stringValue!)
-    discriminator = object["discriminator"]!.stringValue!
-    avatar = object["avatar"]?.stringValue.map { hash in
-      Asset(type: .avatar, parent: id, hash: hash)
-    }
-    self.id = id
-  }
-
   public init(fakeWithName name: String, id: Snowflake) {
     username = name
     publicFlags = 0
     self.id = id
     discriminator = "0001"
     avatar = nil
+  }
+}
+
+extension User: Decodable {
+  public init(from decoder: Decoder) throws {
+    username = try decoder.decode("username")
+    publicFlags = try decoder.decode("public_flags")
+    id = try decoder.decode("id")
+    discriminator = try decoder.decode("discriminator")
+    avatar = Asset(type: .avatar, parent: id, hash: try decoder.decode("avatar", as: String.self))
   }
 }

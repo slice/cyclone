@@ -1,11 +1,9 @@
 import Combine
 import Dispatch
-import FineJSON
 import Foundation
-import GenericJSON
 import Network
 import os
-import RichJSONParser
+import SwiftyJSON
 
 // MARK: Client
 
@@ -31,15 +29,12 @@ public class Client {
   var gatewaySink: AnyCancellable!
 
   /// The user's settings, received from the `READY` packet.
-  public private(set) var userSettings: [String: GenericJSON.JSON]?
+  public private(set) var userSettings: JSON?
   public private(set) var currentUser: CurrentUser?
 
   /// A Combine `Publisher` that publishes when the user settings have changed.
   /// The partial data fragment sent by the gateway is published.
-  public private(set) var userSettingsChanged = PassthroughSubject<
-    [String: GenericJSON.JSON],
-    Never
-  >()
+  public private(set) var userSettingsChanged = PassthroughSubject<JSON, Never>()
 
   /// The guilds that this client has.
   public private(set) var guilds: [Guild] = []
@@ -50,15 +45,15 @@ public class Client {
 
   static let defaultDisguise = Disguise(
     userAgent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) discord/0.0.278 Chrome/91.0.4472.164 Electron/13.4.0 Safari/537.36",
-    capabilities: 125,
+    capabilities: 509,
     os: "Mac OS X",
     browser: "Discord Client",
     releaseChannel: .canary,
-    clientVersion: "0.0.278",
+    clientVersion: "0.0.284",
     osVersion: "21.2.0",
     osArch: "x64",
     systemLocale: "en-US",
-    clientBuildNumber: 105_780,
+    clientBuildNumber: 124831,
     clientEventSource: nil
   )
 
@@ -89,8 +84,17 @@ public class Client {
 
   /// Connect to the Discord gateway.
   public func connect() {
-    gatewaySink = gatewayConnection.packets.sink { [weak self] packet in
-      self?.processPacket(packet)
+    gatewaySink = gatewayConnection.receivedPackets.sink { [weak self] packet in
+      do {
+        try self?.processPacket(packet)
+      } catch let error as DecodingError {
+        self?.log.error("failed to decode packet: \(String(describing: error))")
+        self?.log.error("while processing packet: \(String(describing: packet))")
+        fatalError("failed to decode a gateway packet, whoops.")
+      } catch {
+        self?.log.error("failed to process packet: \(error.localizedDescription)")
+        fatalError("failed to process a gateway packet, whoops.")
+      }
     }
 
     gatewayConnection.connect(
@@ -99,41 +103,38 @@ public class Client {
     )
   }
 
-  func processPacket(_ packet: GatewayPacket) {
-    guard let eventName = packet.eventName else {
+  func processPacket(_ packet: AnyGatewayPacket) throws {
+    guard let eventName = packet.packet.eventName,
+          let eventData = packet.packet.eventData else {
       return
     }
 
     switch eventName {
     case "READY":
-      processReadyPacket(packet)
+      log.debug("discord is READY. now we have to get READY!")
+
+      struct Ready: Decodable {
+        let user: CurrentUser
+        let guilds: [Guild]
+      }
+
+      userSettings = eventData["user_settings"]
+      userSettingsChanged.send(userSettings!)
+
+      let ready: Ready = try packet.reparse()
+
+      currentUser = ready.user
+      guilds = ready.guilds
+      guildsChanged.send()
     case "GUILD_CREATE":
-      guilds.append(Guild(json: packet.eventData!))
+      guilds.append(try packet.reparse())
       guildsChanged.send()
     case "USER_SETTINGS_UPDATE":
-      let diff = packet.eventData!.objectValue!
-      guard userSettings != nil else {
-        return
-      }
-      userSettings!.merge(diff, uniquingKeysWith: { $1 })
-      userSettingsChanged.send(diff)
+      try userSettings?.merge(with: eventData)
+      userSettingsChanged.send(eventData)
     default:
       break
     }
-  }
-
-  func processReadyPacket(_ packet: GatewayPacket) {
-    log.debug("getting READY...")
-
-    let object = packet.eventData!.objectValue!
-
-    userSettings = object["user_settings"]!.objectValue!
-    userSettingsChanged.send(userSettings!)
-
-    currentUser = CurrentUser(json: object["user"]!)
-
-    guilds = object["guilds"]!.arrayValue!.map(Guild.init(json:))
-    guildsChanged.send()
   }
 
   /// Disconnect from the Discord gateway.

@@ -20,6 +20,10 @@
 		123F622F275183A8001D3D61 /* NavigatorGuildCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 123F622E275183A8001D3D61 /* NavigatorGuildCellView.swift */; };
 		12552C9C273F3DDA007D92B1 /* HTTP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12552C9B273F3DDA007D92B1 /* HTTP.swift */; };
 		12552C9E273F3FE2007D92B1 /* SpoofedRequestType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12552C9D273F3FE2007D92B1 /* SpoofedRequestType.swift */; };
+		1259D6D82816AA55006AE1D1 /* Decodable+Int.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1259D6D72816AA55006AE1D1 /* Decodable+Int.swift */; };
+		1259D6DE28176964006AE1D1 /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 1259D6DD28176964006AE1D1 /* SwiftyJSON */; };
+		1259D6E22817696F006AE1D1 /* Codextended in Frameworks */ = {isa = PBXBuildFile; productRef = 1259D6E12817696F006AE1D1 /* Codextended */; };
+		1259D6E428176E0E006AE1D1 /* AnyGatewayPacket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1259D6E328176E0E006AE1D1 /* AnyGatewayPacket.swift */; };
 		1260A75B275163F00099CA3B /* NavigatorViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1260A75A275163F00099CA3B /* NavigatorViewControllerDelegate.swift */; };
 		12894913274C8FA200850D5E /* Guild.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12894912274C8FA200850D5E /* Guild.swift */; };
 		12894915274C8FB900850D5E /* Snowflake.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12894914274C8FB900850D5E /* Snowflake.swift */; };
@@ -30,10 +34,6 @@
 		128C7673273DFD0E008FD585 /* Client.swift in Sources */ = {isa = PBXBuildFile; fileRef = 128C7672273DFD0E008FD585 /* Client.swift */; };
 		128C7675273DFF73008FD585 /* Branch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 128C7674273DFF73008FD585 /* Branch.swift */; };
 		128C7677273E04D2008FD585 /* Disguise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 128C7676273E04D2008FD585 /* Disguise.swift */; };
-		128C767D273E0A5C008FD585 /* FineJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 128C767C273E0A5C008FD585 /* FineJSON */; };
-		128C767F273E0B22008FD585 /* FineJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 128C767E273E0B22008FD585 /* FineJSON */; };
-		128C7682273E0B57008FD585 /* RichJSONParser in Frameworks */ = {isa = PBXBuildFile; productRef = 128C7681273E0B57008FD585 /* RichJSONParser */; };
-		128C7684273E0B61008FD585 /* RichJSONParser in Frameworks */ = {isa = PBXBuildFile; productRef = 128C7683273E0B61008FD585 /* RichJSONParser */; };
 		128C768C273E10DD008FD585 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 128C768B273E10DD008FD585 /* main.swift */; };
 		128C7695273E1171008FD585 /* Contempt.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 12F4FDB3273DFCD000B6AE64 /* Contempt.framework */; };
 		128C7696273E1171008FD585 /* Contempt.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 12F4FDB3273DFCD000B6AE64 /* Contempt.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -41,9 +41,10 @@
 		12945083274D3A410024C744 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12945082274D3A410024C744 /* User.swift */; };
 		129AF795273E653100B3851C /* GatewayPacket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 129AF794273E653100B3851C /* GatewayPacket.swift */; };
 		129C11C3274DBB3A00AA7E82 /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 129C11C2274DBB3A00AA7E82 /* ImageCache.swift */; };
+		129FBBF22812913400BD5D09 /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 129FBBF12812913400BD5D09 /* SwiftyJSON */; };
+		129FBBF52812918C00BD5D09 /* Codextended in Frameworks */ = {isa = PBXBuildFile; productRef = 129FBBF42812918C00BD5D09 /* Codextended */; };
 		12AB3D7E274C1CB400934345 /* Gateway Inspector.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 12AB3D7D274C1CB400934345 /* Gateway Inspector.storyboard */; };
 		12AB3D80274C224200934345 /* GatewayInspectorController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12AB3D7F274C224200934345 /* GatewayInspectorController.swift */; };
-		12AB766C274C13A300F1A177 /* GenericJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 12AB766B274C13A300F1A177 /* GenericJSON */; };
 		12B99C1E27410A5A0048D2DB /* GatewayLogStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12B99C1D27410A5A0048D2DB /* GatewayLogStore.swift */; };
 		12B99C2227410AD00048D2DB /* LogMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12B99C2127410AD00048D2DB /* LogMessage.swift */; };
 		12B99C2427410B010048D2DB /* PacketDirection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12B99C2327410B010048D2DB /* PacketDirection.swift */; };
@@ -163,6 +164,8 @@
 		123F622E275183A8001D3D61 /* NavigatorGuildCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigatorGuildCellView.swift; sourceTree = "<group>"; };
 		12552C9B273F3DDA007D92B1 /* HTTP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTP.swift; sourceTree = "<group>"; };
 		12552C9D273F3FE2007D92B1 /* SpoofedRequestType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpoofedRequestType.swift; sourceTree = "<group>"; };
+		1259D6D72816AA55006AE1D1 /* Decodable+Int.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Decodable+Int.swift"; sourceTree = "<group>"; };
+		1259D6E328176E0E006AE1D1 /* AnyGatewayPacket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyGatewayPacket.swift; sourceTree = "<group>"; };
 		1260A75A275163F00099CA3B /* NavigatorViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigatorViewControllerDelegate.swift; sourceTree = "<group>"; };
 		12894912274C8FA200850D5E /* Guild.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Guild.swift; sourceTree = "<group>"; };
 		12894914274C8FB900850D5E /* Snowflake.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Snowflake.swift; sourceTree = "<group>"; };
@@ -226,10 +229,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				128C767D273E0A5C008FD585 /* FineJSON in Frameworks */,
+				129FBBF22812913400BD5D09 /* SwiftyJSON in Frameworks */,
 				12F4FDC8273DFCD000B6AE64 /* Contempt.framework in Frameworks */,
+				129FBBF52812918C00BD5D09 /* Codextended in Frameworks */,
 				121B6FBB273E32D6000DD150 /* ArgumentParser in Frameworks */,
-				128C7682273E0B57008FD585 /* RichJSONParser in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -251,9 +254,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				128C767F273E0B22008FD585 /* FineJSON in Frameworks */,
-				128C7684273E0B61008FD585 /* RichJSONParser in Frameworks */,
-				12AB766C274C13A300F1A177 /* GenericJSON in Frameworks */,
+				1259D6E22817696F006AE1D1 /* Codextended in Frameworks */,
+				1259D6DE28176964006AE1D1 /* SwiftyJSON in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -360,6 +362,7 @@
 				12897BF3273E2BF400403E5B /* Opcode.swift */,
 				12897BF1273E25C700403E5B /* GatewayConnection.swift */,
 				129AF794273E653100B3851C /* GatewayPacket.swift */,
+				1259D6E328176E0E006AE1D1 /* AnyGatewayPacket.swift */,
 			);
 			path = Gateway;
 			sourceTree = "<group>";
@@ -380,6 +383,7 @@
 			isa = PBXGroup;
 			children = (
 				12CD0226274217E600F136A5 /* Publisher+Buffer.swift */,
+				1259D6D72816AA55006AE1D1 /* Decodable+Int.swift */,
 			);
 			path = Support;
 			sourceTree = "<group>";
@@ -530,9 +534,9 @@
 			);
 			name = Basilisk;
 			packageProductDependencies = (
-				128C767C273E0A5C008FD585 /* FineJSON */,
-				128C7681273E0B57008FD585 /* RichJSONParser */,
 				121B6FBA273E32D5000DD150 /* ArgumentParser */,
+				129FBBF12812913400BD5D09 /* SwiftyJSON */,
+				129FBBF42812918C00BD5D09 /* Codextended */,
 			);
 			productName = Basilisk;
 			productReference = 12F4FD80273DFC1900B6AE64 /* Basilisk.app */;
@@ -586,12 +590,13 @@
 			buildRules = (
 			);
 			dependencies = (
+				1259D6E02817696C006AE1D1 /* PBXTargetDependency */,
+				1259D6DC28176957006AE1D1 /* PBXTargetDependency */,
 			);
 			name = Contempt;
 			packageProductDependencies = (
-				128C767E273E0B22008FD585 /* FineJSON */,
-				128C7683273E0B61008FD585 /* RichJSONParser */,
-				12AB766B274C13A300F1A177 /* GenericJSON */,
+				1259D6DD28176964006AE1D1 /* SwiftyJSON */,
+				1259D6E12817696F006AE1D1 /* Codextended */,
 			);
 			productName = Contempt;
 			productReference = 12F4FDB3273DFCD000B6AE64 /* Contempt.framework */;
@@ -659,10 +664,9 @@
 			);
 			mainGroup = 12F4FD77273DFC1900B6AE64;
 			packageReferences = (
-				128C7678273E09C5008FD585 /* XCRemoteSwiftPackageReference "FineJSON" */,
-				128C7680273E0B57008FD585 /* XCRemoteSwiftPackageReference "RichJSONParser" */,
 				121B6FB9273E32D5000DD150 /* XCRemoteSwiftPackageReference "swift-argument-parser" */,
-				12AB7668274C138B00F1A177 /* XCRemoteSwiftPackageReference "generic-json-swift" */,
+				129FBBF02812913400BD5D09 /* XCRemoteSwiftPackageReference "SwiftyJSON" */,
+				129FBBF32812918C00BD5D09 /* XCRemoteSwiftPackageReference "Codextended" */,
 			);
 			productRefGroup = 12F4FD81273DFC1900B6AE64 /* Products */;
 			projectDirPath = "";
@@ -780,6 +784,7 @@
 			files = (
 				12CD0228274218AA00F136A5 /* Publisher+Buffer.swift in Sources */,
 				12894919274C91C700850D5E /* Channel.swift in Sources */,
+				1259D6D82816AA55006AE1D1 /* Decodable+Int.swift in Sources */,
 				12552C9C273F3DDA007D92B1 /* HTTP.swift in Sources */,
 				B8EFC2F6275197ED0010B894 /* PermissionOverwrites.swift in Sources */,
 				12945081274D3A240024C744 /* Message.swift in Sources */,
@@ -789,6 +794,7 @@
 				129AF795273E653100B3851C /* GatewayPacket.swift in Sources */,
 				12552C9E273F3FE2007D92B1 /* SpoofedRequestType.swift in Sources */,
 				B8EFC2FA2751A9350010B894 /* CurrentUser.swift in Sources */,
+				1259D6E428176E0E006AE1D1 /* AnyGatewayPacket.swift in Sources */,
 				12897BF4273E2BF400403E5B /* Opcode.swift in Sources */,
 				128C7677273E04D2008FD585 /* Disguise.swift in Sources */,
 				12F4FDB7273DFCD000B6AE64 /* Contempt.docc in Sources */,
@@ -812,6 +818,14 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		1259D6DC28176957006AE1D1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 1259D6DB28176957006AE1D1 /* SwiftyJSON */;
+		};
+		1259D6E02817696C006AE1D1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 1259D6DF2817696C006AE1D1 /* Codextended */;
+		};
 		128C7698273E1171008FD585 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 12F4FDB2273DFCD000B6AE64 /* Contempt */;
@@ -1286,28 +1300,20 @@
 				minimumVersion = 1.0.0;
 			};
 		};
-		128C7678273E09C5008FD585 /* XCRemoteSwiftPackageReference "FineJSON" */ = {
+		129FBBF02812913400BD5D09 /* XCRemoteSwiftPackageReference "SwiftyJSON" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/omochi/FineJSON";
+			repositoryURL = "https://github.com/SwiftyJSON/SwiftyJSON";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.0;
+				minimumVersion = 5.0.0;
 			};
 		};
-		128C7680273E0B57008FD585 /* XCRemoteSwiftPackageReference "RichJSONParser" */ = {
+		129FBBF32812918C00BD5D09 /* XCRemoteSwiftPackageReference "Codextended" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/omochi/RichJSONParser";
+			repositoryURL = "https://github.com/JohnSundell/Codextended";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 3.0.0;
-			};
-		};
-		12AB7668274C138B00F1A177 /* XCRemoteSwiftPackageReference "generic-json-swift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/zoul/generic-json-swift";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.0.0;
+				minimumVersion = 0.3.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
@@ -1323,30 +1329,35 @@
 			package = 121B6FB9273E32D5000DD150 /* XCRemoteSwiftPackageReference "swift-argument-parser" */;
 			productName = ArgumentParser;
 		};
-		128C767C273E0A5C008FD585 /* FineJSON */ = {
+		1259D6DB28176957006AE1D1 /* SwiftyJSON */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 128C7678273E09C5008FD585 /* XCRemoteSwiftPackageReference "FineJSON" */;
-			productName = FineJSON;
+			package = 129FBBF02812913400BD5D09 /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
+			productName = SwiftyJSON;
 		};
-		128C767E273E0B22008FD585 /* FineJSON */ = {
+		1259D6DD28176964006AE1D1 /* SwiftyJSON */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 128C7678273E09C5008FD585 /* XCRemoteSwiftPackageReference "FineJSON" */;
-			productName = FineJSON;
+			package = 129FBBF02812913400BD5D09 /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
+			productName = SwiftyJSON;
 		};
-		128C7681273E0B57008FD585 /* RichJSONParser */ = {
+		1259D6DF2817696C006AE1D1 /* Codextended */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 128C7680273E0B57008FD585 /* XCRemoteSwiftPackageReference "RichJSONParser" */;
-			productName = RichJSONParser;
+			package = 129FBBF32812918C00BD5D09 /* XCRemoteSwiftPackageReference "Codextended" */;
+			productName = Codextended;
 		};
-		128C7683273E0B61008FD585 /* RichJSONParser */ = {
+		1259D6E12817696F006AE1D1 /* Codextended */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 128C7680273E0B57008FD585 /* XCRemoteSwiftPackageReference "RichJSONParser" */;
-			productName = RichJSONParser;
+			package = 129FBBF32812918C00BD5D09 /* XCRemoteSwiftPackageReference "Codextended" */;
+			productName = Codextended;
 		};
-		12AB766B274C13A300F1A177 /* GenericJSON */ = {
+		129FBBF12812913400BD5D09 /* SwiftyJSON */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 12AB7668274C138B00F1A177 /* XCRemoteSwiftPackageReference "generic-json-swift" */;
-			productName = GenericJSON;
+			package = 129FBBF02812913400BD5D09 /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
+			productName = SwiftyJSON;
+		};
+		129FBBF42812918C00BD5D09 /* Codextended */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 129FBBF32812918C00BD5D09 /* XCRemoteSwiftPackageReference "Codextended" */;
+			productName = Codextended;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

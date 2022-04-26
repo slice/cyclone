@@ -3,7 +3,6 @@ import Combine
 import Contempt
 import CoreImage
 import CoreImage.CIFilterBuiltins
-import FineJSON
 import os.log
 
 private extension NSScrollView {
@@ -94,7 +93,7 @@ class MessagesViewController: NSViewController {
 
     var views: NSArray? = []
     guard MessageCollectionViewItem.nib!
-            .instantiate(withOwner: messageSizingTemplate, topLevelObjects: &views) else {
+      .instantiate(withOwner: messageSizingTemplate, topLevelObjects: &views) else {
       preconditionFailure("failed to instantiate message sizing template nib")
     }
     let messageSizingTemplate = views?.filter { $0 is MessageCollectionViewItem }.first

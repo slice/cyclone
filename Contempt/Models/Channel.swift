@@ -1,7 +1,6 @@
 import Foundation
-import GenericJSON
 
-public enum ChannelType: Int {
+public enum ChannelType: Int, Codable {
   case text = 0
   case dm = 1
   case voice = 2
@@ -17,7 +16,6 @@ public enum ChannelType: Int {
 
 public struct Channel: Identifiable {
   public let id: Snowflake
-//  let guildID: Snowflake
   public let name: String
   public let type: ChannelType
   public let position: Int
@@ -30,16 +28,16 @@ public struct Channel: Identifiable {
   public var isTopLevel: Bool {
     type == .category || parentID == nil
   }
+}
 
-  init(json: JSON) {
-    id = Snowflake(string: json["id"]!.stringValue!)
-//    guildID = Snowflake(string: json["guild_id"]!.stringValue!)
-    name = json["name"]!.stringValue!
-    type = ChannelType(rawValue: Int(json["type"]!.doubleValue!))!
-    position = Int(json["position"]!.doubleValue!)
-    topic = json["topic"]?.stringValue
-    parentID = json["parent_id"]?.stringValue.map(Snowflake.init(string:))
-    overwrites = json["permission_overwrites"]!.arrayValue!
-      .map { PermissionOverwrites(json: $0) }
+extension Channel: Decodable {
+  public init(from decoder: Decoder) throws {
+    id = try decoder.decode("id")
+    type = try decoder.decode("type")
+    name = try decoder.decode("name")
+    position = try decoder.decode("position")
+    topic = try decoder.decodeIfPresent("topic")
+    parentID = try decoder.decodeIfPresent("parent_id")
+    overwrites = try decoder.decode("permission_overwrites")
   }
 }

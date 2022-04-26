@@ -40,7 +40,7 @@ extension NavigatorViewController: NSOutlineViewDataSource {
                    ofItem item: Any?) -> Any
   {
     let userID = delegate?.navigatorViewController(self, didRequestCurrentUserID: ())
-    
+
     if item == nil {
       // root items are direct messages, pins, and guilds
       return NavigatorOutlineItem.rootItems[index]
@@ -99,7 +99,7 @@ extension NavigatorViewController: NSOutlineViewDataSource {
 
   func outlineView(_: NSOutlineView, numberOfChildrenOfItem item: Any?) -> Int {
     let userID = delegate?.navigatorViewController(self, didRequestCurrentUserID: ())
-    
+
     if item == nil {
       return NavigatorOutlineItem.rootItems.count
     }

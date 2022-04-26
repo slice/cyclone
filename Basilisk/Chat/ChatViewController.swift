@@ -1,9 +1,7 @@
 import Cocoa
 import Combine
 import Contempt
-import FineJSON
-import GenericJSON
-import RichJSONParser
+import SwiftyJSON
 
 @MainActor class ChatViewController: NSSplitViewController {
   var navigatorViewController: NavigatorViewController {
@@ -19,6 +17,7 @@ import RichJSONParser
   var gatewayPacketHandler: Task<Void, Never>?
   var gatewayGuildsSink: AnyCancellable!
   var gatewayUserSettingsSink: AnyCancellable!
+  var gatewaySentPacketsSink: AnyCancellable!
   var selectedGuildID: Guild.ID?
   var exhaustedMessageHistory = false
   var requestingMoreHistory = false
@@ -63,15 +62,14 @@ import RichJSONParser
       if let self = self, let focusedChannelID = self.focusedChannelID,
          let client = self.client
       {
-        let randomNumber = Int.random(in: 0 ... 1_000_000_000)
         let request = try! client.http.apiRequest(
           to: "/channels/\(focusedChannelID)/messages",
           method: .post,
-          body: .object(.init([
-            "content": .string(content),
-            "tts": .boolean(false),
-            "nonce": .string(String(randomNumber)),
-          ]))
+          body: [
+            "content": content,
+            "tts": false,
+            "nonce": String(Int.random(in: 0...1_000_000_000))
+          ]
         )!
         Task { [request] in
           try! await client.http.request(request, withSpoofedHeadersFor: .xhr)
@@ -108,11 +106,11 @@ import RichJSONParser
     )!
 
     Task { [request] in
-      let json = try! await client.http.requestParsingJSON(
+      let messages: [Message] = try! await client.http.requestDecoding(
         request,
         withSpoofedHeadersFor: .xhr
       )
-      let messages = json.arrayValue!.map(Message.init(json:))
+
       self.messagesViewController.prependOldMessages(messages)
 
       if messages.count < limit {
@@ -141,11 +139,7 @@ import RichJSONParser
       )!
 
       Task { [request] in
-        guard let json = try? await client.http.requestParsingJSON(
-          request,
-          withSpoofedHeadersFor: .xhr
-        ) else { return }
-        let messages = json.arrayValue!.map(Message.init(json:))
+        let messages: [Message] = try! await client.http.requestDecoding(request, withSpoofedHeadersFor: .xhr)
         self.messagesViewController.applyInitialMessages(messages)
       }
     }
@@ -197,8 +191,7 @@ import RichJSONParser
   /// settings.
   func guildsSortedAccordingToUserSettings() -> [Guild]? {
     guard let userSettings = client?.userSettings,
-          let guildPositions = userSettings["guild_positions"]?.arrayValue?
-          .compactMap(\.stringValue).map(Snowflake.init(string:)),
+          let guildPositions = userSettings["guild_positions"].array?.compactMap(\.string).map(Snowflake.init(string:)),
           let guilds = client?.guilds
     else { return client?.guilds }
 
@@ -222,15 +215,33 @@ import RichJSONParser
     try await client.http.requestLandingPage()
     client.connect()
     setUpGatewayPacketHandler()
+
     gatewayGuildsSink = client.guildsChanged.receive(on: RunLoop.main)
       .sink { [weak self] _ in
         self?.applyGuilds()
       }
+
+    gatewaySentPacketsSink = client.gatewayConnection.sentPackets.receive(on: RunLoop.main)
+      .sink { (json, string) in
+        let data = string.data(using: .utf8)!
+
+        let packet = try! JSONDecoder().decode(GatewayPacket<JSON>.self, from: data)
+        let anyPacket = AnyGatewayPacket(packet: packet, raw: data)
+
+        let logMessage = LogMessage(
+          gatewayPacket: anyPacket,
+          timestamp: Date.now,
+          direction: .sent
+        )
+
+        (NSApp.delegate as! AppDelegate).gatewayLogStore.appendMessage(logMessage)
+      }
+
     gatewayUserSettingsSink = client.userSettingsChanged
       .receive(on: RunLoop.main)
-      .sink { [weak self] dictionary in
-        guard dictionary["guild_positions"] != nil ||
-          dictionary["guild_folders"] != nil, let self = self else { return }
+      .sink { [weak self] json in
+        guard json["guild_positions"].exists() ||
+                json["guild_folders"].exists(), let self = self else { return }
         self.applyGuilds()
       }
   }
@@ -243,9 +254,8 @@ import RichJSONParser
     navigatorViewController.reloadWithGuildIDs(guilds.map(\.id))
   }
 
-  func logPacket(_ packet: GatewayPacket) {
+  func logPacket(_ packet: AnyGatewayPacket) {
     let logMessage = LogMessage(
-      content: packet.rawPayload,
       gatewayPacket: packet,
       timestamp: Date.now,
       direction: .received
@@ -259,7 +269,7 @@ import RichJSONParser
     guard let client = client else { return }
 
     gatewayPacketHandler = Task.detached(priority: .high) {
-      for await packet in client.gatewayConnection.packets.bufferInfinitely()
+      for await packet in client.gatewayConnection.receivedPackets.bufferInfinitely()
         .values
       {
         await self.logPacket(packet)
@@ -268,14 +278,14 @@ import RichJSONParser
     }
   }
 
-  func handleGatewayPacket(_ packet: GatewayPacket) async {
-    if let eventName = packet.eventName, eventName == "MESSAGE_CREATE" {
-      let data = packet.eventData!.objectValue!
+  func handleGatewayPacket(_ packet: AnyGatewayPacket) async {
+    if let eventName = packet.packet.eventName, eventName == "MESSAGE_CREATE" {
+      let data = packet.packet.eventData!
 
-      let channelID = UInt64(data["channel_id"]!.stringValue!)
+      let channelID = UInt64(data["channel_id"].string!)
       guard channelID == focusedChannelID else { return }
 
-      let message = Message(json: packet.eventData!)
+      let message: Message = try! packet.reparse()
       messagesViewController.appendNewlyReceivedMessage(message)
     }
   }

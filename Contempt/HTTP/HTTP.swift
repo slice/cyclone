@@ -1,8 +1,6 @@
-import FineJSON
 import Foundation
-import GenericJSON
 import os
-import RichJSONParser
+import SwiftyJSON
 
 public enum HTTPError: Error {
   case httpError(httpResponse: HTTPURLResponse, data: Data)
@@ -84,16 +82,17 @@ public class HTTP {
 
     switch type {
     case .xhr:
-      let superPropertiesJSONString = disguise.superPropertiesJSONString()
-      let superPropertiesData = superPropertiesJSONString.data(using: .utf8)!
+      guard let superProperties = try? disguise.superProperties.encoded().base64EncodedString() else {
+        fatalError("failed to encode super properties into base64")
+      }
       headers.merge([
         "Sec-Fetch-Dest": "empty",
         "Sec-Fetch-Mode": "cors",
         "Sec-Fetch-Site": "same-origin",
         "Accept": "*/*",
-        "X-Super-Properties": superPropertiesData.base64EncodedString(),
-        // Apple discourages doing this, but WHY? We have literally no other
-        // choice.
+        "X-Super-Properties": superProperties,
+        // Apple discourages passing in the Authorization header explicitly, but
+        // why? We don't seem to have any other way of doing this.
         "Authorization": token,
       ], uniquingKeysWith: { _, new in new })
     case .navigation:
@@ -114,7 +113,7 @@ public class HTTP {
     to pathComponents: String,
     query: [String: String] = [:],
     method: HTTPMethod = .get,
-    body: RichJSONParser.JSON? = nil
+    body: JSON? = nil
   ) throws -> URLRequest? {
     guard var urlComponents = URLComponents(
       url: baseURL,
@@ -133,11 +132,8 @@ public class HTTP {
     var request = URLRequest(url: finalURL)
     request.httpMethod = method.rawValue
     if let body = body {
-      let encoder = FineJSONEncoder()
-      encoder.jsonSerializeOptions = JSONSerializeOptions(isPrettyPrint: false)
-      encoder.optionalEncodingStrategy = .explicitNull
       request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-      request.httpBody = try encoder.encode(body)
+      request.httpBody = try body.encoded()
     }
     return request
   }
@@ -177,14 +173,13 @@ public class HTTP {
     return (httpResponse, data)
   }
 
-  /// Makes a request to a URL, parsing the response as JSON.
-  public func requestParsingJSON(
+  /// Makes a request to a URL, decoding the response.
+  public func requestDecoding<T: Decodable>(
     _ request: URLRequest,
     withSpoofedHeadersFor type: SpoofedRequestType
-  ) async throws -> GenericJSON.JSON {
+  ) async throws -> T {
     let (_, data) = try await self.request(request, withSpoofedHeadersFor: type)
-
-    let value = try JSONSerialization.jsonObject(with: data, options: [])
-    return try JSON(value)
+    let decoder = JSONDecoder()
+    return try decoder.decode(T.self, from: data)
   }
 }

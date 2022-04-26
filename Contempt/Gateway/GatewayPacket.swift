@@ -1,13 +1,13 @@
 import Foundation
-import GenericJSON
+import SwiftyJSON
 
 /// A single packet from the Discord gateway.
-public struct GatewayPacket {
+public struct GatewayPacket<EventData: Decodable> {
   /// The opcode for this packet (`HELLO`, `HEARTBEAT`, etc.)
   public let op: Opcode
 
   /// The event data for this packet.
-  public let eventData: JSON?
+  public let eventData: EventData?
 
   /// The sequence number for this packet. Only present for `DISPATCH` packets.
   public let sequence: Double?
@@ -15,7 +15,19 @@ public struct GatewayPacket {
   /// The event name for this packet. Only present for `DISPATCH` packets.
   public let eventName: String?
 
-  /// The raw payload received over the gateway that was deserialized into this
-  /// packet.
-  public let rawPayload: String
+  public init(op: Opcode, eventData: EventData?, sequence: Double?, eventName: String?) {
+    self.op = op
+    self.eventData = eventData
+    self.sequence = sequence
+    self.eventName = eventName
+  }
+}
+
+extension GatewayPacket: Decodable {
+  enum CodingKeys: String, CodingKey {
+    case op = "op"
+    case eventData = "d"
+    case sequence = "s"
+    case eventName = "t"
+  }
 }

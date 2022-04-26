@@ -1,5 +1,3 @@
-import GenericJSON
-
 struct Permissions: OptionSet {
   let rawValue: Int
 
@@ -44,39 +42,22 @@ struct Permissions: OptionSet {
   static let sendMessagesInThreads = Permissions(rawValue: 1 << 38)
 }
 
-extension Permissions {
-  init(_ json: JSON?) {
-    self = json.flatMap(\.stringValue).flatMap { Int($0) }
-      .map { Permissions(rawValue: $0) }!
+extension Permissions: Decodable {
+  public init(from decoder: Decoder) throws {
+    self = Permissions(rawValue: try decoder.decodeSingleIntString())
   }
 }
 
-public enum PermissionOverwritesType: String {
-  case role, member
-
-  init?(_ json: JSON?) {
-    if let overwrites = json.flatMap(\.stringValue)
-      .flatMap({ PermissionOverwritesType(rawValue: $0) })
-    {
-      self = overwrites
-    } else {
-      return nil
-    }
-  }
+public enum PermissionOverwritesType: Int, Decodable {
+  case role = 0
+  case member = 1
 }
 
-public struct PermissionOverwrites {
+public struct PermissionOverwrites: Decodable {
   let deny: Permissions
   let allow: Permissions
   let id: Snowflake
   let type: PermissionOverwritesType?
-
-  init(json: JSON) {
-    deny = Permissions(json["deny"])
-    allow = Permissions(json["allow"])
-    id = Snowflake(json: json["id"])
-    type = PermissionOverwritesType(json["type"])
-  }
 }
 
 public extension Array where Element == PermissionOverwrites {

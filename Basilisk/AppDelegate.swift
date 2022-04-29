@@ -9,7 +9,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
   }
 
   func applicationDidFinishLaunching(_: Notification) {
-    // Insert code here to initialize your application
+    do {
+      if FileManager.default.fileExists(atPath: Accounts.defaultAccountsPath.path) {
+        try Accounts.read()
+      }
+    } catch {
+      NSApp.presentError(CocoaError(.fileReadCorruptFile,
+                                    userInfo: [NSURLErrorKey: Accounts.defaultAccountsPath]))
+    }
   }
 
   @MainActor func applicationShouldTerminate(_ sender: NSApplication)

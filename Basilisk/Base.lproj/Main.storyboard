@@ -13,6 +13,14 @@
             </objects>
             <point key="canvasLocation" x="121" y="54"/>
         </scene>
+        <!--Preferences-->
+        <scene sceneID="6LP-jY-WjY">
+            <objects>
+                <controllerPlaceholder storyboardName="Preferences" id="G4l-Uj-sux" sceneMemberID="viewController"/>
+                <customObject id="c6h-oM-pFu" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="308" y="54"/>
+        </scene>
         <!--Application-->
         <scene sceneID="JPo-4y-FX3">
             <objects>
@@ -30,7 +38,11 @@
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="VOq-y0-SEH"/>
-                                        <menuItem title="Preferences…" keyEquivalent="," id="BOF-NM-1cW"/>
+                                        <menuItem title="Preferences…" keyEquivalent="," id="BOF-NM-1cW">
+                                            <connections>
+                                                <segue destination="G4l-Uj-sux" kind="show" id="471-gq-5dI"/>
+                                            </connections>
+                                        </menuItem>
                                         <menuItem isSeparatorItem="YES" id="wFC-TO-SCJ"/>
                                         <menuItem title="Services" id="NMo-om-nkz">
                                             <modifierMask key="keyEquivalentModifierMask"/>
@@ -856,13 +868,13 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="24" horizontalPageScroll="10" verticalLineScroll="24" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="h0D-su-6jd">
-                                <rect key="frame" x="0.0" y="0.0" width="152" height="545"/>
+                                <rect key="frame" x="0.0" y="0.0" width="152" height="569"/>
                                 <clipView key="contentView" drawsBackground="NO" id="TGt-zi-MMF">
-                                    <rect key="frame" x="0.0" y="0.0" width="152" height="545"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="152" height="569"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <outlineView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" selectionHighlightStyle="sourceList" multipleSelection="NO" autosaveColumns="NO" rowHeight="24" rowSizeStyle="systemDefault" viewBased="YES" floatsGroupRows="NO" indentationPerLevel="13" outlineTableColumn="03T-OW-czf" id="o1E-3Y-zAB">
-                                            <rect key="frame" x="0.0" y="0.0" width="152" height="545"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="152" height="569"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <size key="intercellSpacing" width="3" height="0.0"/>
                                             <color key="backgroundColor" name="_sourceListBackgroundColor" catalog="System" colorSpace="catalog"/>

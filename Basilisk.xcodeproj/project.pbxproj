@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		12093A5E281BC11000FAE304 /* BasiliskError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12093A5D281BC11000FAE304 /* BasiliskError.swift */; };
 		120A78D82741E9A70099834B /* WebSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 120A78D72741E9A70099834B /* WebSocket.swift */; };
 		120A78DB2741F9BE0099834B /* WebSocketEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 120A78DA2741F9BE0099834B /* WebSocketEvent.swift */; };
 		12102CF9274D8ABE000F8FD9 /* MessageCollectionViewItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12102CF7274D8ABE000F8FD9 /* MessageCollectionViewItem.swift */; };
@@ -41,6 +42,7 @@
 		12945083274D3A410024C744 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12945082274D3A410024C744 /* User.swift */; };
 		129AF795273E653100B3851C /* GatewayPacket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 129AF794273E653100B3851C /* GatewayPacket.swift */; };
 		129C11C3274DBB3A00AA7E82 /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 129C11C2274DBB3A00AA7E82 /* ImageCache.swift */; };
+		129ED06B2818ED4B009FDAD7 /* AccountEditorController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 129ED06A2818ED4B009FDAD7 /* AccountEditorController.swift */; };
 		129FBBF22812913400BD5D09 /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 129FBBF12812913400BD5D09 /* SwiftyJSON */; };
 		129FBBF52812918C00BD5D09 /* Codextended in Frameworks */ = {isa = PBXBuildFile; productRef = 129FBBF42812918C00BD5D09 /* Codextended */; };
 		12AB3D7E274C1CB400934345 /* Gateway Inspector.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 12AB3D7D274C1CB400934345 /* Gateway Inspector.storyboard */; };
@@ -49,6 +51,11 @@
 		12B99C2227410AD00048D2DB /* LogMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12B99C2127410AD00048D2DB /* LogMessage.swift */; };
 		12B99C2427410B010048D2DB /* PacketDirection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12B99C2327410B010048D2DB /* PacketDirection.swift */; };
 		12CD0228274218AA00F136A5 /* Publisher+Buffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12CD0226274217E600F136A5 /* Publisher+Buffer.swift */; };
+		12D23C1A27540BAE00F3D18D /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12D23C1927540BAE00F3D18D /* Account.swift */; };
+		12D23C1C27540CF200F3D18D /* Accounts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12D23C1B27540CF200F3D18D /* Accounts.swift */; };
+		12D23C1F2754127000F3D18D /* Preferences.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 12D23C1E2754127000F3D18D /* Preferences.storyboard */; };
+		12D23C2127541C0B00F3D18D /* WindowTitleUpdatingTabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12D23C2027541C0B00F3D18D /* WindowTitleUpdatingTabViewController.swift */; };
+		12D23C232754204B00F3D18D /* AccountsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12D23C222754204B00F3D18D /* AccountsViewController.swift */; };
 		12DCEAA32751E38500A0A626 /* NavigatorOutlineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12DCEAA22751E38500A0A626 /* NavigatorOutlineItem.swift */; };
 		12DCEAA52751E60C00A0A626 /* ChannelSorting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12DCEAA42751E60C00A0A626 /* ChannelSorting.swift */; };
 		12E80A552752A88000ACD979 /* InvalidatingCollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12E80A542752A88000ACD979 /* InvalidatingCollectionViewFlowLayout.swift */; };
@@ -153,6 +160,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		12093A5D281BC11000FAE304 /* BasiliskError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasiliskError.swift; sourceTree = "<group>"; };
 		120A78D72741E9A70099834B /* WebSocket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocket.swift; sourceTree = "<group>"; };
 		120A78DA2741F9BE0099834B /* WebSocketEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketEvent.swift; sourceTree = "<group>"; };
 		12102CF7274D8ABE000F8FD9 /* MessageCollectionViewItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageCollectionViewItem.swift; sourceTree = "<group>"; };
@@ -182,12 +190,18 @@
 		12945082274D3A410024C744 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		129AF794273E653100B3851C /* GatewayPacket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GatewayPacket.swift; sourceTree = "<group>"; };
 		129C11C2274DBB3A00AA7E82 /* ImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
+		129ED06A2818ED4B009FDAD7 /* AccountEditorController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountEditorController.swift; sourceTree = "<group>"; };
 		12AB3D7D274C1CB400934345 /* Gateway Inspector.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Gateway Inspector.storyboard"; sourceTree = "<group>"; };
 		12AB3D7F274C224200934345 /* GatewayInspectorController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GatewayInspectorController.swift; sourceTree = "<group>"; };
 		12B99C1D27410A5A0048D2DB /* GatewayLogStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GatewayLogStore.swift; sourceTree = "<group>"; };
 		12B99C2127410AD00048D2DB /* LogMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogMessage.swift; sourceTree = "<group>"; };
 		12B99C2327410B010048D2DB /* PacketDirection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PacketDirection.swift; sourceTree = "<group>"; };
 		12CD0226274217E600F136A5 /* Publisher+Buffer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Publisher+Buffer.swift"; sourceTree = "<group>"; };
+		12D23C1927540BAE00F3D18D /* Account.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
+		12D23C1B27540CF200F3D18D /* Accounts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Accounts.swift; sourceTree = "<group>"; };
+		12D23C1E2754127000F3D18D /* Preferences.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Preferences.storyboard; sourceTree = "<group>"; };
+		12D23C2027541C0B00F3D18D /* WindowTitleUpdatingTabViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowTitleUpdatingTabViewController.swift; sourceTree = "<group>"; };
+		12D23C222754204B00F3D18D /* AccountsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountsViewController.swift; sourceTree = "<group>"; };
 		12DCEAA22751E38500A0A626 /* NavigatorOutlineItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigatorOutlineItem.swift; sourceTree = "<group>"; };
 		12DCEAA42751E60C00A0A626 /* ChannelSorting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelSorting.swift; sourceTree = "<group>"; };
 		12E80A542752A88000ACD979 /* InvalidatingCollectionViewFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvalidatingCollectionViewFlowLayout.swift; sourceTree = "<group>"; };
@@ -356,6 +370,16 @@
 			path = Glare;
 			sourceTree = "<group>";
 		};
+		128E2A3527540B860098BB84 /* Accounts */ = {
+			isa = PBXGroup;
+			children = (
+				12D23C1927540BAE00F3D18D /* Account.swift */,
+				12D23C1B27540CF200F3D18D /* Accounts.swift */,
+				129ED06A2818ED4B009FDAD7 /* AccountEditorController.swift */,
+			);
+			path = Accounts;
+			sourceTree = "<group>";
+		};
 		129AF793273E62BC00B3851C /* Gateway */ = {
 			isa = PBXGroup;
 			children = (
@@ -388,11 +412,22 @@
 			path = Support;
 			sourceTree = "<group>";
 		};
+		12D23C1D2754126800F3D18D /* Preferences */ = {
+			isa = PBXGroup;
+			children = (
+				12D23C1E2754127000F3D18D /* Preferences.storyboard */,
+				12D23C2027541C0B00F3D18D /* WindowTitleUpdatingTabViewController.swift */,
+				12D23C222754204B00F3D18D /* AccountsViewController.swift */,
+			);
+			path = Preferences;
+			sourceTree = "<group>";
+		};
 		12E80A582752AC1600ACD979 /* Support */ = {
 			isa = PBXGroup;
 			children = (
 				129C11C2274DBB3A00AA7E82 /* ImageCache.swift */,
 				12E80A592752AC1F00ACD979 /* NSView+Nib.swift */,
+				12093A5D281BC11000FAE304 /* BasiliskError.swift */,
 			);
 			path = Support;
 			sourceTree = "<group>";
@@ -429,6 +464,8 @@
 		12F4FD82273DFC1900B6AE64 /* Basilisk */ = {
 			isa = PBXGroup;
 			children = (
+				12D23C1D2754126800F3D18D /* Preferences */,
+				128E2A3527540B860098BB84 /* Accounts */,
 				12E80A582752AC1600ACD979 /* Support */,
 				1289491C274CB34E00850D5E /* Chat */,
 				12CB09572740D47000F28AD5 /* Gateway Inspector */,
@@ -690,6 +727,7 @@
 				12F4FD88273DFC1B00B6AE64 /* Assets.xcassets in Resources */,
 				12102CFA274D8ABE000F8FD9 /* MessageCollectionViewItem.xib in Resources */,
 				12AB3D7E274C1CB400934345 /* Gateway Inspector.storyboard in Resources */,
+				12D23C1F2754127000F3D18D /* Preferences.storyboard in Resources */,
 				12F4FD8B273DFC1B00B6AE64 /* Main.storyboard in Resources */,
 				12FA9AEC274D968500079393 /* MessageGroupHeader.xib in Resources */,
 			);
@@ -741,6 +779,7 @@
 				129C11C3274DBB3A00AA7E82 /* ImageCache.swift in Sources */,
 				121F931A274CF631007F81CC /* ChannelRef.swift in Sources */,
 				12B99C2427410B010048D2DB /* PacketDirection.swift in Sources */,
+				12D23C2127541C0B00F3D18D /* WindowTitleUpdatingTabViewController.swift in Sources */,
 				12E80A5A2752AC1F00ACD979 /* NSView+Nib.swift in Sources */,
 				12F4FD86273DFC1900B6AE64 /* ChatViewController.swift in Sources */,
 				121F931C274CF841007F81CC /* NavigatorViewController.swift in Sources */,
@@ -751,13 +790,18 @@
 				12F4FD84273DFC1900B6AE64 /* AppDelegate.swift in Sources */,
 				121F9310274CF318007F81CC /* MessagesViewController.swift in Sources */,
 				12102CF9274D8ABE000F8FD9 /* MessageCollectionViewItem.swift in Sources */,
+				12D23C1C27540CF200F3D18D /* Accounts.swift in Sources */,
 				12E80A552752A88000ACD979 /* InvalidatingCollectionViewFlowLayout.swift in Sources */,
 				1210E6EA274CC18300BF8C9B /* RoundingView.swift in Sources */,
+				129ED06B2818ED4B009FDAD7 /* AccountEditorController.swift in Sources */,
+				12093A5E281BC11000FAE304 /* BasiliskError.swift in Sources */,
 				12DCEAA52751E60C00A0A626 /* ChannelSorting.swift in Sources */,
 				12B99C1E27410A5A0048D2DB /* GatewayLogStore.swift in Sources */,
 				12E80A572752A9A600ACD979 /* MessagesViewController+Flow Layout Delegate.swift in Sources */,
 				12B99C2227410AD00048D2DB /* LogMessage.swift in Sources */,
 				12DCEAA32751E38500A0A626 /* NavigatorOutlineItem.swift in Sources */,
+				12D23C232754204B00F3D18D /* AccountsViewController.swift in Sources */,
+				12D23C1A27540BAE00F3D18D /* Account.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

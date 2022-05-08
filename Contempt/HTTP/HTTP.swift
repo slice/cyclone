@@ -94,6 +94,8 @@ public class HTTP {
         // Important. Don't omit.
         "X-Super-Properties": superProperties,
 
+        "X-Discord-Locale": disguise.systemLocale,
+
         // Apple "reserves" the Authorization HTTP header (and many others)
         // to be handled exclusively by their own "URL Loading System". According
         // to the documentation, "if you set a value for one of these reserved

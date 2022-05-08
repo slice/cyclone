@@ -90,9 +90,18 @@ public class HTTP {
         "Sec-Fetch-Mode": "cors",
         "Sec-Fetch-Site": "same-origin",
         "Accept": "*/*",
+
+        // Important. Don't omit.
         "X-Super-Properties": superProperties,
-        // Apple discourages passing in the Authorization header explicitly, but
-        // why? We don't seem to have any other way of doing this.
+
+        // Apple "reserves" the Authorization HTTP header (and many others)
+        // to be handled exclusively by their own "URL Loading System". According
+        // to the documentation, "if you set a value for one of these reserved
+        // headers, the system may ignore the value you set, or overwrite it
+        // with its own value, or simply not send it."
+        //
+        // I'm not quite sure how to do this any other way, so let's just do it
+        // anyways. It seems to work for now.
         "Authorization": token,
       ], uniquingKeysWith: { _, new in new })
     case .navigation:

@@ -1,6 +1,8 @@
 import Codextended
 import Darwin
 
+/// A subset of `Disguise` properties used when `IDENTIFY`ing and as the value
+/// of the `X-Super-Properties` header.
 internal struct SuperProperties: Codable {
   enum CodingKeys: String, CodingKey {
     case os
@@ -47,16 +49,40 @@ internal struct SuperProperties: Codable {
 /// A collection of identifying values and metadata that real Discord clients
 /// send to Discord while `IDENTIFY`ing, and as part of all HTTP requests.
 public struct Disguise: Codable {
+  /// The HTTP `User-Agent`. Also used in the super properties.
   let userAgent: String
+
+  /// A bitfield sent in `IDENTIFY`. Purpose unknown.
   let capabilities: Int
+
+  /// The operating system. This should probably be "Mac OS X".
   let os: String
+
+  /// The browser used. Example values: "Discord Client", "Chrome".
   let browser: String
+
+  /// The client release channel ("branch").
   let releaseChannel: Branch
+
+  /// The version of the client host (i.e. the Electron application).
   let clientVersion: String
+
+  /// The operating system version.
   let osVersion: String
+
+  /// The architecture of the operating system.
   let osArch: String
+
+  /// The first preferred locale of the system. This is sent in the super
+  /// properties, used as the content of the `Accept-Language` header in
+  /// every request, and is sent as another private header.
   let systemLocale: String
+
+  /// The client build number. Discord ostensibly increments this number with
+  /// each build of the client.
   let clientBuildNumber: Int
+
+  /// Unknown field.
   let clientEventSource: String?
 
   var superProperties: SuperProperties {

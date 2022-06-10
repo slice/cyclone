@@ -1,7 +1,7 @@
 import Combine
 
-/// A store for logged messages from the gateway.
-class GatewayLogStore: ObservableObject {
+/// A store for logged messages.
+class LogStore: ObservableObject {
   let objectWillChange = PassthroughSubject<Void, Never>()
 
   /// The logged gateway messages.
@@ -13,6 +13,12 @@ class GatewayLogStore: ObservableObject {
 
   convenience init() {
     self.init(messages: [])
+  }
+
+  /// Clear all messages from the log store.
+  @MainActor func clear() {
+    messages.removeAll()
+    objectWillChange.send()
   }
 
   /// Append a new message to the log store.

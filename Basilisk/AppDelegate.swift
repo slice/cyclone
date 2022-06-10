@@ -2,7 +2,7 @@ import Cocoa
 
 @main
 class AppDelegate: NSObject, NSApplicationDelegate {
-  var gatewayLogStore = GatewayLogStore()
+  var gatewayLogStore = LogStore()
 
   var activeViewControllers: [ChatViewController] {
     NSApp.windows.compactMap { $0.contentViewController as? ChatViewController }

@@ -15,9 +15,13 @@ import SwiftyJSON
   var client: Client?
   var focusedChannelID: UInt64?
   var gatewayPacketHandler: Task<Void, Never>?
+
   var gatewayGuildsSink: AnyCancellable!
   var gatewayUserSettingsSink: AnyCancellable!
   var gatewaySentPacketsSink: AnyCancellable!
+  var httpRequestsSink: AnyCancellable!
+  var httpResponsesSink: AnyCancellable!
+
   var selectedGuildID: Guild.ID?
   var exhaustedMessageHistory = false
   var requestingMoreHistory = false
@@ -212,6 +216,23 @@ import SwiftyJSON
 
     let client = Client(branch: .canary, token: token)
     self.client = client
+
+    httpRequestsSink = client.http.requests.receive(on: RunLoop.main)
+      .sink { (method, http) in
+        let body = bodyToString(http.body)
+        let logMessage = LogMessage(direction: .sent, timestamp: Date.now, variant: .http("\(method) \(http.url.absoluteString)", body))
+
+        (NSApp.delegate as! AppDelegate).gatewayLogStore.appendMessage(logMessage)
+      }
+
+    httpResponsesSink = client.http.responses.receive(on: RunLoop.main)
+      .sink { (statusCode, http) in
+        let body = bodyToString(http.body)
+        let logMessage = LogMessage(direction: .received, timestamp: Date.now, variant: .http("\(statusCode) \(http.url.absoluteString)", body))
+
+        (NSApp.delegate as! AppDelegate).gatewayLogStore.appendMessage(logMessage)
+      }
+
     try await client.http.requestLandingPage()
     client.connect()
     setUpGatewayPacketHandler()
@@ -221,6 +242,15 @@ import SwiftyJSON
         self?.applyGuilds()
       }
 
+    func bodyToString(_ body: Data?) -> String {
+      guard let body = body else {
+        return "<no body>"
+      }
+
+      return String(data: body, encoding: .utf8) ?? "<failed to decode body>"
+    }
+
+
     gatewaySentPacketsSink = client.gatewayConnection.sentPackets.receive(on: RunLoop.main)
       .sink { (json, string) in
         let data = string.data(using: .utf8)!
@@ -229,9 +259,9 @@ import SwiftyJSON
         let anyPacket = AnyGatewayPacket(packet: packet, raw: data)
 
         let logMessage = LogMessage(
-          gatewayPacket: anyPacket,
+          direction: .sent,
           timestamp: Date.now,
-          direction: .sent
+          variant: .gateway(anyPacket)
         )
 
         (NSApp.delegate as! AppDelegate).gatewayLogStore.appendMessage(logMessage)
@@ -256,9 +286,9 @@ import SwiftyJSON
 
   func logPacket(_ packet: AnyGatewayPacket) {
     let logMessage = LogMessage(
-      gatewayPacket: packet,
+      direction: .received,
       timestamp: Date.now,
-      direction: .received
+      variant: .gateway(packet)
     )
 
     let delegate = NSApp.delegate as! AppDelegate

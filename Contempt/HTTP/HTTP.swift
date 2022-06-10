@@ -1,6 +1,7 @@
 import Foundation
 import os
 import SwiftyJSON
+import Combine
 
 public enum HTTPError: Error {
   case httpError(httpResponse: HTTPURLResponse, data: Data)
@@ -12,6 +13,12 @@ public enum HTTPMethod: String {
   case patch = "PATCH"
   case delete = "DELETE"
   case put = "PUT"
+}
+
+public struct HTTPLog {
+  public let url: URL
+  public let headers: [String: String]
+  public let body: Data?
 }
 
 /// A facility to make HTTP requests to the Discord API.
@@ -28,6 +35,13 @@ public class HTTP {
   private var cookieStorage: HTTPCookieStorage! {
     session.configuration.httpCookieStorage
   }
+
+
+  /// A Combine subject for requests sent to Discord.
+  public private(set) var requests = PassthroughSubject<(String, HTTPLog), Never>()
+
+  /// A Combine subject for responses received from Discord.
+  public private(set) var responses = PassthroughSubject<(Int, HTTPLog), Never>()
 
   init(baseURL: URL, token: String, disguise: Disguise) {
     self.baseURL = baseURL
@@ -165,8 +179,12 @@ public class HTTP {
 
     log.info("<- \(request.httpMethod!) \(request.url!.absoluteString)")
 
+    requests.send((request.httpMethod!, HTTPLog(url: request.url!, headers: request.allHTTPHeaderFields!, body: request.httpBody)))
+
     let (data, response) = try await session.data(for: request, delegate: nil)
     let httpResponse = response as! HTTPURLResponse
+
+    responses.send((httpResponse.statusCode, HTTPLog(url: request.url!, headers: httpResponse.allHeaderFields as! [String: String], body: data)))
 
     log
       .info(

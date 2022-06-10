@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19529"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="20037"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Gateway Inspector-->
+        <!--Inspector-->
         <scene sceneID="iER-6A-uud">
             <objects>
-                <controllerPlaceholder storyboardName="Gateway Inspector" id="UgZ-vc-CQU" sceneMemberID="viewController"/>
+                <controllerPlaceholder storyboardName="Inspector" id="UgZ-vc-CQU" sceneMemberID="viewController"/>
                 <customObject id="fHW-ER-KTN" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="121" y="54"/>
+            <point key="canvasLocation" x="169" y="62"/>
         </scene>
         <!--Preferences-->
         <scene sceneID="6LP-jY-WjY">
@@ -667,7 +667,7 @@
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="eu3-7i-yIM"/>
-                                        <menuItem title="Gateway Inspector" keyEquivalent="0" id="zwa-jW-Fkv">
+                                        <menuItem title="Inspector" keyEquivalent="0" id="zwa-jW-Fkv">
                                             <modifierMask key="keyEquivalentModifierMask" shift="YES" command="YES"/>
                                             <connections>
                                                 <segue destination="UgZ-vc-CQU" kind="show" id="10v-06-IFi"/>
@@ -868,13 +868,13 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="24" horizontalPageScroll="10" verticalLineScroll="24" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="h0D-su-6jd">
-                                <rect key="frame" x="0.0" y="0.0" width="152" height="569"/>
+                                <rect key="frame" x="0.0" y="0.0" width="152" height="593"/>
                                 <clipView key="contentView" drawsBackground="NO" id="TGt-zi-MMF">
-                                    <rect key="frame" x="0.0" y="0.0" width="152" height="569"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="152" height="593"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <outlineView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" selectionHighlightStyle="sourceList" multipleSelection="NO" autosaveColumns="NO" rowHeight="24" rowSizeStyle="systemDefault" viewBased="YES" floatsGroupRows="NO" indentationPerLevel="13" outlineTableColumn="03T-OW-czf" id="o1E-3Y-zAB">
-                                            <rect key="frame" x="0.0" y="0.0" width="152" height="569"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="152" height="593"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <size key="intercellSpacing" width="3" height="0.0"/>
                                             <color key="backgroundColor" name="_sourceListBackgroundColor" catalog="System" colorSpace="catalog"/>

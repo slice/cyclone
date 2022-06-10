@@ -6,12 +6,19 @@ struct LogMessage: Identifiable {
   /// The identifier of the message.
   let id = UUID()
 
-  /// The gateway packet associated with this message.
-  let gatewayPacket: AnyGatewayPacket?
+  /// The direction in which the corresponding network packet was transmitted.
+  let direction: PacketDirection
 
   /// The timestamp at which the message occurred.
   let timestamp: Date
 
-  /// Whether the gateway packet was received or sent.
-  let direction: PacketDirection
+  /// The log itself.
+  let variant: LogVariant
+}
+
+enum LogVariant {
+  case gateway(AnyGatewayPacket)
+
+  // For now.
+  case http(String, String)
 }

@@ -45,11 +45,11 @@
 		129ED06B2818ED4B009FDAD7 /* AccountEditorController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 129ED06A2818ED4B009FDAD7 /* AccountEditorController.swift */; };
 		129FBBF22812913400BD5D09 /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 129FBBF12812913400BD5D09 /* SwiftyJSON */; };
 		129FBBF52812918C00BD5D09 /* Codextended in Frameworks */ = {isa = PBXBuildFile; productRef = 129FBBF42812918C00BD5D09 /* Codextended */; };
-		12AB3D7E274C1CB400934345 /* Gateway Inspector.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 12AB3D7D274C1CB400934345 /* Gateway Inspector.storyboard */; };
-		12AB3D80274C224200934345 /* GatewayInspectorController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12AB3D7F274C224200934345 /* GatewayInspectorController.swift */; };
-		12B99C1E27410A5A0048D2DB /* GatewayLogStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12B99C1D27410A5A0048D2DB /* GatewayLogStore.swift */; };
+		12AB3D80274C224200934345 /* InspectorController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12AB3D7F274C224200934345 /* InspectorController.swift */; };
+		12B99C1E27410A5A0048D2DB /* LogStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12B99C1D27410A5A0048D2DB /* LogStore.swift */; };
 		12B99C2227410AD00048D2DB /* LogMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12B99C2127410AD00048D2DB /* LogMessage.swift */; };
 		12B99C2427410B010048D2DB /* PacketDirection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12B99C2327410B010048D2DB /* PacketDirection.swift */; };
+		12C1D4B92827B9ED005D21A4 /* Inspector.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 12C1D4B82827B9ED005D21A4 /* Inspector.storyboard */; };
 		12CD0228274218AA00F136A5 /* Publisher+Buffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12CD0226274217E600F136A5 /* Publisher+Buffer.swift */; };
 		12D23C1A27540BAE00F3D18D /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12D23C1927540BAE00F3D18D /* Account.swift */; };
 		12D23C1C27540CF200F3D18D /* Accounts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12D23C1B27540CF200F3D18D /* Accounts.swift */; };
@@ -76,6 +76,7 @@
 		12F4FDC9273DFCD000B6AE64 /* Contempt.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 12F4FDB3273DFCD000B6AE64 /* Contempt.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		12FA9AEB274D968500079393 /* MessageGroupHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12FA9AE9274D968500079393 /* MessageGroupHeader.swift */; };
 		12FA9AEC274D968500079393 /* MessageGroupHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 12FA9AEA274D968500079393 /* MessageGroupHeader.xib */; };
+		12FAA7652827C29E00205A5B /* InspectorMessagesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12FAA7642827C29E00205A5B /* InspectorMessagesController.swift */; };
 		B8EFC2F6275197ED0010B894 /* PermissionOverwrites.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8EFC2F5275197ED0010B894 /* PermissionOverwrites.swift */; };
 		B8EFC2FA2751A9350010B894 /* CurrentUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8EFC2F92751A9350010B894 /* CurrentUser.swift */; };
 /* End PBXBuildFile section */
@@ -191,11 +192,11 @@
 		129AF794273E653100B3851C /* GatewayPacket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GatewayPacket.swift; sourceTree = "<group>"; };
 		129C11C2274DBB3A00AA7E82 /* ImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
 		129ED06A2818ED4B009FDAD7 /* AccountEditorController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountEditorController.swift; sourceTree = "<group>"; };
-		12AB3D7D274C1CB400934345 /* Gateway Inspector.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Gateway Inspector.storyboard"; sourceTree = "<group>"; };
-		12AB3D7F274C224200934345 /* GatewayInspectorController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GatewayInspectorController.swift; sourceTree = "<group>"; };
-		12B99C1D27410A5A0048D2DB /* GatewayLogStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GatewayLogStore.swift; sourceTree = "<group>"; };
+		12AB3D7F274C224200934345 /* InspectorController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InspectorController.swift; sourceTree = "<group>"; };
+		12B99C1D27410A5A0048D2DB /* LogStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogStore.swift; sourceTree = "<group>"; };
 		12B99C2127410AD00048D2DB /* LogMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogMessage.swift; sourceTree = "<group>"; };
 		12B99C2327410B010048D2DB /* PacketDirection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PacketDirection.swift; sourceTree = "<group>"; };
+		12C1D4B82827B9ED005D21A4 /* Inspector.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Inspector.storyboard; sourceTree = "<group>"; };
 		12CD0226274217E600F136A5 /* Publisher+Buffer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Publisher+Buffer.swift"; sourceTree = "<group>"; };
 		12D23C1927540BAE00F3D18D /* Account.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
 		12D23C1B27540CF200F3D18D /* Accounts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Accounts.swift; sourceTree = "<group>"; };
@@ -225,6 +226,7 @@
 		12F4FDC3273DFCD000B6AE64 /* ContemptTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContemptTests.swift; sourceTree = "<group>"; };
 		12FA9AE9274D968500079393 /* MessageGroupHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageGroupHeader.swift; sourceTree = "<group>"; };
 		12FA9AEA274D968500079393 /* MessageGroupHeader.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MessageGroupHeader.xib; sourceTree = "<group>"; };
+		12FAA7642827C29E00205A5B /* InspectorMessagesController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InspectorMessagesController.swift; sourceTree = "<group>"; };
 		B8EFC2F5275197ED0010B894 /* PermissionOverwrites.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionOverwrites.swift; sourceTree = "<group>"; };
 		B8EFC2F92751A9350010B894 /* CurrentUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentUser.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -391,16 +393,17 @@
 			path = Gateway;
 			sourceTree = "<group>";
 		};
-		12CB09572740D47000F28AD5 /* Gateway Inspector */ = {
+		12CB09572740D47000F28AD5 /* Inspector */ = {
 			isa = PBXGroup;
 			children = (
-				12B99C1D27410A5A0048D2DB /* GatewayLogStore.swift */,
+				12B99C1D27410A5A0048D2DB /* LogStore.swift */,
 				12B99C2127410AD00048D2DB /* LogMessage.swift */,
 				12B99C2327410B010048D2DB /* PacketDirection.swift */,
-				12AB3D7D274C1CB400934345 /* Gateway Inspector.storyboard */,
-				12AB3D7F274C224200934345 /* GatewayInspectorController.swift */,
+				12AB3D7F274C224200934345 /* InspectorController.swift */,
+				12C1D4B82827B9ED005D21A4 /* Inspector.storyboard */,
+				12FAA7642827C29E00205A5B /* InspectorMessagesController.swift */,
 			);
-			path = "Gateway Inspector";
+			path = Inspector;
 			sourceTree = "<group>";
 		};
 		12CD0225274217D800F136A5 /* Support */ = {
@@ -468,7 +471,7 @@
 				128E2A3527540B860098BB84 /* Accounts */,
 				12E80A582752AC1600ACD979 /* Support */,
 				1289491C274CB34E00850D5E /* Chat */,
-				12CB09572740D47000F28AD5 /* Gateway Inspector */,
+				12CB09572740D47000F28AD5 /* Inspector */,
 				12F4FD83273DFC1900B6AE64 /* AppDelegate.swift */,
 				12F4FD87273DFC1B00B6AE64 /* Assets.xcassets */,
 				12F4FD89273DFC1B00B6AE64 /* Main.storyboard */,
@@ -726,9 +729,9 @@
 			files = (
 				12F4FD88273DFC1B00B6AE64 /* Assets.xcassets in Resources */,
 				12102CFA274D8ABE000F8FD9 /* MessageCollectionViewItem.xib in Resources */,
-				12AB3D7E274C1CB400934345 /* Gateway Inspector.storyboard in Resources */,
 				12D23C1F2754127000F3D18D /* Preferences.storyboard in Resources */,
 				12F4FD8B273DFC1B00B6AE64 /* Main.storyboard in Resources */,
+				12C1D4B92827B9ED005D21A4 /* Inspector.storyboard in Resources */,
 				12FA9AEC274D968500079393 /* MessageGroupHeader.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -785,7 +788,7 @@
 				121F931C274CF841007F81CC /* NavigatorViewController.swift in Sources */,
 				1260A75B275163F00099CA3B /* NavigatorViewControllerDelegate.swift in Sources */,
 				12FA9AEB274D968500079393 /* MessageGroupHeader.swift in Sources */,
-				12AB3D80274C224200934345 /* GatewayInspectorController.swift in Sources */,
+				12AB3D80274C224200934345 /* InspectorController.swift in Sources */,
 				123F622F275183A8001D3D61 /* NavigatorGuildCellView.swift in Sources */,
 				12F4FD84273DFC1900B6AE64 /* AppDelegate.swift in Sources */,
 				121F9310274CF318007F81CC /* MessagesViewController.swift in Sources */,
@@ -794,9 +797,10 @@
 				12E80A552752A88000ACD979 /* InvalidatingCollectionViewFlowLayout.swift in Sources */,
 				1210E6EA274CC18300BF8C9B /* RoundingView.swift in Sources */,
 				129ED06B2818ED4B009FDAD7 /* AccountEditorController.swift in Sources */,
+				12FAA7652827C29E00205A5B /* InspectorMessagesController.swift in Sources */,
 				12093A5E281BC11000FAE304 /* BasiliskError.swift in Sources */,
 				12DCEAA52751E60C00A0A626 /* ChannelSorting.swift in Sources */,
-				12B99C1E27410A5A0048D2DB /* GatewayLogStore.swift in Sources */,
+				12B99C1E27410A5A0048D2DB /* LogStore.swift in Sources */,
 				12E80A572752A9A600ACD979 /* MessagesViewController+Flow Layout Delegate.swift in Sources */,
 				12B99C2227410AD00048D2DB /* LogMessage.swift in Sources */,
 				12DCEAA32751E38500A0A626 /* NavigatorOutlineItem.swift in Sources */,

@@ -17,7 +17,7 @@ public struct User: Identifiable {
 extension User: Decodable {
   public init(from decoder: Decoder) throws {
     username = try decoder.decode("username")
-    publicFlags = try decoder.decode("public_flags")
+    publicFlags = try decoder.decodeIfPresent("public_flags")
     id = try decoder.decode("id")
     discriminator = try decoder.decode("discriminator")
     avatar = Asset(type: .avatar, parent: id, hash: try decoder.decode("avatar", as: String.self))

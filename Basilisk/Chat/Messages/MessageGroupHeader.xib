@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="19529" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="21179.7" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19529"/>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21179.7"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -9,30 +10,33 @@
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <customView id="Hz6-mo-xeY" customClass="MessageGroupHeader" customModule="Basilisk" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="480" height="30"/>
+            <rect key="frame" x="0.0" y="0.0" width="480" height="45"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <customView translatesAutoresizingMaskIntoConstraints="NO" id="qm4-3A-YHK">
-                    <rect key="frame" x="11" y="0.0" width="469" height="30"/>
+                    <rect key="frame" x="0.0" y="0.0" width="480" height="45"/>
                     <subviews>
                         <customView translatesAutoresizingMaskIntoConstraints="NO" id="lB3-uN-kCv" customClass="RoundingView" customModule="Basilisk" customModuleProvider="target">
-                            <rect key="frame" x="0.0" y="0.0" width="30" height="30"/>
+                            <rect key="frame" x="3" y="5" width="30" height="30"/>
                             <subviews>
                                 <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="cxd-Dc-WYh">
-                                    <rect key="frame" x="0.0" y="-2.5" width="30" height="35"/>
-                                    <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyUpOrDown" image="person.fill" catalog="system" id="EMx-GA-1qW"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="30" height="30"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="30" id="AjF-cE-RUT"/>
+                                        <constraint firstAttribute="width" constant="30" id="IeD-ud-DTk"/>
+                                    </constraints>
+                                    <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyUpOrDown" id="EMx-GA-1qW"/>
                                 </imageView>
                             </subviews>
                             <constraints>
                                 <constraint firstItem="cxd-Dc-WYh" firstAttribute="top" secondItem="lB3-uN-kCv" secondAttribute="top" id="DNa-d7-IIc"/>
                                 <constraint firstAttribute="trailing" secondItem="cxd-Dc-WYh" secondAttribute="trailing" id="Tkm-Dd-8SE"/>
                                 <constraint firstItem="cxd-Dc-WYh" firstAttribute="leading" secondItem="lB3-uN-kCv" secondAttribute="leading" id="VTZ-cW-Er2"/>
-                                <constraint firstAttribute="width" secondItem="lB3-uN-kCv" secondAttribute="height" multiplier="1:1" id="XgM-8x-R2d"/>
                                 <constraint firstAttribute="bottom" secondItem="cxd-Dc-WYh" secondAttribute="bottom" id="oAM-Xd-KvX"/>
                             </constraints>
                         </customView>
                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="chR-WG-ypf">
-                            <rect key="frame" x="36" y="7" width="105" height="16"/>
+                            <rect key="frame" x="39" y="12" width="105" height="16"/>
                             <textFieldCell key="cell" lineBreakMode="clipping" title="username#0000" id="xrR-FT-xSv">
                                 <font key="font" metaFont="system"/>
                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -40,7 +44,7 @@
                             </textFieldCell>
                         </textField>
                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ufi-Tm-TTI">
-                            <rect key="frame" x="145" y="7" width="19" height="14"/>
+                            <rect key="frame" x="148" y="12" width="19" height="14"/>
                             <textFieldCell key="cell" lineBreakMode="clipping" title="1m" id="SKE-dN-ME7">
                                 <font key="font" metaFont="smallSystem"/>
                                 <color key="textColor" name="tertiaryLabelColor" catalog="System" colorSpace="catalog"/>
@@ -49,19 +53,18 @@
                         </textField>
                     </subviews>
                     <constraints>
-                        <constraint firstItem="lB3-uN-kCv" firstAttribute="leading" secondItem="qm4-3A-YHK" secondAttribute="leading" id="39o-za-H0X"/>
-                        <constraint firstItem="lB3-uN-kCv" firstAttribute="height" secondItem="qm4-3A-YHK" secondAttribute="height" id="8Jo-l8-olw"/>
-                        <constraint firstAttribute="height" constant="30" id="B6l-xq-Tdo"/>
+                        <constraint firstItem="lB3-uN-kCv" firstAttribute="leading" secondItem="qm4-3A-YHK" secondAttribute="leading" constant="3" id="39o-za-H0X"/>
+                        <constraint firstAttribute="height" constant="45" id="B6l-xq-Tdo"/>
                         <constraint firstItem="ufi-Tm-TTI" firstAttribute="leading" secondItem="chR-WG-ypf" secondAttribute="trailing" constant="8" symbolic="YES" id="FrD-Qq-CXr"/>
                         <constraint firstItem="chR-WG-ypf" firstAttribute="leading" secondItem="lB3-uN-kCv" secondAttribute="trailing" constant="8" symbolic="YES" id="Hyj-8j-avP"/>
                         <constraint firstItem="ufi-Tm-TTI" firstAttribute="firstBaseline" secondItem="chR-WG-ypf" secondAttribute="firstBaseline" id="Uuz-KO-U9H"/>
-                        <constraint firstItem="lB3-uN-kCv" firstAttribute="centerY" secondItem="qm4-3A-YHK" secondAttribute="centerY" id="aOV-fR-7QH"/>
+                        <constraint firstItem="lB3-uN-kCv" firstAttribute="bottom" secondItem="qm4-3A-YHK" secondAttribute="bottom" constant="-5" id="aOV-fR-7QH"/>
                         <constraint firstItem="chR-WG-ypf" firstAttribute="centerY" secondItem="lB3-uN-kCv" secondAttribute="centerY" id="dXm-QE-Jid"/>
                     </constraints>
                 </customView>
             </subviews>
             <constraints>
-                <constraint firstItem="qm4-3A-YHK" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" constant="11" id="7JQ-Z4-Oen"/>
+                <constraint firstItem="qm4-3A-YHK" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" id="7JQ-Z4-Oen"/>
                 <constraint firstAttribute="bottom" secondItem="qm4-3A-YHK" secondAttribute="bottom" id="LD0-a0-ixf"/>
                 <constraint firstAttribute="trailing" secondItem="qm4-3A-YHK" secondAttribute="trailing" id="sMI-n6-8Ch"/>
             </constraints>
@@ -71,10 +74,7 @@
                 <outlet property="groupAvatarRounding" destination="lB3-uN-kCv" id="RiI-NX-JTT"/>
                 <outlet property="groupTimestampTextField" destination="ufi-Tm-TTI" id="WpO-zw-VV3"/>
             </connections>
-            <point key="canvasLocation" x="139" y="150"/>
+            <point key="canvasLocation" x="140" y="136.5"/>
         </customView>
     </objects>
-    <resources>
-        <image name="person.fill" catalog="system" width="14" height="14"/>
-    </resources>
 </document>

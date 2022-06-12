@@ -4,6 +4,8 @@ import Contempt
 import CoreImage
 import CoreImage.CIFilterBuiltins
 import os.log
+import OrderedCollections
+import Kingfisher
 
 private extension NSScrollView {
   var scrollPosition: CGFloat {
@@ -35,8 +37,12 @@ struct MessagesSection: Hashable {
   }
 }
 
+//enum MessagesSection {
+//  case main
+//}
+
 typealias MessagesDiffableDataSource =
-  NSCollectionViewDiffableDataSource<
+  NSTableViewDiffableDataSource<
     MessagesSection,
     Message.ID
   >
@@ -54,19 +60,14 @@ private extension NSUserInterfaceItemIdentifier {
 
 class MessagesViewController: NSViewController {
   @IBOutlet var scrollView: NSScrollView!
-  @IBOutlet var collectionView: NSCollectionView!
+  @IBOutlet var tableView: NSTableView!
 
-  private static let messageGroupHeaderKind = "message-group-header"
-  var cachedMessageSizes: [Message.ID: NSSize] = [:]
-
-  /// The array of messages this view controller is showing, ordered from oldest
-  /// to newest.
-  var messages: [Message] = []
+  /// The ordered set of messages this view controller is showing, ordered from
+  /// oldest to newest.
+  var messages: OrderedDictionary<Message.ID, Message> = [:]
 
   /// The ID of the oldest message this view controller is showing.
-  public var oldestMessageID: Message.ID? {
-    messages.first?.id
-  }
+  public var oldestMessageID: Message.ID? { messages.elements[0].value.id }
 
   /// Called when the user tries to invoke a command.
   var onRunCommand: ((_ command: String, _ arguments: [String]) -> Void)?
@@ -79,108 +80,51 @@ class MessagesViewController: NSViewController {
 
   /// A message view that is used to measure message heights. It is never
   /// drawn to the screen.
-  var messageSizingTemplate: MessageCollectionViewItem!
+  private var messageSizingTemplate: NSTableCellView!
+  private var groupRowHeight: CGFloat!
 
   private var dataSource: MessagesDiffableDataSource!
   private var clipViewBoundsChangedSink: AnyCancellable!
-
-  let horizontalMessageSectionInset = 11.0
 
   var signposter = OSSignposter()
 
   override func viewDidLoad() {
     super.viewDidLoad()
 
-    var views: NSArray? = []
-    guard MessageCollectionViewItem.nib!
-      .instantiate(withOwner: messageSizingTemplate, topLevelObjects: &views) else {
-      preconditionFailure("failed to instantiate message sizing template nib")
-    }
-    let messageSizingTemplate = views?.filter { $0 is MessageCollectionViewItem }.first
-    guard let messageSizingTemplate = messageSizingTemplate as? MessageCollectionViewItem else {
-      preconditionFailure("failed to locate message sizing template from instantiated nib")
-    }
-    self.messageSizingTemplate = messageSizingTemplate
+    self.messageSizingTemplate = tableView.makeView(withIdentifier: .message, owner: self) as? NSTableCellView
+    tableView.register(MessageGroupHeader.nib!, forIdentifier: .messageGroupHeader)
+    self.groupRowHeight = 45.0
 
     dataSource =
-      MessagesDiffableDataSource(collectionView: collectionView) { [weak self] collectionView, indexPath, identifier in
-        guard let self = self else { return nil }
+    MessagesDiffableDataSource(tableView: tableView) { [weak self] tableView, tableColumn, _, snowflake in
+      guard let self = self else { return .init(frame: .zero) }
 
-        let item = collectionView.makeItem(
-          withIdentifier: .message,
-          for: indexPath
-        ) as! MessageCollectionViewItem
+      let item = tableView.makeView(withIdentifier: .message, owner: nil) as! NSTableCellView
 
-        // TODO(skip): replace this with an O(1) operation.
-        guard let message = self.messages.first(where: { $0.id == identifier })
-        else {
-          fatalError("tried to make item for message not present in state")
-        }
-
-        item.configure(withMessage: message)
-
-        return item
+      guard let message = self.messages[snowflake] else {
+        NSLog("tried to make item for message not present in state")
+        return .init(frame: .zero)
       }
 
-    dataSource
-      .supplementaryViewProvider =
-      { [weak self] collectionView, _, indexPath -> (
-        NSView & NSCollectionViewElement
-      ) in
-        guard let self = self else { return MessageGroupHeader() }
+      item.textField!.stringValue = message.content
+      return item
+    }
 
-        let supplementaryView = collectionView.makeSupplementaryView(
-          ofKind: NSCollectionView.elementKindSectionHeader,
-          withIdentifier: .messageGroupHeader,
-          for: indexPath
-        ) as! MessageGroupHeader
-        let dataSource = collectionView
-          .dataSource as! MessagesDiffableDataSource
-
-        let currentSnapshot = dataSource.snapshot()
-
-        // grab the current message group (section) we're in; it references the
-        // author id of this message group
-        let section = currentSnapshot.sectionIdentifiers[indexPath.section]
-
-        guard let message = self.messages
-          .first(where: { $0.id == section.firstMessageID })
-        else {
-          fatalError("unable to find a message in state with the user")
-        }
-        let user = message.author
-        let name = "\(user.username)#\(user.discriminator)"
-
-        supplementaryView.groupAuthorTextField.stringValue = name
-
-        if let task = supplementaryView.avatarLoadingTask {
-          task.cancel()
-        }
-
-        if let avatar = user.avatar {
-          supplementaryView.avatarLoadingTask = Task {
-            let url = avatar.url(withFileExtension: "png")
-            let image = try await ImageCache.shared.image(at: url)
-            supplementaryView.groupAvatarRounding.radius = 10.0
-            supplementaryView.groupAvatarImageView.image = image
-          }
-        }
-
-        supplementaryView.groupTimestampTextField.stringValue = message.id
-          .timestamp
-          .formatted(.relative(presentation: .named, unitsStyle: .narrow))
-
-        return supplementaryView
+    dataSource.sectionHeaderViewProvider = { [weak self] collectionView, row, section in
+      guard let self = self else { return .init(frame: .zero) }
+      let item = self.tableView.makeView(withIdentifier: .messageGroupHeader, owner: nil) as! MessageGroupHeader
+      let message = self.messages[section.firstMessageID]!
+      item.groupAuthorTextField.stringValue = message.author.username
+      item.groupAvatarRounding.radius = 10.0
+      if let avatar = message.author.avatar {
+        item.groupAvatarImageView.kf.setImage(with: avatar.url(withFileExtension: "png"))
       }
+      item.groupTimestampTextField.stringValue = message.id.timestamp.formatted(date: .omitted, time: .shortened)
+      return item
+    }
 
-    collectionView.register(MessageCollectionViewItem.nib!, forItemWithIdentifier: .message)
-    collectionView.register(MessageGroupHeader.nib!,
-                            forSupplementaryViewOfKind: NSCollectionView.elementKindSectionHeader,
-                            withIdentifier: .messageGroupHeader)
-
-    collectionView.dataSource = dataSource
-    collectionView.collectionViewLayout = makeCollectionViewLayout()
-    collectionView.delegate = self
+    tableView.dataSource = dataSource
+    tableView.delegate = self
 
     let clipView = scrollView.contentView
     clipView.postsBoundsChangedNotifications = true
@@ -198,50 +142,41 @@ class MessagesViewController: NSViewController {
 
   // MARK: - Applying Messages
 
-  /// Applies an array of initial `Message` objects to be displayed in the view
-  /// controller.
+  /// Applies an array of initial `Message` objects to be displayed in the
+  /// view controller.
   ///
-  /// The most recent messages should be first.
+  /// The most recent messages should appear first.
   public func applyInitialMessages(_ messages: [Message]) {
     var snapshot = NSDiffableDataSourceSnapshot<MessagesSection, Message.ID>()
 
-    guard !messages.isEmpty else {
-      self.messages = []
-      dataSource.apply(snapshot)
+    if messages.isEmpty {
+      self.messages = [:]
+      dataSource.apply(snapshot, animatingDifferences: false)
       return
     }
 
-    // reverse the messages so that the oldest ones come first, so we can get
-    // the intended ui (bottom of scroll view is where the latest messages are)
-    let reversedMessages: [Message] = messages.reversed()
-    self.messages = reversedMessages
+    // We want the recent messages to appear at the bottom of the scroll view,
+    // so we have to reverse the array here.
+    self.messages = OrderedDictionary(
+      messages.map { message in (message.id, message) }.reversed(),
+      uniquingKeysWith: { (left, right) in left }
+    )
 
-    let firstMessage = reversedMessages.first!
+    let firstMessage = self.messages.elements[0].value
     var currentSection = MessagesSection(firstMessage: firstMessage)
     snapshot.appendSections([currentSection])
-    for message in reversedMessages {
+
+    for message in self.messages.values {
       if message.author.id != currentSection.authorID {
         // author has changed, so create a new section (message group)
         currentSection = MessagesSection(firstMessage: message)
         snapshot.appendSections([currentSection])
       }
 
-      // keep on appending items (messages) to this section until the author
-      // changes
       snapshot.appendItems([message.id], toSection: currentSection)
     }
 
     applySnapshot(snapshot, alwaysScrollToBottom: true)
-
-    // immediately invalidate the compositional layout.
-    //
-    // for some reason, applying the initial batch of messages leaves messages
-    // with multiline text awkwardly clipped. this fixes itself when a new
-    // message is received, which indirectly invalidates the layout. so, do it
-    // now so we get the correct layout ASAP. we are using estimated item
-    // dimensions to facilitate variable height items, so it's possible there's
-    // some rough edges with this. investigate further?
-    collectionView.collectionViewLayout!.invalidateLayout()
   }
 
   /// Appends a newly received message to the view controller and updates the
@@ -259,7 +194,8 @@ class MessagesViewController: NSViewController {
     }
 
     snapshot.appendItems([message.id], toSection: lastSection!)
-    messages.append(message)
+
+    messages[message.id] = message
     applySnapshot(snapshot)
   }
 
@@ -281,10 +217,14 @@ class MessagesViewController: NSViewController {
     let firstSection = snapshot.sectionIdentifiers.first!
     var section = MessagesSection(firstMessage: messages.first!)
     snapshot.insertSections([section], beforeSection: firstSection)
+
     for message in messages {
       if message.author.id != section.authorID {
         // author differs, start a new message group
         let newSection = MessagesSection(firstMessage: message)
+        if snapshot.sectionIdentifiers.contains(newSection) {
+          fatalError("\(newSection) was already in the snapshot -- this should never happen")
+        }
         snapshot.insertSections([newSection], afterSection: section)
         section = newSection
       }
@@ -292,9 +232,11 @@ class MessagesViewController: NSViewController {
       snapshot.appendItems([message.id], toSection: section)
     }
 
-    self.messages.insert(contentsOf: messages, at: 0)
+    for message in messagesNewestFirst {
+      self.messages.updateValue(message, forKey: message.id, insertingAt: 0)
+    }
 
-    let scrollView = collectionView.enclosingScrollView!
+    let scrollView = tableView.enclosingScrollView!
     let savedScrollPosition = scrollView.scrollPosition
     let savedContentHeight = scrollView.documentView!.bounds.height
     applySnapshot(snapshot) {
@@ -327,23 +269,11 @@ class MessagesViewController: NSViewController {
     let wasScrolledToBottom = alwaysScrollToBottom ? true : scrollView
       .isScrolledToBottom
     dataSource.apply(snapshot, animatingDifferences: false) { [weak self] in
-      if wasScrolledToBottom {
-        self?.scrollView.scrollToEnd()
-      }
-      completion?()
+        if wasScrolledToBottom {
+          self?.scrollView.scrollToEnd()
+        }
+        completion?()
     }
-  }
-
-  // MARK: - Collection View Layout
-
-  private func makeCollectionViewLayout() -> NSCollectionViewLayout {
-    let layout = InvalidatingCollectionViewFlowLayout()
-    let spacingBetweenMessages = 5.0
-    layout.minimumLineSpacing = spacingBetweenMessages
-    layout.minimumInteritemSpacing = 0.0
-    // section insets are returned dynamically from the delegate
-    layout.scrollDirection = .vertical
-    return layout
   }
 
   func appendToConsole(line _: String) {
@@ -372,5 +302,17 @@ class MessagesViewController: NSViewController {
     }
 
     onSendMessage?(fieldText)
+  }
+}
+
+extension MessagesViewController: NSTableViewDelegate {
+  func tableView(_ tableView: NSTableView, heightOfRow row: Int) -> CGFloat {
+    if case .some(_) = dataSource.sectionIdentifier(forRow: row) {
+      return self.groupRowHeight
+    }
+    let messageID = dataSource.itemIdentifier(forRow: row)!
+    let message = self.messages[messageID]!
+    self.messageSizingTemplate.textField!.stringValue = message.content
+    return self.messageSizingTemplate.fittingSize.height
   }
 }

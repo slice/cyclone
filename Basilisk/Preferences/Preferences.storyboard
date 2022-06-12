@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="lZz-ST-Ekk">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="21179.7" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="lZz-ST-Ekk">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="20037"/>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21179.7"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -85,7 +86,7 @@
                                         <rect key="frame" x="190" y="49" width="337" height="296"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <view key="contentView" id="Ruq-Zo-SdY">
-                                            <rect key="frame" x="3" y="3" width="331" height="290"/>
+                                            <rect key="frame" x="4" y="5" width="329" height="288"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <containerView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6c2-Gt-xVg">
@@ -217,7 +218,7 @@
                     </tabViewItems>
                     <viewControllerTransitionOptions key="transitionOptions" allowUserInteraction="YES"/>
                     <tabView key="tabView" drawsBackground="NO" type="noTabsNoBorder" id="9t9-W8-E1p">
-                        <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
+                        <rect key="frame" x="0.0" y="0.0" width="406" height="295"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <font key="font" metaFont="message"/>
                         <connections>
@@ -232,7 +233,7 @@
                 </tabViewController>
                 <customObject id="NmD-X1-4uM" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1214" y="796"/>
+            <point key="canvasLocation" x="1802" y="240"/>
         </scene>
         <!--Account Editor Controller-->
         <scene sceneID="zFM-Uf-Ahl">
@@ -376,7 +377,7 @@
                 </viewController>
                 <customObject id="rZw-Jo-G0p" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1728" y="653"/>
+            <point key="canvasLocation" x="2330" y="97"/>
         </scene>
         <!--Empty-->
         <scene sceneID="hqn-Nv-cwf">
@@ -400,7 +401,7 @@
                 </viewController>
                 <customObject id="KgF-ml-E3H" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1728" y="1012"/>
+            <point key="canvasLocation" x="2330" y="458"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="Y9q-oC-KAV">

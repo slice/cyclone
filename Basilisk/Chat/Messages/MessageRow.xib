@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="21179.7" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21179.7"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner"/>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customView id="c22-O7-iKe" customClass="MessageRow" customModule="Basilisk" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="480" height="16"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="5" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KzP-l8-HmT">
+                    <rect key="frame" x="0.0" y="0.0" width="480" height="16"/>
+                    <subviews>
+                        <textField horizontalHuggingPriority="240" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="Tbq-3e-tmn">
+                            <rect key="frame" x="-2" y="0.0" width="484" height="16"/>
+                            <textFieldCell key="cell" title="Message Content" id="WkO-zi-NoK">
+                                <font key="font" usesAppearanceFont="YES"/>
+                                <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                            </textFieldCell>
+                        </textField>
+                    </subviews>
+                    <visibilityPriorities>
+                        <integer value="1000"/>
+                    </visibilityPriorities>
+                    <customSpacing>
+                        <real value="3.4028234663852886e+38"/>
+                    </customSpacing>
+                </stackView>
+            </subviews>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="KzP-l8-HmT" secondAttribute="bottom" id="7yX-T0-r4p"/>
+                <constraint firstItem="KzP-l8-HmT" firstAttribute="top" secondItem="c22-O7-iKe" secondAttribute="top" id="944-wa-9Uq"/>
+                <constraint firstItem="KzP-l8-HmT" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" id="jVd-he-qsV"/>
+                <constraint firstAttribute="trailing" secondItem="KzP-l8-HmT" secondAttribute="trailing" id="yoq-x7-Ueb"/>
+            </constraints>
+            <connections>
+                <outlet property="contentTextField" destination="Tbq-3e-tmn" id="tlb-dD-E11"/>
+                <outlet property="partsStackView" destination="KzP-l8-HmT" id="qFf-lV-RRZ"/>
+            </connections>
+            <point key="canvasLocation" x="139" y="287"/>
+        </customView>
+    </objects>
+</document>

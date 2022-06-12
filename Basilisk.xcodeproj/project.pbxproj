@@ -36,6 +36,9 @@
 		12945081274D3A240024C744 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12945080274D3A240024C744 /* Message.swift */; };
 		12945083274D3A410024C744 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12945082274D3A410024C744 /* User.swift */; };
 		1296E31728559AE300CDFD2E /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 1296E31628559AE300CDFD2E /* Kingfisher */; };
+		1296E3192855AD2700CDFD2E /* Attachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1296E3182855AD2700CDFD2E /* Attachment.swift */; };
+		1296E31B2855B0B900CDFD2E /* MessageRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1296E31A2855B0B900CDFD2E /* MessageRow.swift */; };
+		1296E31D2855B0C600CDFD2E /* MessageRow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1296E31C2855B0C600CDFD2E /* MessageRow.xib */; };
 		129AF795273E653100B3851C /* GatewayPacket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 129AF794273E653100B3851C /* GatewayPacket.swift */; };
 		129C11C3274DBB3A00AA7E82 /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 129C11C2274DBB3A00AA7E82 /* ImageCache.swift */; };
 		129ED06B2818ED4B009FDAD7 /* AccountEditorController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 129ED06A2818ED4B009FDAD7 /* AccountEditorController.swift */; };
@@ -154,6 +157,9 @@
 		128C7676273E04D2008FD585 /* Disguise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Disguise.swift; sourceTree = "<group>"; };
 		12945080274D3A240024C744 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		12945082274D3A410024C744 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		1296E3182855AD2700CDFD2E /* Attachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Attachment.swift; sourceTree = "<group>"; };
+		1296E31A2855B0B900CDFD2E /* MessageRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageRow.swift; sourceTree = "<group>"; };
+		1296E31C2855B0C600CDFD2E /* MessageRow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MessageRow.xib; sourceTree = "<group>"; };
 		129AF794273E653100B3851C /* GatewayPacket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GatewayPacket.swift; sourceTree = "<group>"; };
 		129C11C2274DBB3A00AA7E82 /* ImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
 		129ED06A2818ED4B009FDAD7 /* AccountEditorController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountEditorController.swift; sourceTree = "<group>"; };
@@ -271,6 +277,8 @@
 				12102CF7274D8ABE000F8FD9 /* MessageCollectionViewItem.swift */,
 				12FA9AE9274D968500079393 /* MessageGroupHeader.swift */,
 				12FA9AEA274D968500079393 /* MessageGroupHeader.xib */,
+				1296E31A2855B0B900CDFD2E /* MessageRow.swift */,
+				1296E31C2855B0C600CDFD2E /* MessageRow.xib */,
 			);
 			path = Messages;
 			sourceTree = "<group>";
@@ -295,6 +303,7 @@
 				12945082274D3A410024C744 /* User.swift */,
 				B8EFC2F5275197ED0010B894 /* PermissionOverwrites.swift */,
 				B8EFC2F92751A9350010B894 /* CurrentUser.swift */,
+				1296E3182855AD2700CDFD2E /* Attachment.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -652,6 +661,7 @@
 				12D23C1F2754127000F3D18D /* Preferences.storyboard in Resources */,
 				12F4FD8B273DFC1B00B6AE64 /* Main.storyboard in Resources */,
 				12C1D4B92827B9ED005D21A4 /* Inspector.storyboard in Resources */,
+				1296E31D2855B0C600CDFD2E /* MessageRow.xib in Resources */,
 				12FA9AEC274D968500079393 /* MessageGroupHeader.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -699,6 +709,7 @@
 				12F4FD86273DFC1900B6AE64 /* ChatViewController.swift in Sources */,
 				121F931C274CF841007F81CC /* NavigatorViewController.swift in Sources */,
 				1260A75B275163F00099CA3B /* NavigatorViewControllerDelegate.swift in Sources */,
+				1296E31B2855B0B900CDFD2E /* MessageRow.swift in Sources */,
 				12FA9AEB274D968500079393 /* MessageGroupHeader.swift in Sources */,
 				12AB3D80274C224200934345 /* InspectorController.swift in Sources */,
 				123F622F275183A8001D3D61 /* NavigatorGuildCellView.swift in Sources */,
@@ -757,6 +768,7 @@
 				128C7677273E04D2008FD585 /* Disguise.swift in Sources */,
 				12F4FDB7273DFCD000B6AE64 /* Contempt.docc in Sources */,
 				12894915274C8FB900850D5E /* Snowflake.swift in Sources */,
+				1296E3192855AD2700CDFD2E /* Attachment.swift in Sources */,
 				120A78DB2741F9BE0099834B /* WebSocketEvent.swift in Sources */,
 				12945083274D3A410024C744 /* User.swift in Sources */,
 				12894917274C904E00850D5E /* Asset.swift in Sources */,

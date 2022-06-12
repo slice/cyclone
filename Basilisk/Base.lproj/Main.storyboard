@@ -799,31 +799,6 @@
                                                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                             </textFieldCell>
                                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
-                                                            <prototypeCellViews>
-                                                                <tableCellView identifier="message" id="8Pt-hI-3GP">
-                                                                    <rect key="frame" x="8" y="0.0" width="591" height="17"/>
-                                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                                    <subviews>
-                                                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="TCD-zx-Hhq">
-                                                                            <rect key="frame" x="0.0" y="1" width="591" height="16"/>
-                                                                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Table View Cell" id="jQv-bQ-J8c">
-                                                                                <font key="font" usesAppearanceFont="YES"/>
-                                                                                <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
-                                                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                                            </textFieldCell>
-                                                                        </textField>
-                                                                    </subviews>
-                                                                    <constraints>
-                                                                        <constraint firstAttribute="bottom" secondItem="TCD-zx-Hhq" secondAttribute="bottom" constant="1" id="1Fc-45-Wu4"/>
-                                                                        <constraint firstItem="TCD-zx-Hhq" firstAttribute="leading" secondItem="8Pt-hI-3GP" secondAttribute="leading" constant="2" id="Qxj-wJ-FTb"/>
-                                                                        <constraint firstItem="TCD-zx-Hhq" firstAttribute="top" secondItem="8Pt-hI-3GP" secondAttribute="top" id="cze-Ac-GIa"/>
-                                                                        <constraint firstAttribute="trailing" secondItem="TCD-zx-Hhq" secondAttribute="trailing" constant="2" id="hst-fY-nL5"/>
-                                                                    </constraints>
-                                                                    <connections>
-                                                                        <outlet property="textField" destination="TCD-zx-Hhq" id="Pfv-rE-DAH"/>
-                                                                    </connections>
-                                                                </tableCellView>
-                                                            </prototypeCellViews>
                                                         </tableColumn>
                                                     </tableColumns>
                                                 </tableView>
@@ -907,13 +882,13 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="24" horizontalPageScroll="10" verticalLineScroll="24" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="h0D-su-6jd">
-                                <rect key="frame" x="0.0" y="0.0" width="152" height="609"/>
+                                <rect key="frame" x="0.0" y="0.0" width="152" height="617"/>
                                 <clipView key="contentView" drawsBackground="NO" id="TGt-zi-MMF">
-                                    <rect key="frame" x="0.0" y="0.0" width="152" height="609"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="152" height="617"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <outlineView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" selectionHighlightStyle="sourceList" multipleSelection="NO" autosaveColumns="NO" rowHeight="24" rowSizeStyle="systemDefault" viewBased="YES" floatsGroupRows="NO" indentationPerLevel="13" outlineTableColumn="03T-OW-czf" id="o1E-3Y-zAB">
-                                            <rect key="frame" x="0.0" y="0.0" width="152" height="609"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="152" height="617"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <size key="intercellSpacing" width="3" height="0.0"/>
                                             <color key="backgroundColor" name="_sourceListBackgroundColor" catalog="System" colorSpace="catalog"/>

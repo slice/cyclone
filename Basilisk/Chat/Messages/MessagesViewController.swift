@@ -76,7 +76,7 @@ class MessagesViewController: NSViewController {
 
   /// A message view that is used to measure message heights. It is never
   /// drawn to the screen.
-  private var messageSizingTemplate: NSTableCellView!
+  private var messageSizingTemplate: MessageRow!
   private var groupRowHeight: CGFloat!
 
   private var dataSource: MessagesDiffableDataSource!
@@ -87,22 +87,20 @@ class MessagesViewController: NSViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
 
-    self.messageSizingTemplate = tableView.makeView(withIdentifier: .message, owner: self) as? NSTableCellView
-    tableView.register(MessageGroupHeader.nib!, forIdentifier: .messageGroupHeader)
     self.groupRowHeight = 45.0
 
     dataSource =
       MessagesDiffableDataSource(tableView: tableView) { [weak self] tableView, tableColumn, _, snowflake in
         guard let self = self else { return .init(frame: .zero) }
 
-        let item = tableView.makeView(withIdentifier: .message, owner: nil) as! NSTableCellView
+        let item = tableView.makeView(withIdentifier: .message, owner: nil) as! MessageRow
 
         guard let message = self.messages[snowflake] else {
           NSLog("tried to make item for message not present in state")
           return .init(frame: .zero)
         }
 
-        item.textField!.stringValue = message.content
+        item.configure(withMessage: message)
         return item
       }
 
@@ -121,6 +119,10 @@ class MessagesViewController: NSViewController {
 
     tableView.dataSource = dataSource
     tableView.delegate = self
+    tableView.register(MessageRow.nib!, forIdentifier: .message)
+    tableView.register(MessageGroupHeader.nib!, forIdentifier: .messageGroupHeader)
+
+    self.messageSizingTemplate = (tableView.makeView(withIdentifier: .message, owner: nil)! as! MessageRow)
 
     let clipView = scrollView.contentView
     clipView.postsBoundsChangedNotifications = true
@@ -299,6 +301,12 @@ class MessagesViewController: NSViewController {
 
     onSendMessage?(fieldText)
   }
+
+  private func measureRowHeight(forMessage message: Message) -> Double {
+    messageSizingTemplate.prepareForReuse()
+    messageSizingTemplate.configure(withMessage: message, forMeasurements: true)
+    return messageSizingTemplate.fittingSize.height
+  }
 }
 
 extension MessagesViewController: NSTableViewDelegate {
@@ -308,7 +316,6 @@ extension MessagesViewController: NSTableViewDelegate {
     }
     let messageID = dataSource.itemIdentifier(forRow: row)!
     let message = self.messages[messageID]!
-    self.messageSizingTemplate.textField!.stringValue = message.content
-    return self.messageSizingTemplate.fittingSize.height
+    return measureRowHeight(forMessage: message)
   }
 }

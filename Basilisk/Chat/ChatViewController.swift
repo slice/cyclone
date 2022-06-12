@@ -271,7 +271,7 @@ import SwiftyJSON
       .receive(on: RunLoop.main)
       .sink { [weak self] json in
         guard json["guild_positions"].exists() ||
-                json["guild_folders"].exists(), let self = self else { return }
+          json["guild_folders"].exists(), let self = self else { return }
         self.applyGuilds()
       }
   }

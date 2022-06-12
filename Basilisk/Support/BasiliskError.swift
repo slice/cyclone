@@ -35,6 +35,6 @@ extension BasiliskError: CustomNSError {
 
   var errorUserInfo: [String: Any] {
     [NSLocalizedDescriptionKey: self.errorDescription as Any,
-NSLocalizedRecoverySuggestionErrorKey: self.recoverySuggestion as Any]
+     NSLocalizedRecoverySuggestionErrorKey: self.recoverySuggestion as Any]
   }
 }

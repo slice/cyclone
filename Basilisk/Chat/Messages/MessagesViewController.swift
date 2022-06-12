@@ -37,10 +37,6 @@ struct MessagesSection: Hashable {
   }
 }
 
-//enum MessagesSection {
-//  case main
-//}
-
 typealias MessagesDiffableDataSource =
   NSTableViewDiffableDataSource<
     MessagesSection,
@@ -96,19 +92,19 @@ class MessagesViewController: NSViewController {
     self.groupRowHeight = 45.0
 
     dataSource =
-    MessagesDiffableDataSource(tableView: tableView) { [weak self] tableView, tableColumn, _, snowflake in
-      guard let self = self else { return .init(frame: .zero) }
+      MessagesDiffableDataSource(tableView: tableView) { [weak self] tableView, tableColumn, _, snowflake in
+        guard let self = self else { return .init(frame: .zero) }
 
-      let item = tableView.makeView(withIdentifier: .message, owner: nil) as! NSTableCellView
+        let item = tableView.makeView(withIdentifier: .message, owner: nil) as! NSTableCellView
 
-      guard let message = self.messages[snowflake] else {
-        NSLog("tried to make item for message not present in state")
-        return .init(frame: .zero)
+        guard let message = self.messages[snowflake] else {
+          NSLog("tried to make item for message not present in state")
+          return .init(frame: .zero)
+        }
+
+        item.textField!.stringValue = message.content
+        return item
       }
-
-      item.textField!.stringValue = message.content
-      return item
-    }
 
     dataSource.sectionHeaderViewProvider = { [weak self] collectionView, row, section in
       guard let self = self else { return .init(frame: .zero) }
@@ -269,10 +265,10 @@ class MessagesViewController: NSViewController {
     let wasScrolledToBottom = alwaysScrollToBottom ? true : scrollView
       .isScrolledToBottom
     dataSource.apply(snapshot, animatingDifferences: false) { [weak self] in
-        if wasScrolledToBottom {
-          self?.scrollView.scrollToEnd()
-        }
-        completion?()
+      if wasScrolledToBottom {
+        self?.scrollView.scrollToEnd()
+      }
+      completion?()
     }
   }
 

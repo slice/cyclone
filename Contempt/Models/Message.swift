@@ -10,6 +10,16 @@ public struct Message: Identifiable {
   }
 }
 
+extension Message: Hashable {
+  public static func ==(lhs: Message, rhs: Message) -> Bool {
+    lhs.id == rhs.id
+  }
+
+  public func hash(into hasher: inout Hasher) {
+    hasher.combine(id)
+  }
+}
+
 extension Message: Decodable {
   public init(from decoder: Decoder) throws {
     id = try decoder.decode("id")

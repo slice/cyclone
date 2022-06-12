@@ -19,6 +19,12 @@ public struct Snowflake: Hashable {
   }
 }
 
+extension Snowflake: ExpressibleByIntegerLiteral {
+  public init(integerLiteral value: IntegerLiteralType) {
+    uint64 = UInt64(clamping: value)
+  }
+}
+
 extension Snowflake: Encodable {
   public func encode(to encoder: Encoder) throws {
     var container = encoder.singleValueContainer()

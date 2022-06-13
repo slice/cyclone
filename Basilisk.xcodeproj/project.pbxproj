@@ -39,6 +39,7 @@
 		1296E3192855AD2700CDFD2E /* Attachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1296E3182855AD2700CDFD2E /* Attachment.swift */; };
 		1296E31B2855B0B900CDFD2E /* MessageRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1296E31A2855B0B900CDFD2E /* MessageRow.swift */; };
 		1296E31D2855B0C600CDFD2E /* MessageRow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1296E31C2855B0C600CDFD2E /* MessageRow.xib */; };
+		1297448B2857415200CDB201 /* LoadingAttachmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1297448A2857415200CDB201 /* LoadingAttachmentView.swift */; };
 		129AF795273E653100B3851C /* GatewayPacket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 129AF794273E653100B3851C /* GatewayPacket.swift */; };
 		129C11C3274DBB3A00AA7E82 /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 129C11C2274DBB3A00AA7E82 /* ImageCache.swift */; };
 		129ED06B2818ED4B009FDAD7 /* AccountEditorController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 129ED06A2818ED4B009FDAD7 /* AccountEditorController.swift */; };
@@ -160,6 +161,7 @@
 		1296E3182855AD2700CDFD2E /* Attachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Attachment.swift; sourceTree = "<group>"; };
 		1296E31A2855B0B900CDFD2E /* MessageRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageRow.swift; sourceTree = "<group>"; };
 		1296E31C2855B0C600CDFD2E /* MessageRow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MessageRow.xib; sourceTree = "<group>"; };
+		1297448A2857415200CDB201 /* LoadingAttachmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingAttachmentView.swift; sourceTree = "<group>"; };
 		129AF794273E653100B3851C /* GatewayPacket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GatewayPacket.swift; sourceTree = "<group>"; };
 		129C11C2274DBB3A00AA7E82 /* ImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
 		129ED06A2818ED4B009FDAD7 /* AccountEditorController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountEditorController.swift; sourceTree = "<group>"; };
@@ -279,6 +281,7 @@
 				12FA9AEA274D968500079393 /* MessageGroupHeader.xib */,
 				1296E31A2855B0B900CDFD2E /* MessageRow.swift */,
 				1296E31C2855B0C600CDFD2E /* MessageRow.xib */,
+				1297448A2857415200CDB201 /* LoadingAttachmentView.swift */,
 			);
 			path = Messages;
 			sourceTree = "<group>";
@@ -722,6 +725,7 @@
 				12FAA7652827C29E00205A5B /* InspectorMessagesController.swift in Sources */,
 				12093A5E281BC11000FAE304 /* BasiliskError.swift in Sources */,
 				12DCEAA52751E60C00A0A626 /* ChannelSorting.swift in Sources */,
+				1297448B2857415200CDB201 /* LoadingAttachmentView.swift in Sources */,
 				12B99C1E27410A5A0048D2DB /* LogStore.swift in Sources */,
 				12B99C2227410AD00048D2DB /* LogMessage.swift in Sources */,
 				12DCEAA32751E38500A0A626 /* NavigatorOutlineItem.swift in Sources */,

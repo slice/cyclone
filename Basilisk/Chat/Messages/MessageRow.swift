@@ -2,52 +2,6 @@ import Cocoa
 import Contempt
 import Kingfisher
 
-extension NSProgressIndicator: Placeholder {}
-
-class LoadingAttachmentView: NSView, Placeholder {
-  private var progressIndicator: NSProgressIndicator!
-  private var switchedToDeterminate: Bool = false
-
-  override init(frame frameRect: NSRect) {
-    super.init(frame: frameRect)
-    setupView()
-  }
-
-  required init?(coder: NSCoder) {
-    super.init(coder: coder)
-    setupView()
-  }
-
-  private func setupView() {
-    progressIndicator = NSProgressIndicator()
-    progressIndicator.translatesAutoresizingMaskIntoConstraints = false
-    progressIndicator.style = .spinning
-    progressIndicator.startAnimation(self)
-    subviews = [progressIndicator]
-
-    NSLayoutConstraint.activate([
-      progressIndicator.centerXAnchor.constraint(equalTo: centerXAnchor),
-      progressIndicator.centerYAnchor.constraint(equalTo: centerYAnchor)
-    ])
-  }
-
-  private func switchToDeterminate() {
-    guard !switchedToDeterminate else { return }
-    switchedToDeterminate = true
-    progressIndicator.isIndeterminate = false
-    progressIndicator.style = .bar
-    progressIndicator.minValue = 0
-
-    progressIndicator.widthAnchor.constraint(equalToConstant: 150.0).isActive = true
-  }
-
-  func updateProgress(receivedSize: Int64, totalSize: Int64) {
-    switchToDeterminate()
-    progressIndicator.maxValue = Double(totalSize)
-    progressIndicator.doubleValue = Double(receivedSize)
-  }
-}
-
 class IntrinsicImageView: NSImageView {
   var overriddenIntrinsicContentSize: NSSize?
 
@@ -118,7 +72,12 @@ class MessageRow: NSView {
       if !measurements {
         let loading = LoadingAttachmentView(frame: .zero)
         loading.translatesAutoresizingMaskIntoConstraints = false
+
         imageView.kf.setImage(with: attachment.proxyURL, placeholder: loading, progressBlock: { receivedSize, totalSize in
+          if width > 100 {
+            loading.switchToDeterminate(attachmentWidth: width)
+          }
+
           loading.updateProgress(receivedSize: receivedSize, totalSize: totalSize)
         })
       }

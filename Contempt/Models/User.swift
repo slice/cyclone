@@ -20,6 +20,10 @@ extension User: Decodable {
     publicFlags = try decoder.decodeIfPresent("public_flags")
     id = try decoder.decode("id")
     discriminator = try decoder.decode("discriminator")
-    avatar = Asset(type: .avatar, parent: id, hash: try decoder.decode("avatar", as: String.self))
+    if let avatarHash = try decoder.decodeIfPresent("avatar", as: String.self) {
+      avatar = Asset(type: .avatar, parent: id, hash: avatarHash)
+    } else {
+      avatar = nil
+    }
   }
 }

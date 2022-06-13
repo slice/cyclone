@@ -34,11 +34,12 @@ class MessageRow: NSView {
       var height = Double(heightInt)
       let aspectRatio = width / height
 
-      // Constrain by height first.
       if height > Self.maxHeight {
         height = Self.maxHeight
         width = height * aspectRatio
-      } else if width > Self.maxWidth {
+      }
+
+      if width > Self.maxWidth {
         width = Self.maxWidth
         height = width / aspectRatio
       }

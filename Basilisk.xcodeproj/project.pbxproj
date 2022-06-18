@@ -10,7 +10,6 @@
 		12093A5E281BC11000FAE304 /* BasiliskError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12093A5D281BC11000FAE304 /* BasiliskError.swift */; };
 		120A78D82741E9A70099834B /* WebSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 120A78D72741E9A70099834B /* WebSocket.swift */; };
 		120A78DB2741F9BE0099834B /* WebSocketEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 120A78DA2741F9BE0099834B /* WebSocketEvent.swift */; };
-		12102CF9274D8ABE000F8FD9 /* MessageCollectionViewItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12102CF7274D8ABE000F8FD9 /* MessageCollectionViewItem.swift */; };
 		1210E6EA274CC18300BF8C9B /* RoundingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1210E6E9274CC18300BF8C9B /* RoundingView.swift */; };
 		121B6FBB273E32D6000DD150 /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = 121B6FBA273E32D5000DD150 /* ArgumentParser */; };
 		121F9310274CF318007F81CC /* MessagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 121F930F274CF318007F81CC /* MessagesViewController.swift */; };
@@ -136,7 +135,6 @@
 		12093A5D281BC11000FAE304 /* BasiliskError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasiliskError.swift; sourceTree = "<group>"; };
 		120A78D72741E9A70099834B /* WebSocket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocket.swift; sourceTree = "<group>"; };
 		120A78DA2741F9BE0099834B /* WebSocketEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketEvent.swift; sourceTree = "<group>"; };
-		12102CF7274D8ABE000F8FD9 /* MessageCollectionViewItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageCollectionViewItem.swift; sourceTree = "<group>"; };
 		1210E6E9274CC18300BF8C9B /* RoundingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundingView.swift; sourceTree = "<group>"; };
 		121F930F274CF318007F81CC /* MessagesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesViewController.swift; sourceTree = "<group>"; };
 		121F9319274CF631007F81CC /* ChannelRef.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelRef.swift; sourceTree = "<group>"; };
@@ -276,7 +274,6 @@
 			isa = PBXGroup;
 			children = (
 				121F930F274CF318007F81CC /* MessagesViewController.swift */,
-				12102CF7274D8ABE000F8FD9 /* MessageCollectionViewItem.swift */,
 				12FA9AE9274D968500079393 /* MessageGroupHeader.swift */,
 				12FA9AEA274D968500079393 /* MessageGroupHeader.xib */,
 				1296E31A2855B0B900CDFD2E /* MessageRow.swift */,
@@ -718,7 +715,6 @@
 				123F622F275183A8001D3D61 /* NavigatorGuildCellView.swift in Sources */,
 				12F4FD84273DFC1900B6AE64 /* AppDelegate.swift in Sources */,
 				121F9310274CF318007F81CC /* MessagesViewController.swift in Sources */,
-				12102CF9274D8ABE000F8FD9 /* MessageCollectionViewItem.swift in Sources */,
 				12D23C1C27540CF200F3D18D /* Accounts.swift in Sources */,
 				1210E6EA274CC18300BF8C9B /* RoundingView.swift in Sources */,
 				129ED06B2818ED4B009FDAD7 /* AccountEditorController.swift in Sources */,

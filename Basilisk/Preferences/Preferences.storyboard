@@ -86,7 +86,7 @@
                                         <rect key="frame" x="190" y="49" width="337" height="296"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <view key="contentView" id="Ruq-Zo-SdY">
-                                            <rect key="frame" x="4" y="5" width="329" height="288"/>
+                                            <rect key="frame" x="3" y="3" width="331" height="290"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <containerView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6c2-Gt-xVg">
@@ -402,19 +402,6 @@
                 <customObject id="KgF-ml-E3H" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2330" y="458"/>
-        </scene>
-        <!--View Controller-->
-        <scene sceneID="Y9q-oC-KAV">
-            <objects>
-                <viewController id="jlN-uL-P0I" sceneMemberID="viewController">
-                    <view key="view" id="xDf-sa-nwi">
-                        <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </view>
-                </viewController>
-                <customObject id="AHZ-O0-zhj" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1662" y="-199"/>
         </scene>
     </scenes>
     <resources>

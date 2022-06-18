@@ -53,8 +53,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "12F4FDBB273DFCD000B6AE64"
-               BuildableName = "ContemptTests.xctest"
-               BlueprintName = "ContemptTests"
+               BuildableName = "SerpentTests.xctest"
+               BlueprintName = "SerpentTests"
                ReferencedContainer = "container:Basilisk.xcodeproj">
             </BuildableReference>
          </TestableReference>

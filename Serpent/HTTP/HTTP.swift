@@ -36,7 +36,6 @@ public class HTTP {
     session.configuration.httpCookieStorage
   }
 
-
   /// A Combine subject for requests sent to Discord.
   public private(set) var requests = PassthroughSubject<(String, HTTPLog), Never>()
 
@@ -48,7 +47,7 @@ public class HTTP {
     self.token = token
     self.disguise = disguise
 
-    log = Logger(subsystem: "zone.slice.Contempt", category: "http")
+    log = Logger(subsystem: "zone.slice.Serpent", category: "http")
 
     let configuration = URLSessionConfiguration.default
     configuration.httpCookieAcceptPolicy = .always
@@ -192,7 +191,7 @@ public class HTTP {
       )
 
     if let string = String(data: data, encoding: .utf8) {
-      log.info("-> \(string)")
+//      log.info("-> \(string)")
     }
 
     if !(200 ..< 300).contains(httpResponse.statusCode) {

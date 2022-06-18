@@ -1,11 +1,11 @@
 import Foundation
-import Contempt
+import Serpent
 
 actor Accounts {
   /// The array of saved accounts.
   static var accounts: [Account.ID: Account] = [:]
 
-  /// The active Contempt `Client` objects for each account.
+  /// The active Serpent `Client` objects for each account.
   static var clients: [Account: Client] = [:]
 
   static func dataDirectory() -> URL {

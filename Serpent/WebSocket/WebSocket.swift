@@ -95,7 +95,7 @@ class WebSocket {
     data: Data,
     context: NWConnection.ContentContext
   ) async throws {
-    // The swift Compiler can't infer the type of the continuation without this.
+    // The Swift compiler can't infer the type of the continuation without this.
     // We could also just say `return` here, but swiftformat removes that since
     // it *should* be redundant here.
     let _: Void =
@@ -117,7 +117,7 @@ class WebSocket {
       }
   }
 
-  /// Send some text through the WebSocket.
+  /// Send text through the WebSocket.
   func send(text: String) async throws {
     let context = NWConnection.ContentContext(
       identifier: "textContext",
@@ -126,7 +126,7 @@ class WebSocket {
     try await send(data: text.data(using: .utf8)!, context: context)
   }
 
-  /// Sends some binary data through the WebSocket.
+  /// Sends binary data through the WebSocket.
   func send(data: Data) async throws {
     let context = NWConnection.ContentContext(
       identifier: "binaryContext",

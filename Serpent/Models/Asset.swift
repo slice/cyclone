@@ -9,8 +9,9 @@ public struct Asset {
   public let hash: String
 
   public func url(withFileExtension fileExtension: String) -> URL {
-    URL(
-      string: "https://cdn.discordapp.com/\(type.rawValue)s/\(parent.uint64)/\(hash).\(fileExtension)"
-    )!
+    Constants.cdnURL
+      .appendingPathComponent("\(type.rawValue)s")
+      .appendingPathComponent(parent.string)
+      .appendingPathComponent("\(hash).\(fileExtension)")
   }
 }

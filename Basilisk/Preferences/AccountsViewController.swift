@@ -1,4 +1,5 @@
 import Cocoa
+import Serpent
 
 enum AccountsSection {
   case main
@@ -75,7 +76,7 @@ class AccountsViewController: NSViewController, NSTableViewDelegate {
       name: "Account",
       token: "",
       gatewayURL: URL(string: "wss://gateway.discord.gg/?encoding=json&v=9")!,
-      baseURL: URL(string: "https://canary.discord.com")!
+      baseURL: Branch.canary.baseURL!
     )
 
     Accounts.accounts[account.id] = account

@@ -1,6 +1,6 @@
 import Cocoa
 import Combine
-import Contempt
+import Serpent
 import SwiftyJSON
 
 @MainActor class ChatViewController: NSSplitViewController {

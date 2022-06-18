@@ -1,5 +1,5 @@
 import Cocoa
-import Contempt
+import Serpent
 import Kingfisher
 
 class IntrinsicImageView: NSImageView {

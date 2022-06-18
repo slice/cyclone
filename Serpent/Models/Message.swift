@@ -1,7 +1,7 @@
 public struct Message: Identifiable {
-  public let id: Snowflake
-  public let content: String
-  public let author: User
+  public var id: Snowflake
+  public var content: String
+  public var author: User
   public var attachments: [Attachment]
 
   public init(id: Snowflake, content: String, author: User) {

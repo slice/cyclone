@@ -1,5 +1,5 @@
 import AppKit
-import Contempt
+import Serpent
 
 @MainActor protocol NavigatorViewControllerDelegate: AnyObject {
   /// Invoked whenever a channel was selected.

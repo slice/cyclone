@@ -19,7 +19,7 @@ public class GatewayConnection {
 
   /// The dispatch queue for handling Discord gateway messages.
   private var dispatchQueue =
-    DispatchQueue(label: "contempt-gateway-connection")
+    DispatchQueue(label: "serpent-gateway-connection")
 
   /// The timer used to manage periodic heartbeating.
   private var heartbeatTimer: AnyCancellable?
@@ -45,7 +45,7 @@ public class GatewayConnection {
   init(token: String, disguise: Disguise) {
     self.token = token
     self.disguise = disguise
-    log = Logger(subsystem: "zone.slice.Contempt", category: "gateway")
+    log = Logger(subsystem: "zone.slice.Serpent", category: "gateway")
   }
 
   /// Connect to the Discord gateway.
@@ -204,7 +204,7 @@ extension GatewayConnection {
         return
       }
 
-      log.info("-> \(text)")
+//      log.info("-> \(text)")
 
       do {
         try await handlePacket(ofJSON: text, raw: data)

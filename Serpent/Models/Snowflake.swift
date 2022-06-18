@@ -1,21 +1,34 @@
-/// Used as a uniquely identifiable descriptor by Discord.
+/// A uniquely identifier used by Discord that doubles as a timestamp.
 ///
-/// For more information, see: https://discord.com/developers/docs/reference#snowflakes
+/// For more information, see [Discord's documentation](https://discord.com/developers/docs/reference#snowflakes).
 public struct Snowflake: Hashable {
+  /// The snowflake as an unsigned 64-bit integer.
   public let uint64: UInt64
 
+  /// Creates a snowflake from a string.
+  ///
+  /// All snowflakes that originate from Discord's gateway or HTTP API are
+  /// strings, because JavaScript lacks the numeric precision for snowflakes.
   public init(string: String) {
     uint64 = UInt64(string)!
   }
 
+  /// Creates a snowflake from an unsigned 64-bit integer.
   public init(uint64: UInt64) {
     self.uint64 = uint64
   }
 
+  /// The timestamp associated with the snowflake.
+  ///
+  /// Snowflakes internally contain a timestamp relative to the Discord epoch.
   public var timestamp: Date {
-    let discordEpoch: Double = 1_420_070_400_000.0
-    let timestamp: Double = (Double(uint64 >> 22) + discordEpoch) / 1000.0
+    let timestamp = (Double(uint64 >> 22) + Double(Constants.discordEpoch)) / 1000.0
     return Date(timeIntervalSince1970: timestamp)
+  }
+
+  /// The snowflake represented textually as a string.
+  public var string: String {
+    String(uint64)
   }
 }
 

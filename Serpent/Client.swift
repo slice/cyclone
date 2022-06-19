@@ -49,11 +49,11 @@ public class Client {
     os: "Mac OS X",
     browser: "Discord Client",
     releaseChannel: .canary,
-    clientVersion: "0.0.284",
-    osVersion: "21.2.0",
-    osArch: "x64",
+    clientVersion: "0.0.62",
+    osVersion: "21.5.0",
+    osArch: "arm64",
     systemLocale: "en-US",
-    clientBuildNumber: 124831,
+    clientBuildNumber: 132857,
     clientEventSource: nil
   )
 

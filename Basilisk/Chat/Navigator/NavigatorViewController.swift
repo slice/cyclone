@@ -19,6 +19,13 @@ class NavigatorViewController: NSViewController {
   }
 
   func reloadWithGuildIDs(_ ids: [Guild.ID]) {
+    if guildIDs.isEmpty && !ids.isEmpty {
+      // If we are receiving our first guilds, automatically expand the guild
+      // list so the user can immediately see them.
+      let guildsItem = NavigatorOutlineItem.rootItems.first { $0.id == "guilds" }
+      outlineView.expandItem(guildsItem)
+    }
+
     guildIDs = ids
     outlineView.reloadData()
   }

@@ -23,6 +23,9 @@
 		1259D6E22817696F006AE1D1 /* Codextended in Frameworks */ = {isa = PBXBuildFile; productRef = 1259D6E12817696F006AE1D1 /* Codextended */; };
 		1259D6E428176E0E006AE1D1 /* AnyGatewayPacket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1259D6E328176E0E006AE1D1 /* AnyGatewayPacket.swift */; };
 		1260A75B275163F00099CA3B /* NavigatorViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1260A75A275163F00099CA3B /* NavigatorViewControllerDelegate.swift */; };
+		126A87FF285E933E0014DC40 /* HTTPMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126A87FE285E933E0014DC40 /* HTTPMethod.swift */; };
+		126A8801285E95B90014DC40 /* HTTPLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126A8800285E95B90014DC40 /* HTTPLog.swift */; };
+		126A8803285E97830014DC40 /* InspectorSummaryCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126A8802285E97830014DC40 /* InspectorSummaryCellView.swift */; };
 		12861A76285DC49C00C85F86 /* Ref.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12861A75285DC49B00C85F86 /* Ref.swift */; };
 		12861A78285DD21600C85F86 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12861A77285DD21600C85F86 /* Constants.swift */; };
 		12894913274C8FA200850D5E /* Guild.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12894912274C8FA200850D5E /* Guild.swift */; };
@@ -147,6 +150,9 @@
 		1259D6D72816AA55006AE1D1 /* Decodable+Int.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Decodable+Int.swift"; sourceTree = "<group>"; };
 		1259D6E328176E0E006AE1D1 /* AnyGatewayPacket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyGatewayPacket.swift; sourceTree = "<group>"; };
 		1260A75A275163F00099CA3B /* NavigatorViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigatorViewControllerDelegate.swift; sourceTree = "<group>"; };
+		126A87FE285E933E0014DC40 /* HTTPMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPMethod.swift; sourceTree = "<group>"; };
+		126A8800285E95B90014DC40 /* HTTPLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPLog.swift; sourceTree = "<group>"; };
+		126A8802285E97830014DC40 /* InspectorSummaryCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InspectorSummaryCellView.swift; sourceTree = "<group>"; };
 		12861A75285DC49B00C85F86 /* Ref.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ref.swift; sourceTree = "<group>"; };
 		12861A77285DD21600C85F86 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		12894912274C8FA200850D5E /* Guild.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Guild.swift; sourceTree = "<group>"; };
@@ -291,6 +297,8 @@
 			isa = PBXGroup;
 			children = (
 				12552C9B273F3DDA007D92B1 /* HTTP.swift */,
+				126A8800285E95B90014DC40 /* HTTPLog.swift */,
+				126A87FE285E933E0014DC40 /* HTTPMethod.swift */,
 				12552C9D273F3FE2007D92B1 /* SpoofedRequestType.swift */,
 			);
 			path = HTTP;
@@ -361,6 +369,7 @@
 				12AB3D7F274C224200934345 /* InspectorController.swift */,
 				12C1D4B82827B9ED005D21A4 /* Inspector.storyboard */,
 				12FAA7642827C29E00205A5B /* InspectorMessagesController.swift */,
+				126A8802285E97830014DC40 /* InspectorSummaryCellView.swift */,
 			);
 			path = Inspector;
 			sourceTree = "<group>";
@@ -722,6 +731,7 @@
 				12F4FD84273DFC1900B6AE64 /* AppDelegate.swift in Sources */,
 				121F9310274CF318007F81CC /* MessagesViewController.swift in Sources */,
 				12D23C1C27540CF200F3D18D /* Accounts.swift in Sources */,
+				126A8803285E97830014DC40 /* InspectorSummaryCellView.swift in Sources */,
 				1210E6EA274CC18300BF8C9B /* RoundingView.swift in Sources */,
 				129ED06B2818ED4B009FDAD7 /* AccountEditorController.swift in Sources */,
 				12FAA7652827C29E00205A5B /* InspectorMessagesController.swift in Sources */,
@@ -767,6 +777,7 @@
 				128C7675273DFF73008FD585 /* Branch.swift in Sources */,
 				12897BF2273E25C700403E5B /* GatewayConnection.swift in Sources */,
 				12861A78285DD21600C85F86 /* Constants.swift in Sources */,
+				126A87FF285E933E0014DC40 /* HTTPMethod.swift in Sources */,
 				129AF795273E653100B3851C /* GatewayPacket.swift in Sources */,
 				12552C9E273F3FE2007D92B1 /* SpoofedRequestType.swift in Sources */,
 				B8EFC2FA2751A9350010B894 /* CurrentUser.swift in Sources */,
@@ -781,6 +792,7 @@
 				12945083274D3A410024C744 /* User.swift in Sources */,
 				12894917274C904E00850D5E /* Asset.swift in Sources */,
 				120A78D82741E9A70099834B /* WebSocket.swift in Sources */,
+				126A8801285E95B90014DC40 /* HTTPLog.swift in Sources */,
 				12894913274C8FA200850D5E /* Guild.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

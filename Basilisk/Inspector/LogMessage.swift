@@ -18,7 +18,5 @@ struct LogMessage: Identifiable {
 
 enum LogVariant {
   case gateway(AnyGatewayPacket)
-
-  // For now.
-  case http(String, String)
+  case http(HTTPLog)
 }

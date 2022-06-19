@@ -12,7 +12,7 @@ enum PacketDirection {
   var systemImageName: String {
     switch self {
     case .received: return "arrow.down"
-    case .sent: return "arrow.up"
+    case .sent: return "paperplane.fill"
     }
   }
 }

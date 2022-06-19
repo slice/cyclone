@@ -8,10 +8,8 @@ enum GatewayInspectorSection {
 fileprivate extension NSUserInterfaceItemIdentifier {
   static let timestamp: Self = .init("timestamp")
   static let direction: Self = .init("direction")
-  static let gatewayOpcode: Self = .init("gatewayOpcode")
   static let gatewaySequence: Self = .init("gatewaySequence")
-  static let gatewayEventName: Self = .init("gatewayEventName")
-  static let http: Self = .init("http")
+  static let summary: Self = .init("summary")
 }
 
 class InspectorMessagesController: NSViewController {
@@ -37,6 +35,12 @@ class InspectorMessagesController: NSViewController {
         return NSView()
       }
 
+      if tableColumn.identifier == .summary {
+        let view = tableView.makeView(withIdentifier: .summary, owner: nil) as! InspectorSummaryCellView
+        view.setup(logMessage: message)
+        return view
+      }
+
       let view = tableView.makeView(withIdentifier: tableColumn.identifier, owner: nil) as! NSTableCellView
       view.textField?.stringValue = ""
 
@@ -44,6 +48,13 @@ class InspectorMessagesController: NSViewController {
       case .timestamp:
         let timestamp = message.timestamp.formatted(date: .omitted, time: .standard)
         view.textField?.stringValue = timestamp
+      case .gatewaySequence:
+        if case .gateway(let packet) = message.variant {
+          view.textField?.stringValue = packet.packet.sequence.map { String(Int($0)) } ?? ""
+        } else {
+          view.textField?.stringValue = ""
+        }
+        view.textField?.alignment = .center
       case .direction:
         let image = NSImage(
           systemSymbolName: message.direction.systemImageName,
@@ -55,27 +66,6 @@ class InspectorMessagesController: NSViewController {
         break
       }
 
-      switch message.variant {
-      case .gateway(let packet):
-        switch tableColumn.identifier {
-        case .gatewayOpcode:
-          view.textField?.stringValue = String(describing: packet.packet.op)
-        case .gatewaySequence:
-          view.textField?.stringValue = packet.packet.sequence.map { String(Int($0)) } ?? ""
-        case .gatewayEventName:
-          view.textField?.stringValue = packet.packet.eventName ?? ""
-        default:
-          return view
-        }
-      case .http(let http, _):
-        switch tableColumn.identifier {
-        case .http:
-          view.textField?.stringValue = http
-        default:
-          return view
-        }
-      }
-
       return view
     }
     tableView.dataSource = dataSource
@@ -83,7 +73,7 @@ class InspectorMessagesController: NSViewController {
     applyInitialSnapshot()
     messagesSink = logStore.objectWillChange.receive(on: RunLoop.main)
       .sink { [weak self] _ in
-        self?.applyInitialSnapshot(animatingDifferences: true)
+        self?.applyInitialSnapshot(animatingDifferences: false)
       }
   }
 

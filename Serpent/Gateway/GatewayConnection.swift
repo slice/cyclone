@@ -24,7 +24,7 @@ public class GatewayConnection {
   /// The timer used to manage periodic heartbeating.
   private var heartbeatTimer: AnyCancellable?
 
-  /// The Combine subscriber used to handle incoming WebSocket events.
+  /// The task used to handle incoming WebSocket events.
   private var eventHandler: Task<Void, Never>?
 
   /// The Discord user token to `IDENTIFY` to the gateway with.
@@ -34,7 +34,7 @@ public class GatewayConnection {
   public private(set) var receivedPackets = PassthroughSubject<AnyGatewayPacket, Never>()
 
   /// A Combine subject for sent gateway packets.
-  public private(set) var sentPackets = PassthroughSubject<(JSON, String), Never>()
+  public private(set) var sentPackets = PassthroughSubject<(json: JSON, raw: String), Never>()
 
   deinit {
     heartbeatTimer = nil

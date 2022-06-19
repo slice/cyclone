@@ -19,8 +19,7 @@ import SwiftyJSON
   var gatewayGuildsSink: AnyCancellable!
   var gatewayUserSettingsSink: AnyCancellable!
   var gatewaySentPacketsSink: AnyCancellable!
-  var httpRequestsSink: AnyCancellable!
-  var httpResponsesSink: AnyCancellable!
+  var httpLoggingSink: AnyCancellable!
 
   var selectedGuildID: Guild.ID?
   var exhaustedMessageHistory = false
@@ -217,20 +216,10 @@ import SwiftyJSON
     let client = Client(branch: .canary, token: token)
     self.client = client
 
-    httpRequestsSink = client.http.requests.receive(on: RunLoop.main)
-      .sink { (method, http) in
-        let body = bodyToString(http.body)
-        let logMessage = LogMessage(direction: .sent, timestamp: Date.now, variant: .http("\(method) \(http.url.absoluteString)", body))
-
-        (NSApp.delegate as! AppDelegate).gatewayLogStore.appendMessage(logMessage)
-      }
-
-    httpResponsesSink = client.http.responses.receive(on: RunLoop.main)
-      .sink { (statusCode, http) in
-        let body = bodyToString(http.body)
-        let logMessage = LogMessage(direction: .received, timestamp: Date.now, variant: .http("\(statusCode) \(http.url.absoluteString)", body))
-
-        (NSApp.delegate as! AppDelegate).gatewayLogStore.appendMessage(logMessage)
+    httpLoggingSink = client.http.subject.receive(on: RunLoop.main)
+      .sink { log in
+        let message = LogMessage(direction: .sent, timestamp: Date.now, variant: .http(log))
+        (NSApp.delegate as! AppDelegate).gatewayLogStore.appendMessage(message)
       }
 
     try await client.http.requestLandingPage()

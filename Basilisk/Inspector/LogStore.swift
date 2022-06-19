@@ -1,11 +1,12 @@
 import Combine
 
 /// A store for logged messages.
-class LogStore: ObservableObject {
-  let objectWillChange = PassthroughSubject<Void, Never>()
-
+class LogStore {
   /// The logged gateway messages.
   var messages: [LogMessage] = []
+
+  /// A Combine subject for incoming log messages.
+  var newMessages = PassthroughSubject<LogMessage, Never>()
 
   init(messages: [LogMessage]) {
     self.messages = messages
@@ -18,12 +19,11 @@ class LogStore: ObservableObject {
   /// Clear all messages from the log store.
   @MainActor func clear() {
     messages.removeAll()
-    objectWillChange.send()
   }
 
   /// Append a new message to the log store.
   @MainActor func appendMessage(_ message: LogMessage) {
     messages.append(message)
-    objectWillChange.send()
+    newMessages.send(message)
   }
 }

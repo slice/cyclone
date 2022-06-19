@@ -25,6 +25,8 @@ class InspectorMessagesController: NSViewController {
   >!
   var messagesSink: AnyCancellable!
 
+  var onSelectedMessage: ((LogMessage.ID?) -> Void)?
+
   override func viewDidLoad() {
     super.viewDidLoad()
 
@@ -71,10 +73,15 @@ class InspectorMessagesController: NSViewController {
     tableView.dataSource = dataSource
 
     applyInitialSnapshot()
-    messagesSink = logStore.objectWillChange.receive(on: RunLoop.main)
-      .sink { [weak self] _ in
-        self?.applyInitialSnapshot(animatingDifferences: false)
+    messagesSink = logStore.newMessages.receive(on: RunLoop.main)
+      .sink { [weak self] message in
+        guard let self = self else { return }
+        var snapshot = self.dataSource.snapshot()
+        snapshot.appendItems([message.id])
+        self.dataSource.apply(snapshot, animatingDifferences: true)
       }
+
+    self.applyInitialSnapshot(animatingDifferences: false)
   }
 
   func applyInitialSnapshot(animatingDifferences: Bool = false) {
@@ -91,11 +98,12 @@ class InspectorMessagesController: NSViewController {
 extension InspectorMessagesController: NSTableViewDelegate {
   func tableViewSelectionDidChange(_: Notification) {
     let selectedRow = tableView.selectedRow
-    guard selectedRow > 0 else { return }
-    let message = logStore.messages[selectedRow]
+    guard selectedRow > 0 else {
+      self.onSelectedMessage?(nil)
+      return
+    }
 
-    //    let raw = message.gatewayPacket?.raw
-    //    messageDetailView.string =
-    //      raw.flatMap { String(data: $0, encoding: .utf8) } ?? "<no raw packet data found>"
+    let message = logStore.messages[selectedRow]
+    self.onSelectedMessage?(message.id)
   }
 }

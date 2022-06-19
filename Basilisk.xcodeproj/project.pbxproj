@@ -26,6 +26,7 @@
 		126A87FF285E933E0014DC40 /* HTTPMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126A87FE285E933E0014DC40 /* HTTPMethod.swift */; };
 		126A8801285E95B90014DC40 /* HTTPLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126A8800285E95B90014DC40 /* HTTPLog.swift */; };
 		126A8803285E97830014DC40 /* InspectorSummaryCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126A8802285E97830014DC40 /* InspectorSummaryCellView.swift */; };
+		126A8805285ECEA40014DC40 /* JSONInspectorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126A8804285ECEA40014DC40 /* JSONInspectorViewController.swift */; };
 		12861A76285DC49C00C85F86 /* Ref.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12861A75285DC49B00C85F86 /* Ref.swift */; };
 		12861A78285DD21600C85F86 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12861A77285DD21600C85F86 /* Constants.swift */; };
 		12894913274C8FA200850D5E /* Guild.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12894912274C8FA200850D5E /* Guild.swift */; };
@@ -153,6 +154,7 @@
 		126A87FE285E933E0014DC40 /* HTTPMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPMethod.swift; sourceTree = "<group>"; };
 		126A8800285E95B90014DC40 /* HTTPLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPLog.swift; sourceTree = "<group>"; };
 		126A8802285E97830014DC40 /* InspectorSummaryCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InspectorSummaryCellView.swift; sourceTree = "<group>"; };
+		126A8804285ECEA40014DC40 /* JSONInspectorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONInspectorViewController.swift; sourceTree = "<group>"; };
 		12861A75285DC49B00C85F86 /* Ref.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ref.swift; sourceTree = "<group>"; };
 		12861A77285DD21600C85F86 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		12894912274C8FA200850D5E /* Guild.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Guild.swift; sourceTree = "<group>"; };
@@ -370,6 +372,7 @@
 				12C1D4B82827B9ED005D21A4 /* Inspector.storyboard */,
 				12FAA7642827C29E00205A5B /* InspectorMessagesController.swift */,
 				126A8802285E97830014DC40 /* InspectorSummaryCellView.swift */,
+				126A8804285ECEA40014DC40 /* JSONInspectorViewController.swift */,
 			);
 			path = Inspector;
 			sourceTree = "<group>";
@@ -728,6 +731,7 @@
 				12FA9AEB274D968500079393 /* MessageGroupHeader.swift in Sources */,
 				12AB3D80274C224200934345 /* InspectorController.swift in Sources */,
 				123F622F275183A8001D3D61 /* NavigatorGuildCellView.swift in Sources */,
+				126A8805285ECEA40014DC40 /* JSONInspectorViewController.swift in Sources */,
 				12F4FD84273DFC1900B6AE64 /* AppDelegate.swift in Sources */,
 				121F9310274CF318007F81CC /* MessagesViewController.swift in Sources */,
 				12D23C1C27540CF200F3D18D /* Accounts.swift in Sources */,

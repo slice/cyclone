@@ -36,7 +36,7 @@ class InspectorController: NSSplitViewController {
 
       switch message.variant {
       case .gateway(let packet):
-        let inspectorItem = self.detailTabViewController.tabViewItems[1]
+        let inspectorItem = self.detailTabViewController.tabViewItems[2]
         let jsonInspectorVC = inspectorItem.viewController! as! JSONInspectorViewController
         jsonInspectorVC.jsonData = packet.packet.eventData
         jsonInspectorVC.reloadData()

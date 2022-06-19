@@ -15,6 +15,7 @@
 		121F9310274CF318007F81CC /* MessagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 121F930F274CF318007F81CC /* MessagesViewController.swift */; };
 		121F931A274CF631007F81CC /* ChannelRef.swift in Sources */ = {isa = PBXBuildFile; fileRef = 121F9319274CF631007F81CC /* ChannelRef.swift */; };
 		121F931C274CF841007F81CC /* NavigatorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 121F931B274CF841007F81CC /* NavigatorViewController.swift */; };
+		123B8132285FAC58008B0145 /* JSONInspector.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 123B8131285FAC58008B0145 /* JSONInspector.storyboard */; };
 		123F622F275183A8001D3D61 /* NavigatorGuildCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 123F622E275183A8001D3D61 /* NavigatorGuildCellView.swift */; };
 		12552C9C273F3DDA007D92B1 /* HTTP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12552C9B273F3DDA007D92B1 /* HTTP.swift */; };
 		12552C9E273F3FE2007D92B1 /* SpoofedRequestType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12552C9D273F3FE2007D92B1 /* SpoofedRequestType.swift */; };
@@ -145,6 +146,7 @@
 		121F930F274CF318007F81CC /* MessagesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesViewController.swift; sourceTree = "<group>"; };
 		121F9319274CF631007F81CC /* ChannelRef.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelRef.swift; sourceTree = "<group>"; };
 		121F931B274CF841007F81CC /* NavigatorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigatorViewController.swift; sourceTree = "<group>"; };
+		123B8131285FAC58008B0145 /* JSONInspector.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = JSONInspector.storyboard; sourceTree = "<group>"; };
 		123F622E275183A8001D3D61 /* NavigatorGuildCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigatorGuildCellView.swift; sourceTree = "<group>"; };
 		12552C9B273F3DDA007D92B1 /* HTTP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTP.swift; sourceTree = "<group>"; };
 		12552C9D273F3FE2007D92B1 /* SpoofedRequestType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpoofedRequestType.swift; sourceTree = "<group>"; };
@@ -373,6 +375,7 @@
 				12FAA7642827C29E00205A5B /* InspectorMessagesController.swift */,
 				126A8802285E97830014DC40 /* InspectorSummaryCellView.swift */,
 				126A8804285ECEA40014DC40 /* JSONInspectorViewController.swift */,
+				123B8131285FAC58008B0145 /* JSONInspector.storyboard */,
 			);
 			path = Inspector;
 			sourceTree = "<group>";
@@ -680,6 +683,7 @@
 				12F4FD8B273DFC1B00B6AE64 /* Main.storyboard in Resources */,
 				12C1D4B92827B9ED005D21A4 /* Inspector.storyboard in Resources */,
 				1296E31D2855B0C600CDFD2E /* MessageRow.xib in Resources */,
+				123B8132285FAC58008B0145 /* JSONInspector.storyboard in Resources */,
 				12FA9AEC274D968500079393 /* MessageGroupHeader.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

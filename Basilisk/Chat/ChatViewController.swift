@@ -142,8 +142,12 @@ import SwiftyJSON
       )!
 
       Task { [request] in
-        let messages: [Message] = try! await client.http.requestDecoding(request, withSpoofedHeadersFor: .xhr)
-        self.messagesViewController.applyInitialMessages(messages)
+        do {
+          let messages: [Message] = try await client.http.requestDecoding(request, withSpoofedHeadersFor: .xhr)
+          self.messagesViewController.applyInitialMessages(messages)
+        } catch {
+          NSLog("failed to fetch messages: \(String(describing: error))")
+        }
       }
     }
   }

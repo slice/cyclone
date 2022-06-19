@@ -11,11 +11,20 @@ class AppDelegate: NSObject, NSApplicationDelegate {
   func applicationDidFinishLaunching(_: Notification) {
     do {
       if FileManager.default.fileExists(atPath: Accounts.defaultAccountsPath.path) {
+        NSLog("reading accounts")
         try Accounts.read()
       }
     } catch {
       NSApp.presentError(CocoaError(.fileReadCorruptFile,
                                     userInfo: [NSURLErrorKey: Accounts.defaultAccountsPath]))
+    }
+
+    if let viewController = activeViewControllers.first,
+       let account = Accounts.accounts.first?.value {
+      NSLog("automatically connecting with account: \(account.name)")
+      Task {
+        try! await viewController.connect(authorizingWithToken: account.token)
+      }
     }
   }
 

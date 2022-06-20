@@ -60,7 +60,7 @@
                                                                         </textField>
                                                                     </subviews>
                                                                     <visibilityPriorities>
-                                                                        <real value="1000"/>
+                                                                        <integer value="1000"/>
                                                                         <integer value="1000"/>
                                                                     </visibilityPriorities>
                                                                     <customSpacing>

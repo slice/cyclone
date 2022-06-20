@@ -2,8 +2,9 @@ import Cocoa
 import Combine
 import Serpent
 import SwiftyJSON
+import os.log
 
-@MainActor class ChatViewController: NSSplitViewController {
+final class ChatViewController: NSSplitViewController {
   var navigatorViewController: NavigatorViewController {
     splitViewItems[0].viewController as! NavigatorViewController
   }
@@ -29,8 +30,10 @@ import SwiftyJSON
     client?.guilds.first { $0.id == selectedGuildID }
   }
 
+  let log = Logger(subsystem: "zone.slice.Basilisk", category: "chat-view-controller")
+
   deinit {
-    NSLog("ViewController deinit")
+    NSLog("ChatViewController deinit")
 
     // TODO(skip): The fact that disconnection happens asynchronously isn't
     // ideal, because it means that we can't guarantee a disconnect before
@@ -46,47 +49,12 @@ import SwiftyJSON
     splitViewItems[1].titlebarSeparatorStyle = .shadow
 
     navigatorViewController.delegate = self
-
-    messagesViewController.onRunCommand = { [weak self] command, args in
-      guard let self = self else { return }
-
-      Task {
-        do {
-          try await self.handleCommand(named: command, arguments: args)
-        } catch {
-          self.messagesViewController
-            .appendToConsole(
-              line: "[system] failed to handle command: \(error)"
-            )
-        }
-      }
-    }
-    messagesViewController.onSendMessage = { [weak self] content in
-      if let self = self, let focusedChannelID = self.focusedChannelID,
-         let client = self.client
-      {
-        let request = try! client.http.apiRequest(
-          to: "/channels/\(focusedChannelID)/messages",
-          method: .post,
-          body: [
-            "content": content,
-            "tts": false,
-            "nonce": String(Int.random(in: 0...1_000_000_000))
-          ]
-        )!
-        Task { [request] in
-          try! await client.http.request(request, withSpoofedHeadersFor: .xhr)
-        }
-      }
-    }
-    messagesViewController.onScrolledNearTop = { [weak self] in
-      self?.requestedToLoadMoreHistory()
-    }
+    messagesViewController.delegate = self
   }
 
   func requestedToLoadMoreHistory() {
     guard !exhaustedMessageHistory else {
-      NSLog("message history is exhausted, not loading more posts")
+      log.info("message history is exhausted, not loading more posts")
       return
     }
 
@@ -96,7 +64,7 @@ import SwiftyJSON
       return
     }
 
-    NSLog("requesting more messages")
+    log.debug("requesting more messages")
     requestingMoreHistory = true
     let limit = 50
 
@@ -117,7 +85,7 @@ import SwiftyJSON
       self.messagesViewController.prependOldMessages(messages)
 
       if messages.count < limit {
-        NSLog("received %@ messages, history is exhausted")
+        log.notice("received \(messages.count) messages (limit: \(limit)), history is exhausted")
         exhaustedMessageHistory = true
       }
 
@@ -146,7 +114,8 @@ import SwiftyJSON
           let messages: [Message] = try await client.http.requestDecoding(request, withSpoofedHeadersFor: .xhr)
           self.messagesViewController.applyInitialMessages(messages)
         } catch {
-          NSLog("failed to fetch messages: \(String(describing: error))")
+          log.error("failed to fetch messages: \(String(describing: error))")
+          self.messagesViewController.applyInitialMessages([])
         }
       }
     }
@@ -315,19 +284,16 @@ import SwiftyJSON
 
   /// Disconnect from the gateway and tear down the Discord client.
   func tearDownClient() async throws {
-    NSLog("tearing down client")
+    log.notice("tearing down client")
     gatewayPacketHandler?.cancel()
 
     // Disconnect from the Discord gateway with a 1000 close code.
     do {
       try await client?.disconnect()
     } catch {
-      NSLog(
-        "failed to disconnect, dealloc-ing anyways: %@",
-        error.localizedDescription
-      )
+      log.error("failed to disconnect, dealloc-ing anyways: \(error)")
     }
-    NSLog("disconnect")
+    log.info("disconnected")
 
     // Immediately (try to) dealloc the client here. Some Combine subscribers
     // will not get a chance to respond to the disconnect, but that's fine since
@@ -340,6 +306,50 @@ import SwiftyJSON
     messagesViewController.applyInitialMessages([])
     view.window?.title = "Basilisk"
     view.window?.subtitle = ""
+  }
+}
+
+extension ChatViewController: MessagesViewControllerDelegate {
+  func messagesController(_ messagesController: MessagesViewController, commandInvoked command: String, arguments: [String]) {
+    Task {
+      do {
+        try await handleCommand(named: command, arguments: arguments)
+      } catch {
+        log.error("failed to handle command: \(error)")
+        self.messagesViewController
+          .appendToConsole(
+            line: "[system] failed to handle command: \(error)"
+          )
+      }
+    }
+  }
+
+  func messagesController(_ messagesController: MessagesViewController, messageSent message: String) {
+    guard let focusedChannelID = self.focusedChannelID, let client = self.client else {
+      return
+    }
+
+    Task {
+      do {
+        let request = try client.http.apiRequest(
+          to: "/channels/\(focusedChannelID)/messages",
+          method: .post,
+          body: [
+            "content": message,
+            "tts": false,
+            "nonce": String(Int.random(in: 0...1_000_000_000))
+          ]
+        )!
+        let _ = try await client.http.request(request, withSpoofedHeadersFor: .xhr)
+      } catch {
+        log.error("failed to send message: \(error)")
+        messagesViewController.appendToConsole(line: "[system] failed to send message: \(error)")
+      }
+    }
+  }
+
+  func messagesControllerDidScrollNearTop(_ messagesController: MessagesViewController) {
+    requestedToLoadMoreHistory()
   }
 }
 

@@ -63,6 +63,12 @@
 		12D23C1F2754127000F3D18D /* Preferences.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 12D23C1E2754127000F3D18D /* Preferences.storyboard */; };
 		12D23C2127541C0B00F3D18D /* WindowTitleUpdatingTabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12D23C2027541C0B00F3D18D /* WindowTitleUpdatingTabViewController.swift */; };
 		12D23C232754204B00F3D18D /* AccountsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12D23C222754204B00F3D18D /* AccountsViewController.swift */; };
+		12DAC9DB28611649006B3B1D /* Messages.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 12DAC9DA28611649006B3B1D /* Messages.storyboard */; };
+		12DAC9DD286116F8006B3B1D /* NSScrollView+Scrolling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12DAC9DC286116F8006B3B1D /* NSScrollView+Scrolling.swift */; };
+		12DAC9DF286117A7006B3B1D /* MessagesViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12DAC9DE286117A7006B3B1D /* MessagesViewControllerDelegate.swift */; };
+		12DAC9E128611B10006B3B1D /* MessagesViewController+Data Source.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12DAC9E028611B10006B3B1D /* MessagesViewController+Data Source.swift */; };
+		12DAC9E328611BAD006B3B1D /* MessagesViewController+Testing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12DAC9E228611BAD006B3B1D /* MessagesViewController+Testing.swift */; };
+		12DAC9E5286127B4006B3B1D /* MessagesViewController+Messages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12DAC9E4286127B4006B3B1D /* MessagesViewController+Messages.swift */; };
 		12DCEAA32751E38500A0A626 /* NavigatorOutlineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12DCEAA22751E38500A0A626 /* NavigatorOutlineItem.swift */; };
 		12DCEAA52751E60C00A0A626 /* ChannelSorting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12DCEAA42751E60C00A0A626 /* ChannelSorting.swift */; };
 		12E80A5A2752AC1F00ACD979 /* NSView+Nib.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12E80A592752AC1F00ACD979 /* NSView+Nib.swift */; };
@@ -188,6 +194,12 @@
 		12D23C1E2754127000F3D18D /* Preferences.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Preferences.storyboard; sourceTree = "<group>"; };
 		12D23C2027541C0B00F3D18D /* WindowTitleUpdatingTabViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowTitleUpdatingTabViewController.swift; sourceTree = "<group>"; };
 		12D23C222754204B00F3D18D /* AccountsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountsViewController.swift; sourceTree = "<group>"; };
+		12DAC9DA28611649006B3B1D /* Messages.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Messages.storyboard; sourceTree = "<group>"; };
+		12DAC9DC286116F8006B3B1D /* NSScrollView+Scrolling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSScrollView+Scrolling.swift"; sourceTree = "<group>"; };
+		12DAC9DE286117A7006B3B1D /* MessagesViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesViewControllerDelegate.swift; sourceTree = "<group>"; };
+		12DAC9E028611B10006B3B1D /* MessagesViewController+Data Source.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MessagesViewController+Data Source.swift"; sourceTree = "<group>"; };
+		12DAC9E228611BAD006B3B1D /* MessagesViewController+Testing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MessagesViewController+Testing.swift"; sourceTree = "<group>"; };
+		12DAC9E4286127B4006B3B1D /* MessagesViewController+Messages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MessagesViewController+Messages.swift"; sourceTree = "<group>"; };
 		12DCEAA22751E38500A0A626 /* NavigatorOutlineItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigatorOutlineItem.swift; sourceTree = "<group>"; };
 		12DCEAA42751E60C00A0A626 /* ChannelSorting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelSorting.swift; sourceTree = "<group>"; };
 		12E80A592752AC1F00ACD979 /* NSView+Nib.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSView+Nib.swift"; sourceTree = "<group>"; };
@@ -288,6 +300,11 @@
 			isa = PBXGroup;
 			children = (
 				121F930F274CF318007F81CC /* MessagesViewController.swift */,
+				12DAC9E4286127B4006B3B1D /* MessagesViewController+Messages.swift */,
+				12DAC9E028611B10006B3B1D /* MessagesViewController+Data Source.swift */,
+				12DAC9E228611BAD006B3B1D /* MessagesViewController+Testing.swift */,
+				12DAC9DE286117A7006B3B1D /* MessagesViewControllerDelegate.swift */,
+				12DAC9DA28611649006B3B1D /* Messages.storyboard */,
 				12FA9AE9274D968500079393 /* MessageGroupHeader.swift */,
 				12FA9AEA274D968500079393 /* MessageGroupHeader.xib */,
 				1296E31A2855B0B900CDFD2E /* MessageRow.swift */,
@@ -405,6 +422,7 @@
 				129C11C2274DBB3A00AA7E82 /* ImageCache.swift */,
 				12E80A592752AC1F00ACD979 /* NSView+Nib.swift */,
 				12093A5D281BC11000FAE304 /* BasiliskError.swift */,
+				12DAC9DC286116F8006B3B1D /* NSScrollView+Scrolling.swift */,
 			);
 			path = Support;
 			sourceTree = "<group>";
@@ -680,6 +698,7 @@
 			files = (
 				12F4FD88273DFC1B00B6AE64 /* Assets.xcassets in Resources */,
 				12D23C1F2754127000F3D18D /* Preferences.storyboard in Resources */,
+				12DAC9DB28611649006B3B1D /* Messages.storyboard in Resources */,
 				12F4FD8B273DFC1B00B6AE64 /* Main.storyboard in Resources */,
 				12C1D4B92827B9ED005D21A4 /* Inspector.storyboard in Resources */,
 				1296E31D2855B0C600CDFD2E /* MessageRow.xib in Resources */,
@@ -725,17 +744,21 @@
 			files = (
 				129C11C3274DBB3A00AA7E82 /* ImageCache.swift in Sources */,
 				121F931A274CF631007F81CC /* ChannelRef.swift in Sources */,
+				12DAC9DD286116F8006B3B1D /* NSScrollView+Scrolling.swift in Sources */,
 				12B99C2427410B010048D2DB /* PacketDirection.swift in Sources */,
 				12D23C2127541C0B00F3D18D /* WindowTitleUpdatingTabViewController.swift in Sources */,
 				12E80A5A2752AC1F00ACD979 /* NSView+Nib.swift in Sources */,
 				12F4FD86273DFC1900B6AE64 /* ChatViewController.swift in Sources */,
+				12DAC9E128611B10006B3B1D /* MessagesViewController+Data Source.swift in Sources */,
 				121F931C274CF841007F81CC /* NavigatorViewController.swift in Sources */,
+				12DAC9E5286127B4006B3B1D /* MessagesViewController+Messages.swift in Sources */,
 				1260A75B275163F00099CA3B /* NavigatorViewControllerDelegate.swift in Sources */,
 				1296E31B2855B0B900CDFD2E /* MessageRow.swift in Sources */,
 				12FA9AEB274D968500079393 /* MessageGroupHeader.swift in Sources */,
 				12AB3D80274C224200934345 /* InspectorController.swift in Sources */,
 				123F622F275183A8001D3D61 /* NavigatorGuildCellView.swift in Sources */,
 				126A8805285ECEA40014DC40 /* JSONInspectorViewController.swift in Sources */,
+				12DAC9E328611BAD006B3B1D /* MessagesViewController+Testing.swift in Sources */,
 				12F4FD84273DFC1900B6AE64 /* AppDelegate.swift in Sources */,
 				121F9310274CF318007F81CC /* MessagesViewController.swift in Sources */,
 				12D23C1C27540CF200F3D18D /* Accounts.swift in Sources */,
@@ -743,6 +766,7 @@
 				1210E6EA274CC18300BF8C9B /* RoundingView.swift in Sources */,
 				129ED06B2818ED4B009FDAD7 /* AccountEditorController.swift in Sources */,
 				12FAA7652827C29E00205A5B /* InspectorMessagesController.swift in Sources */,
+				12DAC9DF286117A7006B3B1D /* MessagesViewControllerDelegate.swift in Sources */,
 				12093A5E281BC11000FAE304 /* BasiliskError.swift in Sources */,
 				12DCEAA52751E60C00A0A626 /* ChannelSorting.swift in Sources */,
 				1297448B2857415200CDB201 /* LoadingAttachmentView.swift in Sources */,

@@ -1,31 +1,11 @@
 import Cocoa
 import Combine
-import Serpent
 import CoreImage
 import CoreImage.CIFilterBuiltins
-import os.log
-import OrderedCollections
 import Kingfisher
-
-private extension NSScrollView {
-  var scrollPosition: CGFloat {
-    return contentView.bounds.origin.y
-  }
-
-  var isScrolledToBottom: Bool {
-    return scrollPosition + contentView.bounds.height == documentView!.frame.height
-  }
-
-  func scrollToEnd() {
-    let totalHeight = documentView!.frame.height
-    let clipViewHeight = contentView.bounds.height
-    contentView.scroll(to: NSPoint(x: 0.0, y: totalHeight - clipViewHeight))
-  }
-
-  var scrollPercentage: Double {
-    return contentView.bounds.minY / (documentView!.frame.height - contentView.bounds.height)
-  }
-}
+import OrderedCollections
+import Serpent
+import os.log
 
 struct MessagesSection: Hashable {
   let authorID: User.ID
@@ -49,80 +29,51 @@ typealias MessagesSnapshot =
     Message.ID
   >
 
-private extension NSUserInterfaceItemIdentifier {
+extension NSUserInterfaceItemIdentifier {
   static let message: Self = .init("message")
   static let messageGroupHeader: Self = .init("message-group-header")
 }
 
-class MessagesViewController: NSViewController {
+final class MessagesViewController: NSViewController {
   @IBOutlet var scrollView: NSScrollView!
   @IBOutlet var tableView: NSTableView!
 
   /// The ordered set of messages this view controller is showing, ordered from
   /// oldest to newest.
-  var messages: OrderedDictionary<Message.ID, Message> = [:]
+  public var messages: OrderedDictionary<Message.ID, Message> = [:]
 
   /// The ID of the oldest message this view controller is showing.
   public var oldestMessageID: Message.ID? { messages.elements[0].value.id }
 
-  /// Called when the user tries to invoke a command.
-  var onRunCommand: ((_ command: String, _ arguments: [String]) -> Void)?
-
-  /// Called when the user tries to send a message.
-  var onSendMessage: ((_ content: String) -> Void)?
-
-  /// Called when the user scrolls near the top of the message history.
-  var onScrolledNearTop: (() -> Void)?
+  /// The delegate of the messages view controller.
+  public weak var delegate: MessagesViewControllerDelegate?
 
   /// A message view that is used to measure message heights. It is never
   /// drawn to the screen.
-  private var messageSizingTemplate: MessageRow!
-  private var groupRowHeight: CGFloat!
+  var messageSizingTemplate: MessageRow!
 
-  private var dataSource: MessagesDiffableDataSource!
-  private var clipViewBoundsChangedSink: AnyCancellable!
+  /// The height of group rows, in points.
+  static let groupRowHeight: CGFloat = 45.0
 
-  var signposter = OSSignposter()
+  var dataSource: MessagesDiffableDataSource!
+  var clipViewBoundsChangedSink: AnyCancellable!
+
+  let log = Logger(subsystem: "zone.slice.Basilisk", category: "messages-view-controller")
+  lazy var signposter = {
+    OSSignposter(logger: log)
+  }()
 
   override func viewDidLoad() {
     super.viewDidLoad()
 
-    self.groupRowHeight = 45.0
+    setupDataSource()
 
-    dataSource =
-      MessagesDiffableDataSource(tableView: tableView) { [weak self] tableView, tableColumn, _, snowflake in
-        guard let self = self else { return .init(frame: .zero) }
-
-        let item = tableView.makeView(withIdentifier: .message, owner: nil) as! MessageRow
-
-        guard let message = self.messages[snowflake] else {
-          NSLog("tried to make item for message not present in state")
-          return .init(frame: .zero)
-        }
-
-        item.configure(withMessage: message)
-        return item
-      }
-
-    dataSource.sectionHeaderViewProvider = { [weak self] collectionView, row, section in
-      guard let self = self else { return .init(frame: .zero) }
-      let item = self.tableView.makeView(withIdentifier: .messageGroupHeader, owner: nil) as! MessageGroupHeader
-      let message = self.messages[section.firstMessageID]!
-      item.groupAuthorTextField.stringValue = message.author.username
-      item.groupAvatarRounding.radius = 10.0
-      if let avatar = message.author.avatar {
-        item.groupAvatarImageView.kf.setImage(with: avatar.url(withFileExtension: "png"))
-      }
-      item.groupTimestampTextField.stringValue = message.id.timestamp.formatted(date: .omitted, time: .shortened)
-      return item
-    }
-
-    tableView.dataSource = dataSource
     tableView.delegate = self
     tableView.register(MessageRow.nib!, forIdentifier: .message)
     tableView.register(MessageGroupHeader.nib!, forIdentifier: .messageGroupHeader)
 
-    self.messageSizingTemplate = (tableView.makeView(withIdentifier: .message, owner: nil)! as! MessageRow)
+    self.messageSizingTemplate =
+      (tableView.makeView(withIdentifier: .message, owner: nil)! as! MessageRow)
 
     let clipView = scrollView.contentView
     clipView.postsBoundsChangedNotifications = true
@@ -133,145 +84,37 @@ class MessagesViewController: NSViewController {
     .sink { [weak self] _ in
       guard let self = self else { return }
       if self.scrollView.scrollPercentage < 0.25 {
-        self.onScrolledNearTop?()
+        self.delegate?.messagesControllerDidScrollNearTop(self)
       }
+    }
+
+    if UserDefaults.standard.bool(forKey: "BSLKApplySampleMessages") {
+      applySampleData()
     }
   }
 
-  // MARK: - Applying Messages
-
-  /// Applies an array of initial `Message` objects to be displayed in the
-  /// view controller.
+  /// Make changes to the scroll view while preserving what messages are
+  /// currently onscreen.
   ///
-  /// The most recent messages should appear first.
-  public func applyInitialMessages(_ messages: [Message]) {
-    var snapshot = NSDiffableDataSourceSnapshot<MessagesSection, Message.ID>()
-
-    if messages.isEmpty {
-      self.messages = [:]
-      dataSource.apply(snapshot, animatingDifferences: false)
-      return
-    }
-
-    // We want the recent messages to appear at the bottom of the scroll view,
-    // so we have to reverse the array here.
-    self.messages = OrderedDictionary(
-      messages.map { message in (message.id, message) }.reversed(),
-      uniquingKeysWith: { (left, right) in left }
-    )
-
-    let firstMessage = self.messages.elements[0].value
-    var currentSection = MessagesSection(firstMessage: firstMessage)
-    snapshot.appendSections([currentSection])
-
-    for message in self.messages.values {
-      if message.author.id != currentSection.authorID {
-        // author has changed, so create a new section (message group)
-        currentSection = MessagesSection(firstMessage: message)
-        snapshot.appendSections([currentSection])
-      }
-
-      snapshot.appendItems([message.id], toSection: currentSection)
-    }
-
-    applySnapshot(snapshot, alwaysScrollToBottom: true)
-  }
-
-  /// Appends a newly received message to the view controller and updates the
-  /// UI accordingly.
-  public func appendNewlyReceivedMessage(_ message: Message) {
-    var snapshot = dataSource.snapshot()
-
-    var lastSection = snapshot.sectionIdentifiers.last
-
-    if lastSection?.authorID != message.author.id || lastSection == nil {
-      // author differs or this is the first message, we should start a new
-      // message group
-      lastSection = MessagesSection(firstMessage: message)
-      snapshot.appendSections([lastSection!])
-    }
-
-    snapshot.appendItems([message.id], toSection: lastSection!)
-
-    messages[message.id] = message
-    applySnapshot(snapshot)
-  }
-
-  /// Prepends old messages to the view controller.
-  public func prependOldMessages(_ messagesNewestFirst: [Message]) {
-    var snapshot = dataSource.snapshot()
-
-    guard !messages.isEmpty else { return }
-
-    let messages: [Message] = messagesNewestFirst.reversed()
-
-    if snapshot.sectionIdentifiers.isEmpty {
-      // if we have no section identifiers, just apply the messages as if they
-      // were an initial listing
-      applyInitialMessages(messages)
-      return
-    }
-
-    let firstSection = snapshot.sectionIdentifiers.first!
-    var section = MessagesSection(firstMessage: messages.first!)
-    snapshot.insertSections([section], beforeSection: firstSection)
-
-    for message in messages {
-      if message.author.id != section.authorID {
-        // author differs, start a new message group
-        let newSection = MessagesSection(firstMessage: message)
-        if snapshot.sectionIdentifiers.contains(newSection) {
-          fatalError("\(newSection) was already in the snapshot -- this should never happen")
-        }
-        snapshot.insertSections([newSection], afterSection: section)
-        section = newSection
-      }
-
-      snapshot.appendItems([message.id], toSection: section)
-    }
-
-    for message in messagesNewestFirst {
-      self.messages.updateValue(message, forKey: message.id, insertingAt: 0)
-    }
-
+  /// Before the closure is called, the scroll position of the scroll view will
+  /// be saved. It will be restored after the closure returns, accounting for
+  /// any possible changes in the content height.
+  func preserveScrollPosition(whileMakingChanges changes: @escaping () -> Void) {
     let scrollView = tableView.enclosingScrollView!
     let savedScrollPosition = scrollView.scrollPosition
     let savedContentHeight = scrollView.documentView!.bounds.height
-    applySnapshot(snapshot) {
-      // when prepending messages, the scroll view ends up becoming positioned
-      // in a similarly to where it was before we prepended the messages
-      // at all. i.e. if you are near the top, after we prepend a chunk of
-      // messages, we will still be near the top. thus, all of the messages
-      // that were previously onscreen will all move downwards and offscreen
-      // after prepending.
-      //
-      // to prevent loading messages infinitely when we scroll near the
-      // top of the message view, reposition the scroll view to be near the
-      // oldest messages onscreen from before the load. this just "feels better",
-      // too.
-      let newHeight = scrollView.documentView!.bounds.height
-      guard newHeight != savedContentHeight else {
-        NSLog("[warning] no height was added after prepending older messages, this should never happen")
-        return
-      }
 
-      let newPosition = (newHeight - savedContentHeight) + savedScrollPosition
-      scrollView.contentView.scroll(to: NSPoint(x: 0.0, y: newPosition))
-      NSLog("adjusting scroll offset from \(savedScrollPosition) to \(newPosition)")
-    }
-  }
+    changes()
 
-  private func applySnapshot(_ snapshot: MessagesSnapshot,
-                             alwaysScrollToBottom: Bool = false,
-                             completion: (() -> Void)? = nil) {
-    let wasScrolledToBottom = alwaysScrollToBottom ? true : scrollView
-      .isScrolledToBottom
-    dataSource.apply(snapshot, animatingDifferences: false) { [weak self] in
-      if wasScrolledToBottom {
-        self?.scrollView.scrollToEnd()
-      }
-      completion?()
+    let newHeight = scrollView.documentView!.bounds.height
+    guard newHeight != savedContentHeight else {
+      self.log.warning("the height didn't change after making changes")
+      return
     }
+
+    let newPosition = (newHeight - savedContentHeight) + savedScrollPosition
+    scrollView.contentView.scroll(to: NSPoint(x: 0.0, y: newPosition))
+    self.log.debug("adjusting scroll position: \(savedScrollPosition) -> \(newPosition)")
   }
 
   func appendToConsole(line _: String) {
@@ -287,32 +130,41 @@ class MessagesViewController: NSViewController {
     if fieldText.starts(with: "/") {
       let tokens = fieldText.trimmingCharacters(in: .whitespacesAndNewlines)
         .split(separator: " ")
-      let firstToken = tokens.first!
-      let firstTokenWithoutSlash =
-        firstToken[firstToken.index(after: firstToken.startIndex) ..< firstToken
-          .endIndex]
 
-      onRunCommand?(
-        String(firstTokenWithoutSlash),
-        tokens.dropFirst().map(String.init)
-      )
+      let firstToken = tokens.first!
+      let command = String(firstToken.dropFirst(1))
+
+      delegate?.messagesController(
+        self, commandInvoked: command,
+        arguments: tokens.dropFirst().map(String.init))
       return
     }
 
-    onSendMessage?(fieldText)
+    delegate?.messagesController(self, messageSent: fieldText)
   }
 
-  private func measureRowHeight(forMessage message: Message) -> Double {
+  /// Measures the height of a message as it would appear in the table view.
+  func measureRowHeight(forMessage message: Message) -> Double {
+    let signpostID = signposter.makeSignpostID()
+    let signpostName: StaticString = "Message Height Measurement"
+    let state = signposter.beginInterval(signpostName, id: signpostID)
+
     messageSizingTemplate.prepareForReuse()
+    signposter.emitEvent("Prepare for reuse", id: signpostID)
     messageSizingTemplate.configure(withMessage: message, forMeasurements: true)
-    return messageSizingTemplate.fittingSize.height
+    signposter.emitEvent("View configuration", id: signpostID)
+    let height = messageSizingTemplate.fittingSize.height
+    signposter.emitEvent("Measurement", id: signpostID)
+    signposter.endInterval(signpostName, state)
+
+    return height
   }
 }
 
 extension MessagesViewController: NSTableViewDelegate {
   func tableView(_ tableView: NSTableView, heightOfRow row: Int) -> CGFloat {
     if case .some(_) = dataSource.sectionIdentifier(forRow: row) {
-      return self.groupRowHeight
+      return Self.groupRowHeight
     }
     let messageID = dataSource.itemIdentifier(forRow: row)!
     let message = self.messages[messageID]!

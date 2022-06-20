@@ -1,6 +1,18 @@
 import Cocoa
-import Serpent
 import OrderedCollections
+import Serpent
+
+enum ScrollingBehavior {
+  /// Preserves the scroll position by summing the added height of the scroll
+  /// view's content view with the saved scroll position.
+  case addingHeightDifference
+
+  /// Preserves the scroll position by setting it back to the saved value.
+  case usingSavedPosition
+
+  /// Always scrolls to the bottom.
+  case toBottom
+}
 
 extension MessagesViewController {
   /// Applies an array of initial `Message` objects to be displayed in the
@@ -37,7 +49,7 @@ extension MessagesViewController {
       snapshot.appendItems([message.id], toSection: currentSection)
     }
 
-    applySnapshot(snapshot, alwaysScrollToBottom: true)
+    applySnapshot(snapshot, scrolling: .toBottom)
   }
 
   /// Prepends old messages to the view controller.
@@ -81,10 +93,8 @@ extension MessagesViewController {
     // messages that are currently onscreen downwards. Not only is this visually
     // disorienting, but it can cause the an infinite loop of loading new
     // messages as the scroll position is still near the top. Preserve the
-    // scroll position to prevent this.
-    preserveScrollPosition {
-      self.applySnapshot(snapshot)
-    }
+    // effective scroll position to prevent this by adding the new height.
+    applySnapshot(snapshot, scrolling: .addingHeightDifference)
   }
 
   /// Appends a newly received message to the view controller.
@@ -103,19 +113,25 @@ extension MessagesViewController {
     snapshot.appendItems([message.id], toSection: lastSection!)
 
     messages[message.id] = message
-    applySnapshot(snapshot)
+
+    // Because the newly received message would be below the clip view, restore
+    // the saved scroll position without performing additional calculations.
+    applySnapshot(snapshot, scrolling: .usingSavedPosition)
   }
 
-  private func applySnapshot(_ snapshot: MessagesSnapshot,
-    alwaysScrollToBottom: Bool = false,
+  private func applySnapshot(
+    _ snapshot: MessagesSnapshot,
+    scrolling scrollingBehavior: ScrollingBehavior,
     completion: (() -> Void)? = nil
   ) {
     let scrolledToBottom = scrollView.isScrolledToBottom
-    dataSource.apply(snapshot, animatingDifferences: false) { [weak self] in
-      if alwaysScrollToBottom || scrolledToBottom {
-        self?.scrollView.scrollToEnd()
+
+    // If we're scrolled to the bottom, pin the scroll view to the bottom.
+    preserveScrollPosition(by: scrolledToBottom ? .toBottom : scrollingBehavior) { restoreScrollPosition in
+      self.dataSource.apply(snapshot, animatingDifferences: false) {
+        restoreScrollPosition()
+        completion?()
       }
-      completion?()
     }
   }
 }

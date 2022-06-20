@@ -99,22 +99,39 @@ final class MessagesViewController: NSViewController {
   /// Before the closure is called, the scroll position of the scroll view will
   /// be saved. It will be restored after the closure returns, accounting for
   /// any possible changes in the content height.
-  func preserveScrollPosition(whileMakingChanges changes: @escaping () -> Void) {
+  func preserveScrollPosition(by behavior: ScrollingBehavior,
+                              whileMakingChanges changes: @escaping (@escaping (() -> Void)) -> Void) {
     let scrollView = tableView.enclosingScrollView!
     let savedScrollPosition = scrollView.scrollPosition
     let savedContentHeight = scrollView.documentView!.bounds.height
 
-    changes()
+    changes({
+      let newHeight = scrollView.documentView!.bounds.height
+      guard newHeight != savedContentHeight else {
+        self.log.warning("the height didn't change after making changes")
+        return
+      }
 
-    let newHeight = scrollView.documentView!.bounds.height
-    guard newHeight != savedContentHeight else {
-      self.log.warning("the height didn't change after making changes")
-      return
-    }
+      let newPosition: Double
 
-    let newPosition = (newHeight - savedContentHeight) + savedScrollPosition
-    scrollView.contentView.scroll(to: NSPoint(x: 0.0, y: newPosition))
-    self.log.debug("adjusting scroll position: \(savedScrollPosition) -> \(newPosition)")
+      switch behavior {
+      case .addingHeightDifference:
+        // Scroll to where we were before, but also accounting for the new
+        // messages at the top.
+        newPosition = savedScrollPosition + (newHeight - savedContentHeight)
+      case .usingSavedPosition:
+        // Scroll to where we were before.
+        newPosition = savedScrollPosition
+      case .toBottom:
+        // Scroll to the bottom of the scroll view.
+        newPosition = newHeight - scrollView.contentView.bounds.height
+      }
+
+      scrollView.contentView.scroll(to: NSPoint(x: 0.0, y: newPosition))
+      scrollView.reflectScrolledClipView(scrollView.contentView)
+
+      self.log.debug("adjusting scroll position (saved: \(savedScrollPosition), current: \(scrollView.scrollPosition)) to \(newPosition) (by: \(String(describing: behavior)))")
+    })
   }
 
   func appendToConsole(line _: String) {

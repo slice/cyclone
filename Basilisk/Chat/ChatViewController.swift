@@ -120,7 +120,7 @@ final class ChatViewController: NSSplitViewController {
           let messages: [Message] = try await client.http.requestDecoding(request, withSpoofedHeadersFor: .xhr)
           self.messagesViewController.applyInitialMessages(messages)
         } catch {
-          log.error("failed to fetch messages: \(String(describing: error))")
+          log.error("failed to fetch messages: \(String(describing: error), privacy: .public)")
           self.messagesViewController.applyInitialMessages([])
         }
       }
@@ -359,7 +359,7 @@ extension ChatViewController: MessagesViewControllerDelegate {
       do {
         try await handleCommand(named: command, arguments: arguments)
       } catch {
-        log.error("failed to handle command: \(error)")
+        log.error("failed to handle command: \(error, privacy: .public)")
         self.messagesViewController
           .appendToConsole(
             line: "[system] failed to handle command: \(error)"
@@ -386,7 +386,7 @@ extension ChatViewController: MessagesViewControllerDelegate {
         )!
         let _ = try await client.http.request(request, withSpoofedHeadersFor: .xhr)
       } catch {
-        log.error("failed to send message: \(error)")
+        log.error("failed to send message: \(error, privacy: .public)")
         messagesViewController.appendToConsole(line: "[system] failed to send message: \(error)")
       }
     }

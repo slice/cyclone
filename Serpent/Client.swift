@@ -88,11 +88,11 @@ public class Client {
       do {
         try self?.processPacket(packet)
       } catch let error as DecodingError {
-        self?.log.error("failed to decode packet: \(String(describing: error))")
+        self?.log.error("failed to decode packet: \(String(describing: error), privacy: .public)")
         self?.log.error("while processing packet: \(String(describing: packet))")
         fatalError("failed to decode a gateway packet, whoops.")
       } catch {
-        self?.log.error("failed to process packet: \(error.localizedDescription)")
+        self?.log.error("failed to process packet: \(String(describing: error), privacy: .public)")
         fatalError("failed to process a gateway packet, whoops.")
       }
     }

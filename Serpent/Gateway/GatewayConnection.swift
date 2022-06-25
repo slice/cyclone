@@ -4,7 +4,21 @@ import Network
 import os
 import SwiftyJSON
 
+extension NWConnection.State {
+  /// A Boolean indicating whether the connection was severed.
+  var didDisconnect: Bool {
+    switch self {
+    case .failed(_): return true
+    case .cancelled: return true
+    default: return false
+    }
+  }
+}
+
 /// A connection to the Discord gateway.
+///
+/// Encapsulates a `WebSocket` connection and handles any logic relating
+/// specific to the Discord gateway.
 public class GatewayConnection {
   /// The WebSocket connection to the gateway.
   private var socket: WebSocket?
@@ -30,11 +44,34 @@ public class GatewayConnection {
   /// The Discord user token to `IDENTIFY` to the gateway with.
   private var token: String
 
-  /// A Combine subject for received gateway packets.
+  /// A Combine subject for all WebSocket state changes.
+  ///
+  /// This resolves to the same subject that is exposed on the underlying
+  /// `WebSocket`. When reconnecting, make sure to recreate your sinks when a
+  /// value gets sent to the ``reconnects`` subject.
+  public var connectionState: CurrentValueSubject<WebSocketState, Never>? {
+    socket?.state
+  }
+
+  /// A subject that publishes upon reconnections.
+  public let reconnects = PassthroughSubject<(), Never>()
+
+  /// A subject for all received gateway packets.
   public private(set) var receivedPackets = PassthroughSubject<AnyGatewayPacket, Never>()
 
-  /// A Combine subject for sent gateway packets.
+  /// A subject for all sent gateway packets.
   public private(set) var sentPackets = PassthroughSubject<(json: JSON, raw: String), Never>()
+
+  /// How long to wait between reconnects in seconds.
+  private var reconnectionBackoff: Double = defaultReconnectionBackoff
+
+  private static let defaultReconnectionBackoff: Double = 5.0
+
+  /// Whether the connection is currently pending a reconnection.
+  ///
+  /// If this is `true`, then any future connection state change to ``WebSocketState/connected``
+  /// or `NWConnection.State.ready` means that we have reconnected.
+  private var isReconnecting: Bool = false
 
   deinit {
     heartbeatTimer = nil
@@ -69,6 +106,18 @@ public class GatewayConnection {
       additionalHeaders: additionalHeaders
     )
 
+    setupEventHandler()
+
+    log.info("connecting to \(gatewayURL)...")
+    socket!.connect()
+  }
+
+  private func setupEventHandler() {
+    if let eventHandler = eventHandler {
+      log.debug("cancelled existing event handler")
+      eventHandler.cancel()
+    }
+
     eventHandler = Task.detached(priority: .high) { [weak self] in
       guard let self = self, let socket = self.socket else { return }
 
@@ -81,14 +130,17 @@ public class GatewayConnection {
           await self.handleWebSocketEvent(event)
         }
 
-        self.log.info("disconnected cleanly")
+        self.log.info("events stream completed cleanly")
       } catch {
-        self.log.error("disconnected with error: \(error.localizedDescription)")
+        self.log.error("events stream completed with failure: \(String(describing: error))")
+        // The WebSocket has disconnected by now.
+        self.cleanupAfterDisconnect()
       }
     }
+  }
 
-    log.info("connecting to \(gatewayURL)...")
-    socket!.connect()
+  private func cleanupAfterDisconnect() {
+    heartbeatTimer = nil
   }
 
   /// Disconnect from the Discord gateway.
@@ -100,7 +152,7 @@ public class GatewayConnection {
     }
 
     try await socket.disconnect(withCloseCode: closeCode)
-    heartbeatTimer = nil
+    cleanupAfterDisconnect()
   }
 
   /// Encodes a JSON payload and sends it through the gateway socket.
@@ -183,16 +235,83 @@ public class GatewayConnection {
   }
 }
 
+// MARK: Reconnecting
+
+extension GatewayConnection {
+  private func reconnect() async throws {
+    guard let socket = socket else {
+      log.error("can't reconnect; socket is nil")
+      return
+    }
+
+    log.notice("attempting to reconnect (backoff: \(self.reconnectionBackoff)s)")
+
+    // TODO: Implement resuming.
+    // https://discord.com/developers/docs/topics/gateway#resuming
+    sequence = 0
+    isReconnecting = true
+
+    try await Task.sleep(nanoseconds: UInt64(self.reconnectionBackoff * 1_000_000_000))
+    log.notice("sleep finished; reconnecting now")
+
+    // Recreate the underlying NWConnection object, and create new event and
+    // WebSocketState subjects.
+    socket.reconnect()
+
+    // Reset our sink for the event subject.
+    setupEventHandler()
+
+    // Downstream consumers should now reset their sinks.
+    reconnects.send(())
+
+    reconnectionBackoff *= 2.0
+  }
+}
+
 // MARK: Packet Handling
 
 extension GatewayConnection {
   private func handleWebSocketEvent(_ event: WebSocketEvent) async {
     switch event {
     case let .connectionStateUpdate(connectionState):
-      log
-        .info(
-          "websocket connection state is now: \(String(describing: connectionState))"
-        )
+      if connectionState.didDisconnect {
+        self.log.info("cancelling heartbeat timer")
+        heartbeatTimer = nil
+      }
+
+      if case .failed(_) = connectionState {
+        Task.detached {
+          self.log.notice("triggering the reconnection process now")
+          do {
+            try await self.reconnect()
+          } catch {
+            self.log.error("failed to reconnect: \(String(describing: error))")
+          }
+        }
+      }
+
+      if case .ready = connectionState {
+        if isReconnecting {
+          self.log.info("connection became ready while reconnecting, .restart()ing connection to make it back to discord land")
+
+          // We need to call `restart` here because the connection seems to get
+          // stuck otherwise. This only applies during a reconnection.
+          //
+          // I've been testing reconnections by turning off Wi-Fi after
+          // connecting, which causes the connection to die due to failing to
+          // read a heartbeat response. Then, the connection goes into waiting
+          // until we get become ready again. Finally, it gets stuck unless we
+          // call this method, so this is why I'm doing this.
+          socket!.connection.restart()
+
+          isReconnecting = false
+        }
+
+        // If we make a successful connection, reset the backoff.
+        reconnectionBackoff = Self.defaultReconnectionBackoff
+      }
+
+      log.info("websocket connection state is now: \(String(describing: connectionState))")
     case .isGoingToClose(closeCode: let closeCode, reason: _):
       log
         .info(

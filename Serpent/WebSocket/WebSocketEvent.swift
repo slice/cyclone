@@ -1,6 +1,6 @@
 import Network
 
-enum WebSocketEvent {
+public enum WebSocketEvent {
   /// A state update occurred.
   case connectionStateUpdate(NWConnection.State)
 

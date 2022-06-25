@@ -9,8 +9,12 @@ final class ChatViewController: NSSplitViewController {
     splitViewItems[0].viewController as! NavigatorViewController
   }
 
+  var statusBarController: StatusBarContainerController {
+    (splitViewItems[1].viewController as! StatusBarContainerController)
+  }
+
   var messagesViewController: MessagesViewController {
-    splitViewItems[1].viewController as! MessagesViewController
+    statusBarController.containedViewController as! MessagesViewController
   }
 
   var client: Client?
@@ -21,6 +25,8 @@ final class ChatViewController: NSSplitViewController {
   var gatewayUserSettingsSink: AnyCancellable!
   var gatewaySentPacketsSink: AnyCancellable!
   var httpLoggingSink: AnyCancellable!
+  var socketEventSink: AnyCancellable!
+  var reconnectionSink: AnyCancellable!
 
   var selectedGuildID: Guild.ID?
   var exhaustedMessageHistory = false
@@ -197,7 +203,17 @@ final class ChatViewController: NSSplitViewController {
 
     try await client.http.requestLandingPage()
     client.connect()
+
+    // TODO(skip): Probably just use a damn delegate for this.
     setUpGatewayPacketHandler()
+    setupConnectionStateSink()
+
+    reconnectionSink = client.gatewayConnection.reconnects.receive(on: RunLoop.main)
+      .sink { [weak self] _ in
+        // The websocket connection has been reset, so we need to reset our sink
+        // too.
+        self?.setupConnectionStateSink()
+      }
 
     gatewayGuildsSink = client.guildsChanged.receive(on: RunLoop.main)
       .sink { [weak self] _ in
@@ -211,7 +227,6 @@ final class ChatViewController: NSSplitViewController {
 
       return String(data: body, encoding: .utf8) ?? "<failed to decode body>"
     }
-
 
     gatewaySentPacketsSink = client.gatewayConnection.sentPackets.receive(on: RunLoop.main)
       .sink { (json, string) in
@@ -235,6 +250,35 @@ final class ChatViewController: NSSplitViewController {
         guard json["guild_positions"].exists() ||
           json["guild_folders"].exists(), let self = self else { return }
         self.applyGuilds()
+      }
+  }
+
+  private func setupConnectionStateSink() {
+    socketEventSink = client!.gatewayConnection.connectionState!.receive(on: RunLoop.main)
+      .sink { [weak self] state in
+        let connectionStatus: ConnectionStatus
+        let connectionLabel: String
+
+        switch state {
+        case .connecting:
+          connectionStatus = .connecting
+          connectionLabel = "Connecting to Discord…"
+        case .failed:
+          connectionStatus = .disconnected
+          connectionLabel = "Connection failed!"
+        case .disconnected:
+          connectionStatus = .disconnected
+          connectionLabel = "Disconnected!"
+        case .connected:
+          connectionStatus = .connected
+          connectionLabel = "Connected."
+        case .unviable:
+          connectionStatus = .connecting
+          connectionLabel = "Network connection has become unviable…"
+        }
+
+        self?.statusBarController.connectionStatus.connectionStatus = connectionStatus
+        self?.statusBarController.connectionStatusLabel.stringValue = connectionLabel
       }
   }
 

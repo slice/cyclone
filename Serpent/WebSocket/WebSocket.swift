@@ -1,6 +1,7 @@
 import Combine
 import Foundation
 import Network
+import os.log
 
 /// Returns whether an `NWError` should be sent as an error to the `events`
 /// subject.
@@ -18,17 +19,39 @@ class WebSocket {
   /// The endpoint to connect to.
   private var endpoint: NWEndpoint
 
-  /// The internal `NWConnection` of this WebSocket.
-  private var connection: NWConnection
+  private var endpointURL: URL
 
-  /// A Combine subject for WebSocket events.
-  public let events = PassthroughSubject<WebSocketEvent, NWError>()
+  /// The internal `NWConnection` of this WebSocket.
+  var connection: NWConnection!
+
+  private var additionalHeaders: [(String, String)]
+
+  /// A subject for all WebSocket events.
+  public private(set) var events = PassthroughSubject<WebSocketEvent, NWError>()
+
+  /// A subject for higher-level WebSocket state change events.
+  ///
+  /// The information emitted by this subject is a synthesized, simpler form of
+  /// WebSocket connection state change and viability update change events.
+  /// Prefer this for the user interface, as it is simpler to reinterpret into
+  /// things the user can understand.
+  public private(set) var state = CurrentValueSubject<WebSocketState, Never>(.disconnected)
+
+  private var hasConnectedInitially: Bool = false
 
   private var messageHandlingWorkItem: DispatchWorkItem?
 
+  private let log = Logger(subsystem: "zone.slice.Serpent", category: "low-level-websocket")
+
   init(endpoint: URL, additionalHeaders: [(String, String)] = []) {
-    self.endpoint = NWEndpoint.url(endpoint)
-    let parameters: NWParameters = endpoint.scheme == "wss" ? .tls : .tcp
+    self.endpointURL = endpoint
+    self.endpoint = NWEndpoint.url(endpointURL)
+    self.additionalHeaders = additionalHeaders
+    setupConnection()
+  }
+
+  private func setupConnection() {
+    let parameters: NWParameters = endpointURL.scheme == "wss" ? .tls : .tcp
     let websocketOptions = NWProtocolWebSocket.Options()
     websocketOptions.autoReplyPing = true
     websocketOptions.maximumMessageSize = 1024 * 1024 * 100
@@ -37,20 +60,79 @@ class WebSocket {
       websocketOptions,
       at: 0
     )
-    connection = NWConnection(to: self.endpoint, using: parameters)
-    connection.stateUpdateHandler = { [weak self] connectionState in
-      self?.events.send(.connectionStateUpdate(connectionState))
 
-      if connectionState == .cancelled {
-        self?.events.send(completion: .finished)
+    connection = NWConnection(to: self.endpoint, using: parameters)
+
+    connection.pathUpdateHandler = { [weak self] path in
+      self?.log.info("connection path updated to: \(String(describing: path))")
+    }
+
+    connection.viabilityUpdateHandler = { [weak self] viability in
+      guard let self = self else { return }
+      self.log.info("connection viability updated to: \(viability)")
+      if viability {
+        if self.hasConnectedInitially {
+          // Network has become viable again.
+          self.state.send(WebSocketState.connected)
+        } else {
+          // Network is becoming viable for the first time (happens after the
+          // initial connection).
+          self.hasConnectedInitially = true
+        }
+      } else {
+        self.state.send(.unviable)
+      }
+    }
+
+    connection.betterPathUpdateHandler = { [weak self] betterPath in
+      self?.log.info("better path updated to: \(betterPath)")
+    }
+
+    connection.stateUpdateHandler = { [weak self] connectionState in
+      guard let self = self else { return }
+      self.log.info("connection state has changed to: \(String(describing: connectionState))")
+      self.events.send(.connectionStateUpdate(connectionState))
+
+      switch connectionState {
+      case .ready:
+        self.state.send(WebSocketState.connected)
+      case .failed(_):
+        self.state.send(.failed)
+        self.log.error("ending events stream, state = failed")
+        self.events.send(completion: .finished)
+      case .setup, .preparing, .waiting(_):
+        self.state.send(.connecting)
+      case .cancelled:
+        self.state.send(.disconnected)
+        self.log.error("ending events stream, state = cancelled")
+        self.events.send(completion: .finished)
+      default:
+        self.log.notice("cannot forward unknown websocket state: \(String(describing: connectionState))")
       }
     }
   }
 
+  /// Recreates any Combine publishers, force cancels the connection, and
+  /// initiates another connection.
+  ///
+  /// After you call this method, you must recreate your Combine sinks. Any
+  /// existing Combine sinks will cease to work.
+  ///
+  /// It also seems that you must call `restart` on the ``connection`` after
+  /// it becomes `ready` again. You should only do this after calling this
+  /// method.
+  func reconnect() {
+    hasConnectedInitially = false
+    setupConnection()
+    events = .init()
+    state = .init(.disconnected)
+    connect()
+  }
+
   /// Initiates the WebSocket connection on a `DispatchQueue`.
-  func connect(onDisptachQueue queue: DispatchQueue = .main) {
-    connection.start(queue: queue)
+  func connect(onDispatchQueue queue: DispatchQueue = .main) {
     messageHandlingWorkItem?.cancel()
+    connection.start(queue: queue)
     messageHandlingWorkItem = DispatchWorkItem(
       qos: .userInteractive,
       flags: [],
@@ -64,13 +146,14 @@ class WebSocket {
       guard let self = self else { return }
 
       if let error = error, shouldSendError(error) {
-        self.events.send(completion: .failure(error))
+        self.log.error("errored while trying to recv: \(error)")
         return
       }
 
-      guard let data = data, !data.isEmpty, let context = context,
-            let firstMetadata = context.protocolMetadata
-            .first as? NWProtocolWebSocket.Metadata
+      guard let data = data,
+            !data.isEmpty,
+            let context = context,
+            let firstMetadata = context.protocolMetadata.first as? NWProtocolWebSocket.Metadata
       else {
         return
       }

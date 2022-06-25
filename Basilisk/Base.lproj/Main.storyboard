@@ -745,7 +745,7 @@
                 <splitViewController id="flm-fQ-VMo" customClass="ChatViewController" customModule="Basilisk" customModuleProvider="target" sceneMemberID="viewController">
                     <splitViewItems>
                         <splitViewItem canCollapse="YES" holdingPriority="260" behavior="sidebar" id="tHn-3N-s6F"/>
-                        <splitViewItem id="5Ql-tb-red"/>
+                        <splitViewItem id="DII-cK-scN"/>
                     </splitViewItems>
                     <splitView key="splitView" dividerStyle="thin" vertical="YES" id="Bvv-La-7Je">
                         <rect key="frame" x="-318" y="0.0" width="768" height="493"/>
@@ -757,7 +757,7 @@
                     <connections>
                         <outlet property="splitView" destination="Bvv-La-7Je" id="EgI-7M-inZ"/>
                         <segue destination="4hD-0Z-fag" kind="relationship" relationship="splitItems" id="CEY-1F-OHm"/>
-                        <segue destination="n48-mC-yKy" kind="relationship" relationship="splitItems" id="1vo-CN-lRx"/>
+                        <segue destination="QVH-ig-Zeh" kind="relationship" relationship="splitItems" id="adw-Wz-3rR"/>
                     </connections>
                 </splitViewController>
                 <customObject id="pMB-8h-XLS" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
@@ -773,13 +773,13 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="24" horizontalPageScroll="10" verticalLineScroll="24" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="h0D-su-6jd">
-                                <rect key="frame" x="0.0" y="0.0" width="152" height="641"/>
+                                <rect key="frame" x="0.0" y="0.0" width="152" height="657"/>
                                 <clipView key="contentView" drawsBackground="NO" id="TGt-zi-MMF">
-                                    <rect key="frame" x="0.0" y="0.0" width="152" height="641"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="152" height="657"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <outlineView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" selectionHighlightStyle="sourceList" multipleSelection="NO" autosaveColumns="NO" rowHeight="24" rowSizeStyle="systemDefault" viewBased="YES" floatsGroupRows="NO" indentationPerLevel="13" outlineTableColumn="03T-OW-czf" id="o1E-3Y-zAB">
-                                            <rect key="frame" x="0.0" y="0.0" width="152" height="641"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="152" height="657"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <size key="intercellSpacing" width="3" height="0.0"/>
                                             <color key="backgroundColor" name="_sourceListBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -891,13 +891,93 @@
             </objects>
             <point key="canvasLocation" x="-555" y="1416.5"/>
         </scene>
+        <!--Status Bar Container Controller-->
+        <scene sceneID="3KH-WT-dgG">
+            <objects>
+                <viewController id="QVH-ig-Zeh" customClass="StatusBarContainerController" customModule="Basilisk" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" id="iIc-WU-rMx">
+                        <rect key="frame" x="0.0" y="0.0" width="450" height="327"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <containerView translatesAutoresizingMaskIntoConstraints="NO" id="QB3-Wd-e9Y">
+                                <rect key="frame" x="0.0" y="22" width="450" height="305"/>
+                                <connections>
+                                    <segue destination="n48-mC-yKy" kind="embed" id="LJW-7d-CAo"/>
+                                </connections>
+                            </containerView>
+                            <box boxType="custom" borderType="none" borderWidth="0.0" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="KOL-zF-JYi">
+                                <rect key="frame" x="0.0" y="0.0" width="450" height="22"/>
+                                <view key="contentView" id="VGE-TN-NtX">
+                                    <rect key="frame" x="0.0" y="0.0" width="450" height="22"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <subviews>
+                                        <stackView distribution="fill" orientation="horizontal" alignment="centerY" spacing="2" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wj9-Ig-jWf">
+                                            <rect key="frame" x="5" y="0.0" width="440" height="22"/>
+                                            <subviews>
+                                                <customView horizontalCompressionResistancePriority="748" translatesAutoresizingMaskIntoConstraints="NO" id="ic4-el-Soj" customClass="ConnectionStatusView" customModule="Basilisk" customModuleProvider="target">
+                                                    <rect key="frame" x="0.0" y="0.0" width="22" height="22"/>
+                                                </customView>
+                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="oTL-04-r6T">
+                                                    <rect key="frame" x="22" y="4" width="420" height="14"/>
+                                                    <textFieldCell key="cell" lineBreakMode="clipping" title="Label" id="xNJ-wY-wbj">
+                                                        <font key="font" metaFont="smallSystem"/>
+                                                        <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                    </textFieldCell>
+                                                </textField>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="ic4-el-Soj" firstAttribute="width" secondItem="wj9-Ig-jWf" secondAttribute="height" id="aoa-X2-LrI"/>
+                                            </constraints>
+                                            <visibilityPriorities>
+                                                <integer value="1000"/>
+                                                <integer value="1000"/>
+                                            </visibilityPriorities>
+                                            <customSpacing>
+                                                <real value="3.4028234663852886e+38"/>
+                                                <real value="3.4028234663852886e+38"/>
+                                            </customSpacing>
+                                        </stackView>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstAttribute="trailing" secondItem="wj9-Ig-jWf" secondAttribute="trailing" constant="5" id="4Lr-bq-Icq"/>
+                                        <constraint firstAttribute="bottom" secondItem="wj9-Ig-jWf" secondAttribute="bottom" id="OG8-2H-fsI"/>
+                                        <constraint firstItem="wj9-Ig-jWf" firstAttribute="leading" secondItem="VGE-TN-NtX" secondAttribute="leading" constant="5" id="SBy-9b-paI"/>
+                                        <constraint firstItem="wj9-Ig-jWf" firstAttribute="top" secondItem="VGE-TN-NtX" secondAttribute="top" id="kz6-Dk-AtC"/>
+                                    </constraints>
+                                </view>
+                                <color key="borderColor" red="1" green="1" blue="1" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="fillColor" name="windowBackgroundColor" catalog="System" colorSpace="catalog"/>
+                            </box>
+                        </subviews>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="KOL-zF-JYi" secondAttribute="trailing" id="0jz-N1-4aK"/>
+                            <constraint firstItem="QB3-Wd-e9Y" firstAttribute="top" secondItem="iIc-WU-rMx" secondAttribute="top" id="5oa-Tj-gFg"/>
+                            <constraint firstAttribute="bottom" secondItem="KOL-zF-JYi" secondAttribute="bottom" id="NC2-Z5-uXK"/>
+                            <constraint firstAttribute="trailing" secondItem="QB3-Wd-e9Y" secondAttribute="trailing" id="QlN-iD-Gwk"/>
+                            <constraint firstItem="KOL-zF-JYi" firstAttribute="top" secondItem="QB3-Wd-e9Y" secondAttribute="bottom" id="hVO-uC-LZV"/>
+                            <constraint firstItem="QB3-Wd-e9Y" firstAttribute="leading" secondItem="iIc-WU-rMx" secondAttribute="leading" id="sAo-I3-vup"/>
+                            <constraint firstItem="KOL-zF-JYi" firstAttribute="leading" secondItem="iIc-WU-rMx" secondAttribute="leading" id="uFw-Za-lDj"/>
+                            <constraint firstAttribute="bottom" secondItem="QB3-Wd-e9Y" secondAttribute="bottom" constant="22" id="y43-ZL-DbS"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="connectionStatus" destination="ic4-el-Soj" id="pA3-zB-6Sl"/>
+                        <outlet property="connectionStatusLabel" destination="oTL-04-r6T" id="e4h-cN-CxB"/>
+                        <outlet property="containedView" destination="iIc-WU-rMx" id="6Jr-oM-nYA"/>
+                    </connections>
+                </viewController>
+                <customObject id="sTp-H2-PKb" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-230" y="1329.5"/>
+        </scene>
         <!--Messages-->
         <scene sceneID="DRi-aw-6NX">
             <objects>
-                <controllerPlaceholder storyboardName="Messages" id="n48-mC-yKy" sceneMemberID="viewController"/>
                 <customObject id="9a6-kd-xl2" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+                <controllerPlaceholder storyboardName="Messages" id="n48-mC-yKy" sceneMemberID="viewController"/>
             </objects>
-            <point key="canvasLocation" x="-153" y="1192"/>
+            <point key="canvasLocation" x="-230" y="1696"/>
         </scene>
     </scenes>
     <resources>

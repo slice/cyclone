@@ -56,6 +56,9 @@
 		12B99C1E27410A5A0048D2DB /* LogStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12B99C1D27410A5A0048D2DB /* LogStore.swift */; };
 		12B99C2227410AD00048D2DB /* LogMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12B99C2127410AD00048D2DB /* LogMessage.swift */; };
 		12B99C2427410B010048D2DB /* PacketDirection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12B99C2327410B010048D2DB /* PacketDirection.swift */; };
+		12BB68052861A83A0078CCEC /* StatusBarContainerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12BB68042861A83A0078CCEC /* StatusBarContainerController.swift */; };
+		12BB68072861ADC00078CCEC /* ConnectionStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12BB68062861ADC00078CCEC /* ConnectionStatusView.swift */; };
+		12BB68092861BF9E0078CCEC /* WebSocketState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12BB68082861BF9E0078CCEC /* WebSocketState.swift */; };
 		12C1D4B92827B9ED005D21A4 /* Inspector.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 12C1D4B82827B9ED005D21A4 /* Inspector.storyboard */; };
 		12CD0228274218AA00F136A5 /* Publisher+Buffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12CD0226274217E600F136A5 /* Publisher+Buffer.swift */; };
 		12D23C1A27540BAE00F3D18D /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12D23C1927540BAE00F3D18D /* Account.swift */; };
@@ -187,6 +190,9 @@
 		12B99C1D27410A5A0048D2DB /* LogStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogStore.swift; sourceTree = "<group>"; };
 		12B99C2127410AD00048D2DB /* LogMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogMessage.swift; sourceTree = "<group>"; };
 		12B99C2327410B010048D2DB /* PacketDirection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PacketDirection.swift; sourceTree = "<group>"; };
+		12BB68042861A83A0078CCEC /* StatusBarContainerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusBarContainerController.swift; sourceTree = "<group>"; };
+		12BB68062861ADC00078CCEC /* ConnectionStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionStatusView.swift; sourceTree = "<group>"; };
+		12BB68082861BF9E0078CCEC /* WebSocketState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketState.swift; sourceTree = "<group>"; };
 		12C1D4B82827B9ED005D21A4 /* Inspector.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Inspector.storyboard; sourceTree = "<group>"; };
 		12CD0226274217E600F136A5 /* Publisher+Buffer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Publisher+Buffer.swift"; sourceTree = "<group>"; };
 		12D23C1927540BAE00F3D18D /* Account.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
@@ -279,6 +285,7 @@
 			children = (
 				120A78D72741E9A70099834B /* WebSocket.swift */,
 				120A78DA2741F9BE0099834B /* WebSocketEvent.swift */,
+				12BB68082861BF9E0078CCEC /* WebSocketState.swift */,
 			);
 			path = WebSocket;
 			sourceTree = "<group>";
@@ -349,6 +356,8 @@
 				121F9315274CF613007F81CC /* Messages */,
 				12F4FD85273DFC1900B6AE64 /* ChatViewController.swift */,
 				1210E6E9274CC18300BF8C9B /* RoundingView.swift */,
+				12BB68042861A83A0078CCEC /* StatusBarContainerController.swift */,
+				12BB68062861ADC00078CCEC /* ConnectionStatusView.swift */,
 			);
 			path = Chat;
 			sourceTree = "<group>";
@@ -751,10 +760,12 @@
 				12F4FD86273DFC1900B6AE64 /* ChatViewController.swift in Sources */,
 				12DAC9E128611B10006B3B1D /* MessagesViewController+Data Source.swift in Sources */,
 				121F931C274CF841007F81CC /* NavigatorViewController.swift in Sources */,
+				12BB68052861A83A0078CCEC /* StatusBarContainerController.swift in Sources */,
 				12DAC9E5286127B4006B3B1D /* MessagesViewController+Messages.swift in Sources */,
 				1260A75B275163F00099CA3B /* NavigatorViewControllerDelegate.swift in Sources */,
 				1296E31B2855B0B900CDFD2E /* MessageRow.swift in Sources */,
 				12FA9AEB274D968500079393 /* MessageGroupHeader.swift in Sources */,
+				12BB68072861ADC00078CCEC /* ConnectionStatusView.swift in Sources */,
 				12AB3D80274C224200934345 /* InspectorController.swift in Sources */,
 				123F622F275183A8001D3D61 /* NavigatorGuildCellView.swift in Sources */,
 				126A8805285ECEA40014DC40 /* JSONInspectorViewController.swift in Sources */,
@@ -816,6 +827,7 @@
 				1259D6E428176E0E006AE1D1 /* AnyGatewayPacket.swift in Sources */,
 				12897BF4273E2BF400403E5B /* Opcode.swift in Sources */,
 				128C7677273E04D2008FD585 /* Disguise.swift in Sources */,
+				12BB68092861BF9E0078CCEC /* WebSocketState.swift in Sources */,
 				12F4FDB7273DFCD000B6AE64 /* Serpent.docc in Sources */,
 				12894915274C8FB900850D5E /* Snowflake.swift in Sources */,
 				12861A76285DC49C00C85F86 /* Ref.swift in Sources */,

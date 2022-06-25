@@ -310,10 +310,10 @@
             </objects>
             <point key="canvasLocation" x="1374" y="-29"/>
         </scene>
-        <!--Detail-->
+        <!--Tab View Controller-->
         <scene sceneID="PeM-o5-7dM">
             <objects>
-                <tabViewController selectedTabViewItemIndex="1" tabStyle="unspecified" id="5fP-LR-A92" customClass="Detail" sceneMemberID="viewController">
+                <tabViewController selectedTabViewItemIndex="1" tabStyle="unspecified" id="5fP-LR-A92" sceneMemberID="viewController">
                     <tabViewItems>
                         <tabViewItem id="rOX-r0-Ksg"/>
                         <tabViewItem id="rtg-kd-gU7"/>

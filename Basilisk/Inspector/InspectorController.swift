@@ -35,13 +35,17 @@ class InspectorController: NSSplitViewController {
       }
 
       switch message.variant {
+      case .http(let http):
+        let httpItem = self.detailTabViewController.tabViewItems[0]
+        let httpInspectorVC = httpItem.viewController! as! HTTPInspectorController
+        httpInspectorVC.log = http
+        self.detailTabViewController.tabView.selectTabViewItem(httpItem)
       case .gateway(let packet):
-        let inspectorItem = self.detailTabViewController.tabViewItems[2]
+        let inspectorItem = self.detailTabViewController.tabViewItems[1]
         let jsonInspectorVC = inspectorItem.viewController! as! JSONInspectorViewController
         jsonInspectorVC.jsonData = packet.packet.eventData
         jsonInspectorVC.reloadData()
         self.detailTabViewController.tabView.selectTabViewItem(inspectorItem)
-      default: break
       }
     }
   }

@@ -66,7 +66,7 @@
                         <splitViewItem holdingPriority="251" id="Sgh-Kk-d0r"/>
                     </splitViewItems>
                     <splitView key="splitView" autosaveName="InspectorSplitView" dividerStyle="thin" vertical="YES" id="Apd-U2-j7g">
-                        <rect key="frame" x="0.0" y="0.0" width="422" height="300"/>
+                        <rect key="frame" x="0.0" y="0.0" width="319" height="323"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <connections>
                             <outlet property="delegate" destination="nFR-w2-W28" id="dp5-JA-z0o"/>
@@ -80,7 +80,7 @@
                 </splitViewController>
                 <customObject id="LG4-E7-gkF" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="726" y="331"/>
+            <point key="canvasLocation" x="674.5" y="342.5"/>
         </scene>
         <!--Messages-->
         <scene sceneID="ad0-WY-ccq">
@@ -315,9 +315,9 @@
             <objects>
                 <tabViewController selectedTabViewItemIndex="1" tabStyle="unspecified" id="5fP-LR-A92" customClass="Detail" sceneMemberID="viewController">
                     <tabViewItems>
-                        <tabViewItem label="Gateway" identifier="" id="rUt-uF-OO8"/>
-                        <tabViewItem id="pwl-p2-YFb"/>
+                        <tabViewItem id="rOX-r0-Ksg"/>
                         <tabViewItem id="rtg-kd-gU7"/>
+                        <tabViewItem id="Jkg-Cq-yzu"/>
                     </tabViewItems>
                     <tabView key="tabView" type="noTabsNoBorder" id="gpf-vW-eOO">
                         <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
@@ -328,27 +328,22 @@
                         </connections>
                     </tabView>
                     <connections>
-                        <segue destination="gwk-aT-kNe" kind="relationship" relationship="tabItems" id="ayM-N1-HbT"/>
-                        <segue destination="4gn-4i-31N" kind="relationship" relationship="tabItems" id="eFe-hH-wgf"/>
+                        <segue destination="j3I-dc-vM0" kind="relationship" relationship="tabItems" id="AgX-xY-bYq"/>
                         <segue destination="fZg-Bl-bVl" kind="relationship" relationship="tabItems" id="SeS-AX-pBA"/>
+                        <segue destination="4gn-4i-31N" kind="relationship" relationship="tabItems" id="XaA-U8-Wsh"/>
                     </connections>
                 </tabViewController>
                 <customObject id="rzG-te-K2F" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1359" y="435"/>
         </scene>
-        <!--View Controller-->
-        <scene sceneID="alD-ay-BOL">
+        <!--HTTPInspector-->
+        <scene sceneID="ve3-lv-WNk">
             <objects>
-                <viewController id="gwk-aT-kNe" sceneMemberID="viewController">
-                    <view key="view" id="XKq-7Q-vFE">
-                        <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </view>
-                </viewController>
-                <customObject id="Hlk-BS-Xbt" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+                <controllerPlaceholder storyboardName="HTTPInspector" id="j3I-dc-vM0" sceneMemberID="viewController"/>
+                <customObject id="H9M-HX-itZ" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2029" y="249"/>
+            <point key="canvasLocation" x="1805" y="375"/>
         </scene>
         <!--JSONInspector-->
         <scene sceneID="p5F-7W-MGd">

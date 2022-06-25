@@ -74,6 +74,9 @@
 		12DCEAA32751E38500A0A626 /* NavigatorOutlineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12DCEAA22751E38500A0A626 /* NavigatorOutlineItem.swift */; };
 		12DCEAA52751E60C00A0A626 /* ChannelSorting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12DCEAA42751E60C00A0A626 /* ChannelSorting.swift */; };
 		12E80A5A2752AC1F00ACD979 /* NSView+Nib.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12E80A592752AC1F00ACD979 /* NSView+Nib.swift */; };
+		12EB5FA42866A4200012F938 /* HTTPInspector.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 12EB5FA32866A41F0012F938 /* HTTPInspector.storyboard */; };
+		12EB5FA62866A46D0012F938 /* HTTPInspectorController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12EB5FA52866A46D0012F938 /* HTTPInspectorController.swift */; };
+		12EB5FA92866ACB80012F938 /* HTTPInspectorBodyHeadersController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12EB5FA82866ACB80012F938 /* HTTPInspectorBodyHeadersController.swift */; };
 		12F4FD84273DFC1900B6AE64 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12F4FD83273DFC1900B6AE64 /* AppDelegate.swift */; };
 		12F4FD86273DFC1900B6AE64 /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12F4FD85273DFC1900B6AE64 /* ChatViewController.swift */; };
 		12F4FD88273DFC1B00B6AE64 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 12F4FD87273DFC1B00B6AE64 /* Assets.xcassets */; };
@@ -207,6 +210,9 @@
 		12DCEAA22751E38500A0A626 /* NavigatorOutlineItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigatorOutlineItem.swift; sourceTree = "<group>"; };
 		12DCEAA42751E60C00A0A626 /* ChannelSorting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelSorting.swift; sourceTree = "<group>"; };
 		12E80A592752AC1F00ACD979 /* NSView+Nib.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSView+Nib.swift"; sourceTree = "<group>"; };
+		12EB5FA32866A41F0012F938 /* HTTPInspector.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = HTTPInspector.storyboard; sourceTree = "<group>"; };
+		12EB5FA52866A46D0012F938 /* HTTPInspectorController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPInspectorController.swift; sourceTree = "<group>"; };
+		12EB5FA82866ACB80012F938 /* HTTPInspectorBodyHeadersController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPInspectorBodyHeadersController.swift; sourceTree = "<group>"; };
 		12F4FD80273DFC1900B6AE64 /* Basilisk.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Basilisk.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		12F4FD83273DFC1900B6AE64 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		12F4FD85273DFC1900B6AE64 /* ChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
@@ -391,6 +397,7 @@
 		12CB09572740D47000F28AD5 /* Inspector */ = {
 			isa = PBXGroup;
 			children = (
+				12EB5FA72866AC850012F938 /* Inspectors */,
 				12B99C1D27410A5A0048D2DB /* LogStore.swift */,
 				12B99C2127410AD00048D2DB /* LogMessage.swift */,
 				12B99C2327410B010048D2DB /* PacketDirection.swift */,
@@ -398,8 +405,6 @@
 				12C1D4B82827B9ED005D21A4 /* Inspector.storyboard */,
 				12FAA7642827C29E00205A5B /* InspectorMessagesController.swift */,
 				126A8802285E97830014DC40 /* InspectorSummaryCellView.swift */,
-				126A8804285ECEA40014DC40 /* JSONInspectorViewController.swift */,
-				123B8131285FAC58008B0145 /* JSONInspector.storyboard */,
 			);
 			path = Inspector;
 			sourceTree = "<group>";
@@ -431,6 +436,18 @@
 				12DAC9DC286116F8006B3B1D /* NSScrollView+Scrolling.swift */,
 			);
 			path = Support;
+			sourceTree = "<group>";
+		};
+		12EB5FA72866AC850012F938 /* Inspectors */ = {
+			isa = PBXGroup;
+			children = (
+				123B8131285FAC58008B0145 /* JSONInspector.storyboard */,
+				126A8804285ECEA40014DC40 /* JSONInspectorViewController.swift */,
+				12EB5FA32866A41F0012F938 /* HTTPInspector.storyboard */,
+				12EB5FA52866A46D0012F938 /* HTTPInspectorController.swift */,
+				12EB5FA82866ACB80012F938 /* HTTPInspectorBodyHeadersController.swift */,
+			);
+			path = Inspectors;
 			sourceTree = "<group>";
 		};
 		12F4FD77273DFC1900B6AE64 = {
@@ -704,6 +721,7 @@
 			files = (
 				12F4FD88273DFC1B00B6AE64 /* Assets.xcassets in Resources */,
 				12D23C1F2754127000F3D18D /* Preferences.storyboard in Resources */,
+				12EB5FA42866A4200012F938 /* HTTPInspector.storyboard in Resources */,
 				12DAC9DB28611649006B3B1D /* Messages.storyboard in Resources */,
 				12F4FD8B273DFC1B00B6AE64 /* Main.storyboard in Resources */,
 				12C1D4B92827B9ED005D21A4 /* Inspector.storyboard in Resources */,
@@ -756,6 +774,7 @@
 				12F4FD86273DFC1900B6AE64 /* ChatViewController.swift in Sources */,
 				12DAC9E128611B10006B3B1D /* MessagesViewController+Data Source.swift in Sources */,
 				121F931C274CF841007F81CC /* NavigatorViewController.swift in Sources */,
+				12EB5FA92866ACB80012F938 /* HTTPInspectorBodyHeadersController.swift in Sources */,
 				12BB68052861A83A0078CCEC /* StatusBarContainerController.swift in Sources */,
 				12DAC9E5286127B4006B3B1D /* MessagesViewController+Messages.swift in Sources */,
 				1260A75B275163F00099CA3B /* NavigatorViewControllerDelegate.swift in Sources */,
@@ -774,6 +793,7 @@
 				129ED06B2818ED4B009FDAD7 /* AccountEditorController.swift in Sources */,
 				12FAA7652827C29E00205A5B /* InspectorMessagesController.swift in Sources */,
 				12DAC9DF286117A7006B3B1D /* MessagesViewControllerDelegate.swift in Sources */,
+				12EB5FA62866A46D0012F938 /* HTTPInspectorController.swift in Sources */,
 				12093A5E281BC11000FAE304 /* BasiliskError.swift in Sources */,
 				12DCEAA52751E60C00A0A626 /* ChannelSorting.swift in Sources */,
 				1297448B2857415200CDB201 /* LoadingAttachmentView.swift in Sources */,

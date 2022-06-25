@@ -98,7 +98,7 @@ class InspectorMessagesController: NSViewController {
 extension InspectorMessagesController: NSTableViewDelegate {
   func tableViewSelectionDidChange(_: Notification) {
     let selectedRow = tableView.selectedRow
-    guard selectedRow > 0 else {
+    guard selectedRow >= 0 else {
       self.onSelectedMessage?(nil)
       return
     }

@@ -192,13 +192,8 @@ extension NavigatorViewController: NSOutlineViewDelegate {
 
         view.roundingView.radius = 6.0
 
-        Task {
-          guard let url = guild.icon?.url(withFileExtension: "png") else {
-            return
-          }
-
-          let guildImage = try await ImageCache.shared.image(at: url)
-          view.imageView?.image = guildImage
+        if let url = guild.icon?.url(withFileExtension: "png") {
+          view.imageView?.kf.setImage(with: url)
         }
 
         return view

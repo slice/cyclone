@@ -47,7 +47,6 @@
 		1296E31D2855B0C600CDFD2E /* MessageRow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1296E31C2855B0C600CDFD2E /* MessageRow.xib */; };
 		1297448B2857415200CDB201 /* LoadingAttachmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1297448A2857415200CDB201 /* LoadingAttachmentView.swift */; };
 		129AF795273E653100B3851C /* GatewayPacket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 129AF794273E653100B3851C /* GatewayPacket.swift */; };
-		129C11C3274DBB3A00AA7E82 /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 129C11C2274DBB3A00AA7E82 /* ImageCache.swift */; };
 		129ED06B2818ED4B009FDAD7 /* AccountEditorController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 129ED06A2818ED4B009FDAD7 /* AccountEditorController.swift */; };
 		129FBBF22812913400BD5D09 /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 129FBBF12812913400BD5D09 /* SwiftyJSON */; };
 		129FBBF52812918C00BD5D09 /* Codextended in Frameworks */ = {isa = PBXBuildFile; productRef = 129FBBF42812918C00BD5D09 /* Codextended */; };
@@ -184,7 +183,6 @@
 		1296E31C2855B0C600CDFD2E /* MessageRow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MessageRow.xib; sourceTree = "<group>"; };
 		1297448A2857415200CDB201 /* LoadingAttachmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingAttachmentView.swift; sourceTree = "<group>"; };
 		129AF794273E653100B3851C /* GatewayPacket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GatewayPacket.swift; sourceTree = "<group>"; };
-		129C11C2274DBB3A00AA7E82 /* ImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
 		129ED06A2818ED4B009FDAD7 /* AccountEditorController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountEditorController.swift; sourceTree = "<group>"; };
 		12AB3D7F274C224200934345 /* InspectorController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InspectorController.swift; sourceTree = "<group>"; };
 		12B99C1D27410A5A0048D2DB /* LogStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogStore.swift; sourceTree = "<group>"; };
@@ -428,7 +426,6 @@
 		12E80A582752AC1600ACD979 /* Support */ = {
 			isa = PBXGroup;
 			children = (
-				129C11C2274DBB3A00AA7E82 /* ImageCache.swift */,
 				12E80A592752AC1F00ACD979 /* NSView+Nib.swift */,
 				12093A5D281BC11000FAE304 /* BasiliskError.swift */,
 				12DAC9DC286116F8006B3B1D /* NSScrollView+Scrolling.swift */,
@@ -751,7 +748,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				129C11C3274DBB3A00AA7E82 /* ImageCache.swift in Sources */,
 				121F931A274CF631007F81CC /* ChannelRef.swift in Sources */,
 				12DAC9DD286116F8006B3B1D /* NSScrollView+Scrolling.swift in Sources */,
 				12B99C2427410B010048D2DB /* PacketDirection.swift in Sources */,

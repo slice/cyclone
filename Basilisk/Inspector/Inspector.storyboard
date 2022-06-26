@@ -182,11 +182,11 @@
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="VCO-4Z-k8b">
-                                                            <rect key="frame" x="158" y="0.0" width="102" height="17"/>
+                                                            <rect key="frame" x="158" y="0.0" width="101" height="17"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="WlV-FB-NMg">
-                                                                    <rect key="frame" x="0.0" y="1" width="102" height="16"/>
+                                                                    <rect key="frame" x="0.0" y="1" width="101" height="16"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                                     <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="Blo-8k-G7f">
                                                                         <font key="font" usesAppearanceFont="YES"/>
@@ -214,7 +214,7 @@
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <tableCellView id="ntK-QD-yfe" customClass="InspectorSummaryCellView" customModule="Basilisk" customModuleProvider="target">
-                                                            <rect key="frame" x="277" y="0.0" width="331" height="17"/>
+                                                            <rect key="frame" x="276" y="0.0" width="332" height="17"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <stackView distribution="fill" orientation="horizontal" alignment="baseline" spacing="6" horizontalStackHuggingPriority="300" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eLC-G2-Rqp">

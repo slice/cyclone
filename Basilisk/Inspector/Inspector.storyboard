@@ -11,7 +11,7 @@
         <scene sceneID="c9e-HK-KAy">
             <objects>
                 <windowController id="WJv-SL-yYj" sceneMemberID="viewController">
-                    <window key="window" title="Inspector" subtitle="0 messages" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="Spk-Je-QA1">
+                    <window key="window" title="Inspector" subtitle="0 messages" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="InspectorWindow" animationBehavior="default" id="Spk-Je-QA1">
                         <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
                         <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
                         <rect key="contentRect" x="196" y="239" width="480" height="269"/>

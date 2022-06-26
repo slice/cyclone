@@ -1,8 +1,16 @@
 import Cocoa
 import SwiftyJSON
 
+enum JSONInspectorError: Error {
+  case failedToStringifyJSON
+}
+
 final class JSONInspectorViewController: NSViewController {
   @IBOutlet var outlineView: NSOutlineView!
+  // NSOutlineView doesn't retain its menu? :thinking:
+  @IBOutlet var outlineViewMenu: NSMenu!
+  @IBOutlet var copyJSONValueMenuItem: NSMenuItem!
+  @IBOutlet var copyJSONObjectEntryValueMenuItem: NSMenuItem!
 
   var jsonData: JSON?
 
@@ -22,6 +30,46 @@ final class JSONInspectorViewController: NSViewController {
     if jsonData != nil, let item = outlineView.item(atRow: 0) {
       outlineView.expandItem(item)
     }
+  }
+
+  @IBAction func copyClickedJSONValue(_ sender: Any) {
+    guard outlineView.clickedRow > -1,
+          let item = outlineView.item(atRow: outlineView.clickedRow) else {
+      return
+    }
+
+    NSPasteboard.general.clearContents()
+    let copyingValue: Data
+    do {
+      switch item {
+      case let objectPair as JSONObjectPair:
+        copyingValue = try objectPair.value.encoded()
+      case let arrayValue as JSONArrayValue:
+        copyingValue = try arrayValue.value.encoded()
+      case let json as JSON:
+        copyingValue = try json.encoded()
+      default:
+        preconditionFailure("tried to copy unknown inspector item")
+      }
+
+      guard let string = String(data: copyingValue, encoding: .utf8) else {
+        throw JSONInspectorError.failedToStringifyJSON
+      }
+
+      NSPasteboard.general.setString(string, forType: .string)
+    } catch {
+      presentError(error)
+    }
+  }
+}
+
+extension JSONInspectorViewController: NSMenuItemValidation {
+  func validateMenuItem(_ menuItem: NSMenuItem) -> Bool {
+    if menuItem.action == #selector(copyClickedJSONValue) {
+      return outlineView.clickedRow > -1
+    }
+
+    return false
   }
 }
 

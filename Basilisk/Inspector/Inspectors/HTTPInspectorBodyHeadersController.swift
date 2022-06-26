@@ -38,6 +38,24 @@ class HTTPInspectorBodyHeadersController: NSViewController {
     headersTableView.delegate = self
     bodyTextView.font = NSFont.monospacedSystemFont(ofSize: NSFont.smallSystemFontSize, weight: .regular)
   }
+
+  @IBAction func copyValueOfClickedHeader(_ sender: Any) {
+    guard headersTableView.clickedRow >= 0 else {
+      return
+    }
+    let header = headers.elements[headersTableView.clickedRow]
+    NSPasteboard.general.clearContents()
+    NSPasteboard.general.setString(header.value, forType: .string)
+  }
+
+  @IBAction func copyNameAndValueOfClickedHeader(_ sender: Any) {
+    guard headersTableView.clickedRow >= 0 else {
+      return
+    }
+    let header = headers.elements[headersTableView.clickedRow]
+    NSPasteboard.general.clearContents()
+    NSPasteboard.general.setString("\(header.key): \(header.value)", forType: .string)
+  }
 }
 
 extension HTTPInspectorBodyHeadersController: NSTableViewDataSource {

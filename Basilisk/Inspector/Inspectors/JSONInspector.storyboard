@@ -82,6 +82,9 @@
                                                     </prototypeCellViews>
                                                 </tableColumn>
                                             </tableColumns>
+                                            <connections>
+                                                <outlet property="menu" destination="eSj-IB-AU9" id="PPk-Xn-hFx"/>
+                                            </connections>
                                         </outlineView>
                                     </subviews>
                                     <nil key="backgroundColor"/>
@@ -104,10 +107,22 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="copyJSONValueMenuItem" destination="wst-xq-fhv" id="tqs-1M-t76"/>
                         <outlet property="outlineView" destination="BQu-wn-XGh" id="bGm-8O-KOW"/>
+                        <outlet property="outlineViewMenu" destination="eSj-IB-AU9" id="A3z-ot-9Mh"/>
                     </connections>
                 </viewController>
                 <customObject id="Xpy-Sy-6e9" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+                <menu id="eSj-IB-AU9">
+                    <items>
+                        <menuItem title="Copy JSON Value" id="wst-xq-fhv">
+                            <modifierMask key="keyEquivalentModifierMask"/>
+                            <connections>
+                                <action selector="copyClickedJSONValue:" target="0vV-Mi-Yr9" id="YtD-r2-NoO"/>
+                            </connections>
+                        </menuItem>
+                    </items>
+                </menu>
             </objects>
             <point key="canvasLocation" x="1816" y="612"/>
         </scene>

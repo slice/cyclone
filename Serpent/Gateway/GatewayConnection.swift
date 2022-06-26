@@ -344,7 +344,7 @@ extension GatewayConnection {
     ofJSON packetJSON: String,
     raw packetBytes: Data
   ) async throws {
-    let decoder = JSONDecoder()
+    let decoder = SerpentJSONDecoder()
 
     let packet = try decoder.decode(GatewayPacket<JSON>.self, from: packetBytes)
     let op = packet.op

@@ -22,6 +22,7 @@ final class ChatViewController: NSSplitViewController {
   var gatewayPacketHandler: Task<Void, Never>?
 
   var gatewayGuildsSink: AnyCancellable!
+  var privateChannelsSink: AnyCancellable!
   var gatewayUserSettingsSink: AnyCancellable!
   var gatewaySentPacketsSink: AnyCancellable!
   var httpLoggingSink: AnyCancellable!
@@ -88,10 +89,17 @@ final class ChatViewController: NSSplitViewController {
         withSpoofedHeadersFor: .xhr
       )
 
+      if messages.isEmpty {
+        log.debug("received 0 older messages, so history is exhausted")
+        exhaustedMessageHistory = true
+        requestingMoreHistory = false
+        return
+      }
+
       self.messagesViewController.prependOldMessages(messages)
 
       if messages.count < limit {
-        log.notice("received \(messages.count) messages (limit: \(limit)), history is exhausted")
+        log.debug("received \(messages.count) messages; less than limit of \(limit), so history is exhausted")
         exhaustedMessageHistory = true
       }
 
@@ -99,30 +107,40 @@ final class ChatViewController: NSSplitViewController {
     }
   }
 
-  func selectChannel(withID id: Snowflake) {
+  func selectChannel(withID id: GuildChannel.ID, inGuild guildID: Guild.ID?) {
+    guard let client = client else {
+      return
+    }
+
     focusedChannelID = id.uint64
     exhaustedMessageHistory = false
 
-    if let client = client,
-       let selectedGuild = selectedGuild,
-       let channelName = selectedGuild.channels.first(where: { $0.id == id })?
-       .name
-    {
+    if let selectedGuild = selectedGuild,
+       let channelName = selectedGuild.channels.first(where: { $0.id == id })?.name {
       view.window?.title = selectedGuild.name
       view.window?.subtitle = "#\(channelName)"
-      let request = try! client.http.apiRequest(
-        to: "/channels/\(id.uint64)/messages",
-        query: ["limit": "50"]
-      )!
+    } else if let privateChannel = client.privateChannels.first(where: { $0.id == id }) {
+      view.window?.title = privateChannel.name()
+      view.window?.subtitle = ""
+    }
 
-      Task { [request] in
-        do {
-          let messages: [Message] = try await client.http.requestDecoding(request, withSpoofedHeadersFor: .xhr)
-          self.messagesViewController.applyInitialMessages(messages)
-        } catch {
-          log.error("failed to fetch messages: \(String(describing: error), privacy: .public)")
-          self.messagesViewController.applyInitialMessages([])
+    let request = try! client.http.apiRequest(
+      to: "/channels/\(id.uint64)/messages",
+      query: ["limit": "50"]
+    )!
+
+    Task { [request] in
+      do {
+        let messages: [Message] = try await client.http.requestDecoding(request, withSpoofedHeadersFor: .xhr)
+        self.messagesViewController.applyInitialMessages(messages)
+
+        if messages.count < 50 {
+          log.debug("entire message history is <50, exhausted")
+          exhaustedMessageHistory = true
         }
+      } catch {
+        log.error("failed to fetch messages: \(String(describing: error), privacy: .public)")
+        self.messagesViewController.applyInitialMessages([])
       }
     }
   }
@@ -220,6 +238,12 @@ final class ChatViewController: NSSplitViewController {
         self?.applyGuilds()
       }
 
+    privateChannelsSink = client.privateChannelsChanged.receive(on: RunLoop.main)
+      .sink { [weak self] _ in
+        guard let self = self, let client = self.client else { return }
+        self.navigatorViewController.reload(privateChannelIDs: client.privateChannels.map(\.id))
+      }
+
     func bodyToString(_ body: Data?) -> String {
       guard let body = body else {
         return "<no body>"
@@ -287,7 +311,7 @@ final class ChatViewController: NSSplitViewController {
       return
     }
 
-    navigatorViewController.reloadWithGuildIDs(guilds.map(\.id))
+    navigatorViewController.reload(guildIDs: guilds.map(\.id))
   }
 
   func logPacket(_ packet: AnyGatewayPacket) {
@@ -346,7 +370,7 @@ final class ChatViewController: NSSplitViewController {
 
     focusedChannelID = nil
     selectedGuildID = nil
-    navigatorViewController.reloadWithGuildIDs([])
+    navigatorViewController.reload(guildIDs: [])
     messagesViewController.applyInitialMessages([])
     view.window?.title = "Basilisk"
     view.window?.subtitle = ""
@@ -399,17 +423,25 @@ extension ChatViewController: MessagesViewControllerDelegate {
 
 extension ChatViewController: NavigatorViewControllerDelegate {
   func navigatorViewController(_ navigatorViewController: NavigatorViewController,
-                               didSelectChannelWithID channelID: Channel.ID,
-                               inGuildWithID guildID: Guild.ID) {
+                               didSelectChannelWithID channelID: GuildChannel.ID,
+                               inGuildWithID guildID: Guild.ID?) {
     selectedGuildID = guildID
-    selectChannel(withID: channelID)
+    selectChannel(withID: channelID, inGuild: guildID)
+  }
+
+  func navigatorViewController(_ navigatorViewController: NavigatorViewController,
+                               requestingPrivateChannelWithID id: PrivateChannel.ID) -> PrivateChannel {
+    guard let privateChannel = client?.privateChannels.first(where: { $0.id == id }) else {
+      fatalError("navigator request non-existent private channel with id: \(id), or client wasn't ready yet")
+    }
+    return privateChannel
   }
 
   func navigatorViewController(_ navigatorViewController: NavigatorViewController,
                                requestingGuildWithID id: Guild.ID
   ) -> Guild {
     guard let guild = client?.guilds.first(where: { $0.id == id }) else {
-      fatalError("navigator requested client when we don't have one")
+      fatalError("navigator requested non-existent guild with id: \(id), or client wasn't ready yet")
     }
 
     return guild

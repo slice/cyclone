@@ -1,20 +1,7 @@
 import Foundation
 
-public enum ChannelType: Int, Codable {
-  case text = 0
-  case dm = 1
-  case voice = 2
-  case groupDM = 3
-  case category = 4
-  case news = 5
-  case store = 6
-  case newsThread = 10
-  case publicThread = 11
-  case privateThread = 12
-  case stageVoice = 13
-}
-
-public struct Channel: Identifiable {
+/// A text, voice, category, etc. channel in a guild.
+public struct GuildChannel: Identifiable {
   public let id: Snowflake
   public let name: String
   public let type: ChannelType
@@ -30,7 +17,7 @@ public struct Channel: Identifiable {
   }
 }
 
-extension Channel: Decodable {
+extension GuildChannel: Decodable {
   public init(from decoder: Decoder) throws {
     id = try decoder.decode("id")
     type = try decoder.decode("type")

@@ -2,7 +2,7 @@ public struct Guild: Identifiable {
   public let name: String
   public let id: Snowflake
   public let icon: Asset?
-  public let channels: [Channel]
+  public let channels: [GuildChannel]
 }
 
 extension Guild: Decodable {

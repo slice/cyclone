@@ -1,6 +1,7 @@
-public enum AssetType: String {
-  case icon
-  case avatar
+public enum AssetType: String, CaseIterable {
+  case icon = "icons"
+  case avatar = "avatars"
+  case channelIcon = "channel-icons"
 }
 
 public struct Asset {
@@ -10,7 +11,7 @@ public struct Asset {
 
   public func url(withFileExtension fileExtension: String) -> URL {
     Constants.cdnURL
-      .appendingPathComponent("\(type.rawValue)s")
+      .appendingPathComponent(type.rawValue)
       .appendingPathComponent(parent.string)
       .appendingPathComponent("\(hash).\(fileExtension)")
   }

@@ -32,16 +32,16 @@ import Serpent
 //
 // Kudos to Danny#0007 and some friends in Dannyware for their assistance.
 
-public extension Array where Element == Channel {
+public extension Array where Element == GuildChannel {
   /// Sorts an array of channels according to their type, then position, then
   /// ID.
-  func sortedByTypeAndPosition() -> [Channel] {
+  func sortedByTypeAndPosition() -> [GuildChannel] {
     sorted {
       ($0.type.rawValue, $0.position, $0.id) < ($1.type.rawValue, $1.position, $1.id)
     }
   }
 
-  func withinCategory(_ category: Channel) -> [Channel] {
+  func withinCategory(_ category: GuildChannel) -> [GuildChannel] {
     filter { $0.parentID == category.id }
   }
 }
@@ -49,7 +49,7 @@ public extension Array where Element == Channel {
 public extension Guild {
   /// Returns an array of this guild's top level channels, sorted according to
   /// how they are displayed in the client for this user.
-  func sortedTopLevelChannels(forUserWith userID: Snowflake?) -> [Channel] {
+  func sortedTopLevelChannels(forUserWith userID: Snowflake?) -> [GuildChannel] {
     channels
       .filter {
         ($0.isTopLevel) && $0.overwrites.isChannelVisible(for: userID)

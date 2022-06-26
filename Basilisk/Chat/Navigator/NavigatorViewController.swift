@@ -6,19 +6,20 @@ private extension NSUserInterfaceItemIdentifier {
   static let navigatorGuild: Self = .init("navigator-guild")
 }
 
-class NavigatorViewController: NSViewController {
+final class NavigatorViewController: NSViewController {
   @IBOutlet var outlineView: NSOutlineView!
 
   weak var delegate: NavigatorViewControllerDelegate?
 
   private var guildIDs: [Guild.ID] = []
+  private var privateChannelIDs: [PrivateChannel.ID] = []
 
   override func viewDidLoad() {
     outlineView.dataSource = self
     outlineView.delegate = self
   }
 
-  func reloadWithGuildIDs(_ ids: [Guild.ID]) {
+  func reload(guildIDs ids: [Guild.ID]) {
     if guildIDs.isEmpty && !ids.isEmpty {
       // If we are receiving our first guilds, automatically expand the guild
       // list so the user can immediately see them.
@@ -30,21 +31,30 @@ class NavigatorViewController: NSViewController {
     outlineView.reloadData()
   }
 
-  private func guild(withID id: Guild.ID) -> Guild {
-    guard let guild = delegate?.navigatorViewController(
-      self,
-      requestingGuildWithID: id
-    ) else {
-      preconditionFailure("navigator was unable to request guild with id \(id)")
-    }
+  func reload(privateChannelIDs ids: [PrivateChannel.ID]) {
+    privateChannelIDs = ids
+    outlineView.reloadData()
+  }
+}
 
+extension NavigatorViewController {
+  private func guild(withID id: Guild.ID) -> Guild {
+    guard let guild = delegate?.navigatorViewController(self, requestingGuildWithID: id) else {
+      preconditionFailure("navigator couldn't request guild with id \(id)")
+    }
     return guild
+  }
+
+  private func privateChannel(withID id: PrivateChannel.ID) -> PrivateChannel {
+    guard let pc = delegate?.navigatorViewController(self, requestingPrivateChannelWithID: id) else {
+      preconditionFailure("navigator couldn't request private channel with id: \(id)")
+    }
+    return pc
   }
 }
 
 extension NavigatorViewController: NSOutlineViewDataSource {
-  func outlineView(_: NSOutlineView, child index: Int,
-                   ofItem item: Any?) -> Any
+  func outlineView(_: NSOutlineView, child index: Int, ofItem item: Any?) -> Any
   {
     let userID = delegate?.navigatorViewController(self, didRequestCurrentUserID: ())
 
@@ -59,10 +69,10 @@ extension NavigatorViewController: NSOutlineViewDataSource {
       case .section:
         switch item.id {
         case "pinned": return NSNull()
-        case "dms": return NSNull()
+        case "dms":
+          return ChannelRef(privateChannel: privateChannel(withID: privateChannelIDs[index]))
         case "guilds":
-          let guildID = guildIDs[index]
-          return NavigatorOutlineItem(kind: .guild, id: String(guildID.uint64))
+          return NavigatorOutlineItem(kind: .guild, id: guildIDs[index].string)
         default: return NSNull()
         }
       case .guild:
@@ -70,16 +80,19 @@ extension NavigatorViewController: NSOutlineViewDataSource {
         let sortedTopLevelChannels = guild.sortedTopLevelChannels(forUserWith: userID)
         return ChannelRef(guild: guild, channel: sortedTopLevelChannels[index])
       }
-    case let channel as ChannelRef:
-      guard channel.type == .category else {
-        NSLog(
-          "[warning] navigator tried to request children of a non-category channel"
-        )
+    case let channelRef as ChannelRef:
+      guard channelRef.type == .category else {
+        NSLog("[warning] navigator tried to request children of a non-category channel")
         return NSNull()
       }
 
-      let guild = guild(withID: Snowflake(uint64: channel.guildID))
-      let channels = guild.channels.filter { $0.parentID?.uint64 == channel.id && $0.overwrites.isChannelVisible(for: userID) }
+      guard let guildID = channelRef.guildID else {
+        NSLog("[warning] category channel ref had no associated guild id")
+        return NSNull()
+      }
+
+      let guild = guild(withID: Snowflake(uint64: guildID))
+      let channels = guild.channels.filter { $0.parentID?.uint64 == channelRef.id && $0.overwrites.isChannelVisible(for: userID) }
         .sortedByTypeAndPosition()
       return ChannelRef(guild: guild, channel: channels[index])
     default: return NSNull()
@@ -117,7 +130,7 @@ extension NavigatorViewController: NSOutlineViewDataSource {
       case .section:
         switch item.id {
         case "pinned": return 0
-        case "dms": return 0
+        case "dms": return privateChannelIDs.count
         case "guilds": return guildIDs.count
         default: preconditionFailure()
         }
@@ -126,10 +139,11 @@ extension NavigatorViewController: NSOutlineViewDataSource {
         return guild.sortedTopLevelChannels(forUserWith: userID).count
       }
     case let channel as ChannelRef:
-      guard channel.type == .category else {
+      guard channel.type == .category,
+            let guildID = channel.guildID else {
         return 0
       }
-      let guild = guild(withID: Snowflake(uint64: channel.guildID))
+      let guild = guild(withID: Snowflake(uint64: guildID))
       return guild.channels.filter { $0.parentID?.uint64 == channel.id && $0.overwrites.isChannelVisible(for: userID) }.count
     default: return 0
     }
@@ -154,11 +168,7 @@ private extension ChannelType {
 }
 
 extension NavigatorViewController: NSOutlineViewDelegate {
-  func outlineView(
-    _ outlineView: NSOutlineView,
-    viewFor _: NSTableColumn?,
-    item: Any
-  ) -> NSView? {
+  func outlineView(_ outlineView: NSOutlineView, viewFor _: NSTableColumn?, item: Any) -> NSView? {
     switch item {
     case let item as NavigatorOutlineItem:
       switch item.kind {
@@ -181,10 +191,7 @@ extension NavigatorViewController: NSOutlineViewDelegate {
         view.textField?.stringValue = name
         return view
       case .guild:
-        let view = outlineView.makeView(
-          withIdentifier: .navigatorGuild,
-          owner: nil
-        ) as! NavigatorGuildCellView
+        let view = outlineView.makeView(withIdentifier: .navigatorGuild, owner: nil) as! NavigatorGuildCellView
 
         let snowflake = Snowflake(string: item.id)
         let guild = guild(withID: snowflake)
@@ -198,23 +205,44 @@ extension NavigatorViewController: NSOutlineViewDelegate {
 
         return view
       }
-    case let channel as ChannelRef:
+    case let channelRef as ChannelRef:
       // TODO: don't use .navigatorGuild
-      let view = outlineView.makeView(
-        withIdentifier: .navigatorGuild,
-        owner: nil
-      ) as! NavigatorGuildCellView
-      view.roundingView.radius = 0.0
-      let guild = guild(withID: Snowflake(uint64: channel.guildID))
+      let view = outlineView.makeView(withIdentifier: .navigatorGuild, owner: nil) as! NavigatorGuildCellView
 
-      let channelID = Snowflake(uint64: channel.id)
-      let channel = guild.channels.first(where: { $0.id == channelID })!
+      if channelRef.isPrivate {
+        let privateChannel = privateChannel(withID: Snowflake(uint64: channelRef.id))
+        view.textField?.stringValue = privateChannel.name()
 
-      view.imageView?.image = NSImage(
-        systemSymbolName: channel.type.systemSymbolName,
-        accessibilityDescription: nil
-      )
-      view.textField?.stringValue = channel.name
+        if case .groupDM(let groupDMChannel) = privateChannel {
+          if let url = groupDMChannel.icon?.url(withFileExtension: "png") {
+            view.imageView?.kf.setImage(with: url)
+            view.roundingView.radius = 6.0
+          } else {
+            view.imageView?.image = NSImage(systemSymbolName: "person.2.fill", accessibilityDescription: "Group Direct Message")
+            view.roundingView.radius = 0
+          }
+        } else {
+          // TODO: implement caching, then use the recipient's avatar here
+          view.imageView?.image = NSImage(systemSymbolName: "person.fill", accessibilityDescription: "Direct Message")
+          view.roundingView.radius = 0
+        }
+      } else {
+        guard let guildID = channelRef.guildID else {
+          NSLog("[warning] non-private channelref didn't have guild id")
+          return nil
+        }
+        view.roundingView.radius = 0.0
+        let guild = guild(withID: Snowflake(uint64: guildID))
+
+        let channelID = Snowflake(uint64: channelRef.id)
+        let channel = guild.channels.first(where: { $0.id == channelID })!
+
+        view.imageView?.image = NSImage(
+          systemSymbolName: channel.type.systemSymbolName,
+          accessibilityDescription: nil
+        )
+        view.textField?.stringValue = channel.name
+      }
 
       return view
     default:
@@ -223,8 +251,8 @@ extension NavigatorViewController: NSOutlineViewDelegate {
   }
 
   func outlineView(_: NSOutlineView, shouldSelectItem item: Any) -> Bool {
-    if let channel = item as? ChannelRef, channel.type == .text {
-      return true
+    if let channel = item as? ChannelRef {
+      return channel.type == .text || channel.isPrivate
     }
 
     return false
@@ -233,12 +261,12 @@ extension NavigatorViewController: NSOutlineViewDelegate {
   func outlineViewSelectionDidChange(_: Notification) {
     guard outlineView.selectedRow > 0 else { return }
 
-    let channel = outlineView
-      .item(atRow: outlineView.selectedRow) as! ChannelRef
+    let channel = outlineView.item(atRow: outlineView.selectedRow) as! ChannelRef
+
     delegate?.navigatorViewController(
       self,
       didSelectChannelWithID: Snowflake(uint64: channel.id),
-      inGuildWithID: Snowflake(uint64: channel.guildID)
+      inGuildWithID: channel.guildID.map { Snowflake(uint64: $0) }
     )
   }
 

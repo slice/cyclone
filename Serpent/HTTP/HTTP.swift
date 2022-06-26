@@ -206,7 +206,7 @@ public class HTTP {
     withSpoofedHeadersFor type: SpoofedRequestType
   ) async throws -> T {
     let (_, data) = try await self.request(request, withSpoofedHeadersFor: type)
-    let decoder = JSONDecoder()
+    let decoder = SerpentJSONDecoder()
     return try decoder.decode(T.self, from: data)
   }
 }

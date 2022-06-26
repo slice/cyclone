@@ -39,9 +39,16 @@ public class Client {
   /// The guilds that this client has.
   public private(set) var guilds: [Guild] = []
 
+  /// The private (DM, group DM) channels visible to the client.
+  public private(set) var privateChannels: [PrivateChannel] = []
+
   /// A Combine `Publisher` that publishes when the client's guild list has
   /// changed in some way.
   public private(set) var guildsChanged = PassthroughSubject<Void, Never>()
+
+  /// A Combine `Publisher` that publishes when the client's private channel
+  /// list has changed in some way.
+  public private(set) var privateChannelsChanged = PassthroughSubject<Void, Never>()
 
   static let defaultDisguise = Disguise(
     userAgent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) discord/0.0.278 Chrome/91.0.4472.164 Electron/13.4.0 Safari/537.36",
@@ -103,6 +110,36 @@ public class Client {
     )
   }
 
+  func handleReady(packet: AnyGatewayPacket) throws {
+    guard let eventData = packet.packet.eventData else {
+      return
+    }
+
+    struct Ready: Decodable {
+      let user: CurrentUser
+      let guilds: [Guild]
+      let privateChannels: [PrivateChannel]
+
+      enum CodingKeys: String, CodingKey {
+        case user = "user"
+        case guilds = "guilds"
+        case privateChannels = "private_channels"
+      }
+    }
+
+    let ready: Ready = try packet.reparse()
+    currentUser = ready.user
+
+    guilds = ready.guilds
+    guildsChanged.send()
+
+    privateChannels = ready.privateChannels
+    privateChannelsChanged.send()
+
+    userSettings = eventData["user_settings"]
+    userSettingsChanged.send(userSettings!)
+  }
+
   func processPacket(_ packet: AnyGatewayPacket) throws {
     guard let eventName = packet.packet.eventName,
           let eventData = packet.packet.eventData else {
@@ -112,20 +149,7 @@ public class Client {
     switch eventName {
     case "READY":
       log.debug("discord is READY. now we have to get READY!")
-
-      struct Ready: Decodable {
-        let user: CurrentUser
-        let guilds: [Guild]
-      }
-
-      userSettings = eventData["user_settings"]
-      userSettingsChanged.send(userSettings!)
-
-      let ready: Ready = try packet.reparse()
-
-      currentUser = ready.user
-      guilds = ready.guilds
-      guildsChanged.send()
+      try handleReady(packet: packet)
     case "GUILD_CREATE":
       guilds.append(try packet.reparse())
       guildsChanged.send()

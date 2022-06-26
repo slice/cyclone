@@ -33,7 +33,7 @@
 		12894913274C8FA200850D5E /* Guild.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12894912274C8FA200850D5E /* Guild.swift */; };
 		12894915274C8FB900850D5E /* Snowflake.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12894914274C8FB900850D5E /* Snowflake.swift */; };
 		12894917274C904E00850D5E /* Asset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12894916274C904E00850D5E /* Asset.swift */; };
-		12894919274C91C700850D5E /* Channel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12894918274C91C700850D5E /* Channel.swift */; };
+		12894919274C91C700850D5E /* GuildChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12894918274C91C700850D5E /* GuildChannel.swift */; };
 		12897BF2273E25C700403E5B /* GatewayConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12897BF1273E25C700403E5B /* GatewayConnection.swift */; };
 		12897BF4273E2BF400403E5B /* Opcode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12897BF3273E2BF400403E5B /* Opcode.swift */; };
 		128C7673273DFD0E008FD585 /* Client.swift in Sources */ = {isa = PBXBuildFile; fileRef = 128C7672273DFD0E008FD585 /* Client.swift */; };
@@ -73,6 +73,11 @@
 		12DAC9E5286127B4006B3B1D /* MessagesViewController+Messages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12DAC9E4286127B4006B3B1D /* MessagesViewController+Messages.swift */; };
 		12DCEAA32751E38500A0A626 /* NavigatorOutlineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12DCEAA22751E38500A0A626 /* NavigatorOutlineItem.swift */; };
 		12DCEAA52751E60C00A0A626 /* ChannelSorting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12DCEAA42751E60C00A0A626 /* ChannelSorting.swift */; };
+		12E6DD9F2867CF9800FD72A2 /* GroupDMChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12E6DD9E2867CF9800FD72A2 /* GroupDMChannel.swift */; };
+		12E6DDA22867D5A600FD72A2 /* SerpentJSONDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12E6DDA12867D5A600FD72A2 /* SerpentJSONDecoder.swift */; };
+		12E6DDA42867D66700FD72A2 /* ChannelType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12E6DDA32867D66700FD72A2 /* ChannelType.swift */; };
+		12E6DDA82867D89E00FD72A2 /* PrivateChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12E6DDA72867D89E00FD72A2 /* PrivateChannel.swift */; };
+		12E6DDAA2867D8B900FD72A2 /* DMChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12E6DDA92867D8B900FD72A2 /* DMChannel.swift */; };
 		12E80A5A2752AC1F00ACD979 /* NSView+Nib.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12E80A592752AC1F00ACD979 /* NSView+Nib.swift */; };
 		12EB5FA42866A4200012F938 /* HTTPInspector.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 12EB5FA32866A41F0012F938 /* HTTPInspector.storyboard */; };
 		12EB5FA62866A46D0012F938 /* HTTPInspectorController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12EB5FA52866A46D0012F938 /* HTTPInspectorController.swift */; };
@@ -173,7 +178,7 @@
 		12894912274C8FA200850D5E /* Guild.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Guild.swift; sourceTree = "<group>"; };
 		12894914274C8FB900850D5E /* Snowflake.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Snowflake.swift; sourceTree = "<group>"; };
 		12894916274C904E00850D5E /* Asset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Asset.swift; sourceTree = "<group>"; };
-		12894918274C91C700850D5E /* Channel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Channel.swift; sourceTree = "<group>"; };
+		12894918274C91C700850D5E /* GuildChannel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuildChannel.swift; sourceTree = "<group>"; };
 		12897BF1273E25C700403E5B /* GatewayConnection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GatewayConnection.swift; sourceTree = "<group>"; };
 		12897BF3273E2BF400403E5B /* Opcode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Opcode.swift; sourceTree = "<group>"; };
 		128C7672273DFD0E008FD585 /* Client.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Client.swift; sourceTree = "<group>"; };
@@ -209,6 +214,11 @@
 		12DAC9E4286127B4006B3B1D /* MessagesViewController+Messages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MessagesViewController+Messages.swift"; sourceTree = "<group>"; };
 		12DCEAA22751E38500A0A626 /* NavigatorOutlineItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigatorOutlineItem.swift; sourceTree = "<group>"; };
 		12DCEAA42751E60C00A0A626 /* ChannelSorting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelSorting.swift; sourceTree = "<group>"; };
+		12E6DD9E2867CF9800FD72A2 /* GroupDMChannel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupDMChannel.swift; sourceTree = "<group>"; };
+		12E6DDA12867D5A600FD72A2 /* SerpentJSONDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SerpentJSONDecoder.swift; sourceTree = "<group>"; };
+		12E6DDA32867D66700FD72A2 /* ChannelType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelType.swift; sourceTree = "<group>"; };
+		12E6DDA72867D89E00FD72A2 /* PrivateChannel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivateChannel.swift; sourceTree = "<group>"; };
+		12E6DDA92867D8B900FD72A2 /* DMChannel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DMChannel.swift; sourceTree = "<group>"; };
 		12E80A592752AC1F00ACD979 /* NSView+Nib.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSView+Nib.swift"; sourceTree = "<group>"; };
 		12EB5FA32866A41F0012F938 /* HTTPInspector.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = HTTPInspector.storyboard; sourceTree = "<group>"; };
 		12EB5FA52866A46D0012F938 /* HTTPInspectorController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPInspectorController.swift; sourceTree = "<group>"; };
@@ -339,10 +349,10 @@
 		12894911274C8F9E00850D5E /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				12E6DDA02867CF9D00FD72A2 /* Channel */,
 				12894912274C8FA200850D5E /* Guild.swift */,
 				12894914274C8FB900850D5E /* Snowflake.swift */,
 				12894916274C904E00850D5E /* Asset.swift */,
-				12894918274C91C700850D5E /* Channel.swift */,
 				12945080274D3A240024C744 /* Message.swift */,
 				12945082274D3A410024C744 /* User.swift */,
 				B8EFC2F5275197ED0010B894 /* PermissionOverwrites.swift */,
@@ -426,6 +436,18 @@
 				12D23C222754204B00F3D18D /* AccountsViewController.swift */,
 			);
 			path = Preferences;
+			sourceTree = "<group>";
+		};
+		12E6DDA02867CF9D00FD72A2 /* Channel */ = {
+			isa = PBXGroup;
+			children = (
+				12E6DDA32867D66700FD72A2 /* ChannelType.swift */,
+				12894918274C91C700850D5E /* GuildChannel.swift */,
+				12E6DDA92867D8B900FD72A2 /* DMChannel.swift */,
+				12E6DD9E2867CF9800FD72A2 /* GroupDMChannel.swift */,
+				12E6DDA72867D89E00FD72A2 /* PrivateChannel.swift */,
+			);
+			path = Channel;
 			sourceTree = "<group>";
 		};
 		12E80A582752AC1600ACD979 /* Support */ = {
@@ -524,6 +546,7 @@
 				128C7674273DFF73008FD585 /* Branch.swift */,
 				128C7676273E04D2008FD585 /* Disguise.swift */,
 				12861A77285DD21600C85F86 /* Constants.swift */,
+				12E6DDA12867D5A600FD72A2 /* SerpentJSONDecoder.swift */,
 			);
 			path = Serpent;
 			sourceTree = "<group>";
@@ -827,8 +850,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				12CD0228274218AA00F136A5 /* Publisher+Buffer.swift in Sources */,
-				12894919274C91C700850D5E /* Channel.swift in Sources */,
+				12894919274C91C700850D5E /* GuildChannel.swift in Sources */,
 				1259D6D82816AA55006AE1D1 /* Decodable+Int.swift in Sources */,
+				12E6DDA82867D89E00FD72A2 /* PrivateChannel.swift in Sources */,
 				12552C9C273F3DDA007D92B1 /* HTTP.swift in Sources */,
 				B8EFC2F6275197ED0010B894 /* PermissionOverwrites.swift in Sources */,
 				12945081274D3A240024C744 /* Message.swift in Sources */,
@@ -843,13 +867,17 @@
 				1259D6E428176E0E006AE1D1 /* AnyGatewayPacket.swift in Sources */,
 				12897BF4273E2BF400403E5B /* Opcode.swift in Sources */,
 				128C7677273E04D2008FD585 /* Disguise.swift in Sources */,
+				12E6DDA42867D66700FD72A2 /* ChannelType.swift in Sources */,
 				12BB68092861BF9E0078CCEC /* WebSocketState.swift in Sources */,
 				12F4FDB7273DFCD000B6AE64 /* Serpent.docc in Sources */,
 				12894915274C8FB900850D5E /* Snowflake.swift in Sources */,
 				12861A76285DC49C00C85F86 /* Ref.swift in Sources */,
 				1296E3192855AD2700CDFD2E /* Attachment.swift in Sources */,
+				12E6DDA22867D5A600FD72A2 /* SerpentJSONDecoder.swift in Sources */,
 				120A78DB2741F9BE0099834B /* WebSocketEvent.swift in Sources */,
 				12945083274D3A410024C744 /* User.swift in Sources */,
+				12E6DD9F2867CF9800FD72A2 /* GroupDMChannel.swift in Sources */,
+				12E6DDAA2867D8B900FD72A2 /* DMChannel.swift in Sources */,
 				12894917274C904E00850D5E /* Asset.swift in Sources */,
 				120A78D82741E9A70099834B /* WebSocket.swift in Sources */,
 				126A8801285E95B90014DC40 /* HTTPLog.swift in Sources */,

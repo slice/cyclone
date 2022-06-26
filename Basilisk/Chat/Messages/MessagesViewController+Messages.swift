@@ -56,7 +56,13 @@ extension MessagesViewController {
   public func prependOldMessages(_ messagesNewestFirst: [Message]) {
     var snapshot = dataSource.snapshot()
 
-    guard !messages.isEmpty else { return }
+    guard !messages.isEmpty else {
+      fatalError("there are no messages being displayed, so we cannot prepend")
+    }
+
+    guard !messagesNewestFirst.isEmpty else {
+      fatalError("messages to prepend was empty")
+    }
 
     let messages: [Message] = messagesNewestFirst.reversed()
 

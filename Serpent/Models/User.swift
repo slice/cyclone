@@ -18,12 +18,9 @@ extension User: Decodable {
   public init(from decoder: Decoder) throws {
     username = try decoder.decode("username")
     publicFlags = try decoder.decodeIfPresent("public_flags")
-    id = try decoder.decode("id")
+    let id: Snowflake = try decoder.decode("id")
+    self.id = id
     discriminator = try decoder.decode("discriminator")
-    if let avatarHash = try decoder.decodeIfPresent("avatar", as: String.self) {
-      avatar = Asset(type: .avatar, parent: id, hash: avatarHash)
-    } else {
-      avatar = nil
-    }
+    avatar = try decoder.decodeIfPresent("avatar").map { Asset(type: .avatar, parent: id, hash: $0) }
   }
 }

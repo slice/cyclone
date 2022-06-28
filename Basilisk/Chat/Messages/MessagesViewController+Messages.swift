@@ -74,7 +74,8 @@ extension MessagesViewController {
     }
 
     let firstSection = snapshot.sectionIdentifiers.first!
-    var section = MessagesSection(firstMessage: messages.first!)
+    let firstMessage = messages.first!
+    var section = MessagesSection(firstMessage: firstMessage)
     snapshot.insertSections([section], beforeSection: firstSection)
 
     for message in messages {

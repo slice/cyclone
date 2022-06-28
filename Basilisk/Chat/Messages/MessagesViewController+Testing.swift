@@ -32,8 +32,8 @@ extension MessagesViewController {
           count: (1...3).randomElement()!
         )
       }
-      let measurement = self.measureRowHeight(forMessage: message)
-      message.content = "\(measurement) \(message.content)"
+//      let measurement = self.measureRowHeight(forMessage: message)
+//      message.content = "\(measurement) \(message.content)"
       return message
     }
 

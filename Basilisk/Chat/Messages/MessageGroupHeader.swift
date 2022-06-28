@@ -8,6 +8,7 @@ class MessageGroupHeader: NSView {
 
   override func prepareForReuse() {
     super.prepareForReuse()
+    groupAvatarImageView.kf.cancelDownloadTask()
     groupAvatarImageView.image = nil
     groupAuthorTextField.stringValue = ""
     groupTimestampTextField.stringValue = ""

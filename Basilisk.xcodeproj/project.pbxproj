@@ -43,10 +43,9 @@
 		12945083274D3A410024C744 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12945082274D3A410024C744 /* User.swift */; };
 		1296E31728559AE300CDFD2E /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 1296E31628559AE300CDFD2E /* Kingfisher */; };
 		1296E3192855AD2700CDFD2E /* Attachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1296E3182855AD2700CDFD2E /* Attachment.swift */; };
-		1296E31B2855B0B900CDFD2E /* MessageRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1296E31A2855B0B900CDFD2E /* MessageRow.swift */; };
-		1296E31D2855B0C600CDFD2E /* MessageRow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1296E31C2855B0C600CDFD2E /* MessageRow.xib */; };
 		1297448B2857415200CDB201 /* LoadingAttachmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1297448A2857415200CDB201 /* LoadingAttachmentView.swift */; };
 		129AF795273E653100B3851C /* GatewayPacket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 129AF794273E653100B3851C /* GatewayPacket.swift */; };
+		129B6031286AEBF60096FB67 /* IntrinsicImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 129B6030286AEBF60096FB67 /* IntrinsicImageView.swift */; };
 		129ED06B2818ED4B009FDAD7 /* AccountEditorController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 129ED06A2818ED4B009FDAD7 /* AccountEditorController.swift */; };
 		129FBBF22812913400BD5D09 /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 129FBBF12812913400BD5D09 /* SwiftyJSON */; };
 		129FBBF52812918C00BD5D09 /* Codextended in Frameworks */ = {isa = PBXBuildFile; productRef = 129FBBF42812918C00BD5D09 /* Codextended */; };
@@ -62,6 +61,8 @@
 		12BB68072861ADC00078CCEC /* ConnectionStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12BB68062861ADC00078CCEC /* ConnectionStatusView.swift */; };
 		12BB68092861BF9E0078CCEC /* WebSocketState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12BB68082861BF9E0078CCEC /* WebSocketState.swift */; };
 		12C1D4B92827B9ED005D21A4 /* Inspector.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 12C1D4B82827B9ED005D21A4 /* Inspector.storyboard */; };
+		12C74E44286A8E01003561A3 /* UnifiedMessageRow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 12C74E43286A8E01003561A3 /* UnifiedMessageRow.xib */; };
+		12C74E46286A8E4B003561A3 /* UnifiedMessageRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12C74E45286A8E4B003561A3 /* UnifiedMessageRow.swift */; };
 		12CD0228274218AA00F136A5 /* Publisher+Buffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12CD0226274217E600F136A5 /* Publisher+Buffer.swift */; };
 		12D23C1A27540BAE00F3D18D /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12D23C1927540BAE00F3D18D /* Account.swift */; };
 		12D23C1C27540CF200F3D18D /* Accounts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12D23C1B27540CF200F3D18D /* Accounts.swift */; };
@@ -98,8 +99,6 @@
 		12F4FDC5273DFCD000B6AE64 /* Serpent.h in Headers */ = {isa = PBXBuildFile; fileRef = 12F4FDB5273DFCD000B6AE64 /* Serpent.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		12F4FDC8273DFCD000B6AE64 /* Serpent.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 12F4FDB3273DFCD000B6AE64 /* Serpent.framework */; };
 		12F4FDC9273DFCD000B6AE64 /* Serpent.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 12F4FDB3273DFCD000B6AE64 /* Serpent.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		12FA9AEB274D968500079393 /* MessageGroupHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12FA9AE9274D968500079393 /* MessageGroupHeader.swift */; };
-		12FA9AEC274D968500079393 /* MessageGroupHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 12FA9AEA274D968500079393 /* MessageGroupHeader.xib */; };
 		12FAA7652827C29E00205A5B /* InspectorMessagesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12FAA7642827C29E00205A5B /* InspectorMessagesController.swift */; };
 		B8EFC2F6275197ED0010B894 /* PermissionOverwrites.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8EFC2F5275197ED0010B894 /* PermissionOverwrites.swift */; };
 		B8EFC2FA2751A9350010B894 /* CurrentUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8EFC2F92751A9350010B894 /* CurrentUser.swift */; };
@@ -190,10 +189,9 @@
 		12945080274D3A240024C744 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		12945082274D3A410024C744 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		1296E3182855AD2700CDFD2E /* Attachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Attachment.swift; sourceTree = "<group>"; };
-		1296E31A2855B0B900CDFD2E /* MessageRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageRow.swift; sourceTree = "<group>"; };
-		1296E31C2855B0C600CDFD2E /* MessageRow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MessageRow.xib; sourceTree = "<group>"; };
 		1297448A2857415200CDB201 /* LoadingAttachmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingAttachmentView.swift; sourceTree = "<group>"; };
 		129AF794273E653100B3851C /* GatewayPacket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GatewayPacket.swift; sourceTree = "<group>"; };
+		129B6030286AEBF60096FB67 /* IntrinsicImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntrinsicImageView.swift; sourceTree = "<group>"; };
 		129ED06A2818ED4B009FDAD7 /* AccountEditorController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountEditorController.swift; sourceTree = "<group>"; };
 		12AB3D7F274C224200934345 /* InspectorController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InspectorController.swift; sourceTree = "<group>"; };
 		12AB415D28691A0300D54786 /* Cache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cache.swift; sourceTree = "<group>"; };
@@ -205,6 +203,8 @@
 		12BB68062861ADC00078CCEC /* ConnectionStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionStatusView.swift; sourceTree = "<group>"; };
 		12BB68082861BF9E0078CCEC /* WebSocketState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketState.swift; sourceTree = "<group>"; };
 		12C1D4B82827B9ED005D21A4 /* Inspector.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Inspector.storyboard; sourceTree = "<group>"; };
+		12C74E43286A8E01003561A3 /* UnifiedMessageRow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UnifiedMessageRow.xib; sourceTree = "<group>"; };
+		12C74E45286A8E4B003561A3 /* UnifiedMessageRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnifiedMessageRow.swift; sourceTree = "<group>"; };
 		12CD0226274217E600F136A5 /* Publisher+Buffer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Publisher+Buffer.swift"; sourceTree = "<group>"; };
 		12D23C1927540BAE00F3D18D /* Account.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
 		12D23C1B27540CF200F3D18D /* Accounts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Accounts.swift; sourceTree = "<group>"; };
@@ -244,8 +244,6 @@
 		12F4FDB6273DFCD000B6AE64 /* Serpent.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = Serpent.docc; sourceTree = "<group>"; };
 		12F4FDBC273DFCD000B6AE64 /* SerpentTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SerpentTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		12F4FDC3273DFCD000B6AE64 /* SerpentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SerpentTests.swift; sourceTree = "<group>"; };
-		12FA9AE9274D968500079393 /* MessageGroupHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageGroupHeader.swift; sourceTree = "<group>"; };
-		12FA9AEA274D968500079393 /* MessageGroupHeader.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MessageGroupHeader.xib; sourceTree = "<group>"; };
 		12FAA7642827C29E00205A5B /* InspectorMessagesController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InspectorMessagesController.swift; sourceTree = "<group>"; };
 		B8EFC2F5275197ED0010B894 /* PermissionOverwrites.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionOverwrites.swift; sourceTree = "<group>"; };
 		B8EFC2F92751A9350010B894 /* CurrentUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentUser.swift; sourceTree = "<group>"; };
@@ -332,11 +330,10 @@
 				12DAC9E228611BAD006B3B1D /* MessagesViewController+Testing.swift */,
 				12DAC9DE286117A7006B3B1D /* MessagesViewControllerDelegate.swift */,
 				12DAC9DA28611649006B3B1D /* Messages.storyboard */,
-				12FA9AE9274D968500079393 /* MessageGroupHeader.swift */,
-				12FA9AEA274D968500079393 /* MessageGroupHeader.xib */,
-				1296E31A2855B0B900CDFD2E /* MessageRow.swift */,
-				1296E31C2855B0C600CDFD2E /* MessageRow.xib */,
 				1297448A2857415200CDB201 /* LoadingAttachmentView.swift */,
+				12C74E43286A8E01003561A3 /* UnifiedMessageRow.xib */,
+				12C74E45286A8E4B003561A3 /* UnifiedMessageRow.swift */,
+				129B6030286AEBF60096FB67 /* IntrinsicImageView.swift */,
 			);
 			path = Messages;
 			sourceTree = "<group>";
@@ -765,9 +762,8 @@
 				12DAC9DB28611649006B3B1D /* Messages.storyboard in Resources */,
 				12F4FD8B273DFC1B00B6AE64 /* Main.storyboard in Resources */,
 				12C1D4B92827B9ED005D21A4 /* Inspector.storyboard in Resources */,
-				1296E31D2855B0C600CDFD2E /* MessageRow.xib in Resources */,
+				12C74E44286A8E01003561A3 /* UnifiedMessageRow.xib in Resources */,
 				123B8132285FAC58008B0145 /* JSONInspector.storyboard in Resources */,
-				12FA9AEC274D968500079393 /* MessageGroupHeader.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -806,6 +802,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				12C74E46286A8E4B003561A3 /* UnifiedMessageRow.swift in Sources */,
 				121F931A274CF631007F81CC /* ChannelRef.swift in Sources */,
 				12DAC9DD286116F8006B3B1D /* NSScrollView+Scrolling.swift in Sources */,
 				12B99C2427410B010048D2DB /* PacketDirection.swift in Sources */,
@@ -817,9 +814,8 @@
 				12EB5FA92866ACB80012F938 /* HTTPInspectorBodyHeadersController.swift in Sources */,
 				12BB68052861A83A0078CCEC /* StatusBarContainerController.swift in Sources */,
 				12DAC9E5286127B4006B3B1D /* MessagesViewController+Messages.swift in Sources */,
+				129B6031286AEBF60096FB67 /* IntrinsicImageView.swift in Sources */,
 				1260A75B275163F00099CA3B /* NavigatorViewControllerDelegate.swift in Sources */,
-				1296E31B2855B0B900CDFD2E /* MessageRow.swift in Sources */,
-				12FA9AEB274D968500079393 /* MessageGroupHeader.swift in Sources */,
 				12BB68072861ADC00078CCEC /* ConnectionStatusView.swift in Sources */,
 				12AB3D80274C224200934345 /* InspectorController.swift in Sources */,
 				123F622F275183A8001D3D61 /* NavigatorGuildCellView.swift in Sources */,

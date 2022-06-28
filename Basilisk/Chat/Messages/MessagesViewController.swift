@@ -30,8 +30,7 @@ typealias MessagesSnapshot =
   >
 
 extension NSUserInterfaceItemIdentifier {
-  static let message: Self = .init("message")
-  static let messageGroupHeader: Self = .init("message-group-header")
+  static let unifiedMessageRow: Self = .init("unified-message-row")
 }
 
 final class MessagesViewController: NSViewController {
@@ -50,10 +49,7 @@ final class MessagesViewController: NSViewController {
 
   /// A message view that is used to measure message heights. It is never
   /// drawn to the screen.
-  var messageSizingTemplate: MessageRow!
-
-  /// The height of group rows, in points.
-  static let groupRowHeight: CGFloat = 45.0
+  var messageSizingTemplate: UnifiedMessageRow!
 
   var dataSource: MessagesDiffableDataSource!
   var clipViewBoundsChangedSink: AnyCancellable!
@@ -69,11 +65,10 @@ final class MessagesViewController: NSViewController {
     setupDataSource()
 
     tableView.delegate = self
-    tableView.register(MessageRow.nib!, forIdentifier: .message)
-    tableView.register(MessageGroupHeader.nib!, forIdentifier: .messageGroupHeader)
+    tableView.register(UnifiedMessageRow.nib!, forIdentifier: .unifiedMessageRow)
 
     self.messageSizingTemplate =
-      (tableView.makeView(withIdentifier: .message, owner: nil)! as! MessageRow)
+      (tableView.makeView(withIdentifier: .unifiedMessageRow, owner: nil)! as! UnifiedMessageRow)
 
     let clipView = scrollView.contentView
     clipView.postsBoundsChangedNotifications = true
@@ -91,6 +86,15 @@ final class MessagesViewController: NSViewController {
     if UserDefaults.standard.bool(forKey: "BSLKApplySampleMessages") {
       applySampleData()
     }
+  }
+
+  /// Returns a Boolean indicating whether a message is the first in a section
+  /// (should be displayed with an avatar, name, and timestamp).
+  func messageIsFirstInSection(id: Message.ID) -> Bool {
+    guard let section = dataSource.snapshot().sectionIdentifier(containingItem: id) else {
+      fatalError("failed to get section containing message \(id), while checking if it's first in the section")
+    }
+    return section.firstMessageID == id
   }
 
   /// Make changes to the scroll view while preserving what messages are
@@ -163,16 +167,15 @@ final class MessagesViewController: NSViewController {
   /// Measures the height of a message as it would appear in the table view.
   func measureRowHeight(forMessage message: Message) -> Double {
     let signpostID = signposter.makeSignpostID()
-    let signpostName: StaticString = "Message Height Measurement"
-    let state = signposter.beginInterval(signpostName, id: signpostID)
+    let state = signposter.beginInterval("Message Row Height Measurement", id: signpostID)
 
     messageSizingTemplate.prepareForReuse()
-    signposter.emitEvent("Prepare for reuse", id: signpostID)
-    messageSizingTemplate.configure(withMessage: message, forMeasurements: true)
-    signposter.emitEvent("View configuration", id: signpostID)
+    signposter.emitEvent("Reuse preparation complete", id: signpostID)
+    messageSizingTemplate.configure(withMessage: message, isGroupHeader: messageIsFirstInSection(id: message.id), forMeasurements: true)
+    signposter.emitEvent("View configuration complete", id: signpostID)
     let height = messageSizingTemplate.fittingSize.height
-    signposter.emitEvent("Measurement", id: signpostID)
-    signposter.endInterval(signpostName, state)
+    signposter.emitEvent("Measurement complete", id: signpostID)
+    signposter.endInterval("Message Row Height Measurement", state)
 
     return height
   }
@@ -180,9 +183,6 @@ final class MessagesViewController: NSViewController {
 
 extension MessagesViewController: NSTableViewDelegate {
   func tableView(_ tableView: NSTableView, heightOfRow row: Int) -> CGFloat {
-    if case .some(_) = dataSource.sectionIdentifier(forRow: row) {
-      return Self.groupRowHeight
-    }
     let messageID = dataSource.itemIdentifier(forRow: row)!
     let message = self.messages[messageID]!
     return measureRowHeight(forMessage: message)

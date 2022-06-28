@@ -13,6 +13,29 @@ public struct Ref<Model: Identifiable> {
   }
 }
 
+extension Ref: Hashable {
+}
+
+extension Identifiable where ID == Snowflake {
+  /// Returns a `Ref` to this model.
+  public var ref: Ref<Self> {
+    Ref(id: id)
+  }
+}
+
+extension Snowflake {
+  /// Returns this snowflake as a `Ref`.
+  public func ref<T>() -> Ref<T> {
+    Ref(id: self)
+  }
+}
+
+extension Ref: Comparable {
+  public static func < (lhs: Ref<Model>, rhs: Ref<Model>) -> Bool {
+    lhs.id < rhs.id
+  }
+}
+
 extension Ref: Decodable {
   public init(from decoder: Decoder) throws {
     self.id = try decoder.decodeSingleValue(as: Snowflake.self)

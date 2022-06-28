@@ -14,6 +14,16 @@ public struct User: Identifiable {
   }
 }
 
+extension User: Hashable {
+  public static func == (lhs: User, rhs: User) -> Bool {
+    lhs.id == rhs.id
+  }
+
+  public func hash(into hasher: inout Hasher) {
+    hasher.combine(id)
+  }
+}
+
 extension User: Decodable {
   public init(from decoder: Decoder) throws {
     username = try decoder.decode("username")

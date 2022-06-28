@@ -11,6 +11,16 @@ public struct DMChannel: Identifiable {
   }
 }
 
+extension DMChannel: Hashable {
+  public static func == (lhs: DMChannel, rhs: DMChannel) -> Bool {
+    lhs.id == rhs.id
+  }
+
+  public func hash(into hasher: inout Hasher) {
+    hasher.combine(id)
+  }
+}
+
 extension DMChannel: Decodable {
   public init(from decoder: Decoder) throws {
     id = try decoder.decode("id")

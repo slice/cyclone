@@ -52,6 +52,9 @@
 		129FBBF52812918C00BD5D09 /* Codextended in Frameworks */ = {isa = PBXBuildFile; productRef = 129FBBF42812918C00BD5D09 /* Codextended */; };
 		12A66644285567A200172D99 /* OrderedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = 12A66643285567A200172D99 /* OrderedCollections */; };
 		12AB3D80274C224200934345 /* InspectorController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12AB3D7F274C224200934345 /* InspectorController.swift */; };
+		12AB415E28691A0300D54786 /* Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12AB415D28691A0300D54786 /* Cache.swift */; };
+		12AB4160286925F200D54786 /* ReadyPacket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12AB415F286925F200D54786 /* ReadyPacket.swift */; };
+		12AB41622869467F00D54786 /* OrderedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = 12AB41612869467F00D54786 /* OrderedCollections */; };
 		12B99C1E27410A5A0048D2DB /* LogStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12B99C1D27410A5A0048D2DB /* LogStore.swift */; };
 		12B99C2227410AD00048D2DB /* LogMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12B99C2127410AD00048D2DB /* LogMessage.swift */; };
 		12B99C2427410B010048D2DB /* PacketDirection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12B99C2327410B010048D2DB /* PacketDirection.swift */; };
@@ -193,6 +196,8 @@
 		129AF794273E653100B3851C /* GatewayPacket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GatewayPacket.swift; sourceTree = "<group>"; };
 		129ED06A2818ED4B009FDAD7 /* AccountEditorController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountEditorController.swift; sourceTree = "<group>"; };
 		12AB3D7F274C224200934345 /* InspectorController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InspectorController.swift; sourceTree = "<group>"; };
+		12AB415D28691A0300D54786 /* Cache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cache.swift; sourceTree = "<group>"; };
+		12AB415F286925F200D54786 /* ReadyPacket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadyPacket.swift; sourceTree = "<group>"; };
 		12B99C1D27410A5A0048D2DB /* LogStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogStore.swift; sourceTree = "<group>"; };
 		12B99C2127410AD00048D2DB /* LogMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogMessage.swift; sourceTree = "<group>"; };
 		12B99C2327410B010048D2DB /* PacketDirection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PacketDirection.swift; sourceTree = "<group>"; };
@@ -280,6 +285,7 @@
 			files = (
 				1259D6E22817696F006AE1D1 /* Codextended in Frameworks */,
 				1259D6DE28176964006AE1D1 /* SwiftyJSON in Frameworks */,
+				12AB41622869467F00D54786 /* OrderedCollections in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -400,8 +406,19 @@
 				12897BF1273E25C700403E5B /* GatewayConnection.swift */,
 				129AF794273E653100B3851C /* GatewayPacket.swift */,
 				1259D6E328176E0E006AE1D1 /* AnyGatewayPacket.swift */,
+				12AB415F286925F200D54786 /* ReadyPacket.swift */,
 			);
 			path = Gateway;
+			sourceTree = "<group>";
+		};
+		12AB415C286919EF00D54786 /* Client */ = {
+			isa = PBXGroup;
+			children = (
+				128C7672273DFD0E008FD585 /* Client.swift */,
+				128C7676273E04D2008FD585 /* Disguise.swift */,
+				12AB415D28691A0300D54786 /* Cache.swift */,
+			);
+			path = Client;
 			sourceTree = "<group>";
 		};
 		12CB09572740D47000F28AD5 /* Inspector */ = {
@@ -535,6 +552,7 @@
 		12F4FDB4273DFCD000B6AE64 /* Serpent */ = {
 			isa = PBXGroup;
 			children = (
+				12AB415C286919EF00D54786 /* Client */,
 				12894911274C8F9E00850D5E /* Models */,
 				12CD0225274217D800F136A5 /* Support */,
 				120A78D92741EC260099834B /* WebSocket */,
@@ -542,9 +560,7 @@
 				129AF793273E62BC00B3851C /* Gateway */,
 				12F4FDB5273DFCD000B6AE64 /* Serpent.h */,
 				12F4FDB6273DFCD000B6AE64 /* Serpent.docc */,
-				128C7672273DFD0E008FD585 /* Client.swift */,
 				128C7674273DFF73008FD585 /* Branch.swift */,
-				128C7676273E04D2008FD585 /* Disguise.swift */,
 				12861A77285DD21600C85F86 /* Constants.swift */,
 				12E6DDA12867D5A600FD72A2 /* SerpentJSONDecoder.swift */,
 			);
@@ -654,6 +670,7 @@
 			packageProductDependencies = (
 				1259D6DD28176964006AE1D1 /* SwiftyJSON */,
 				1259D6E12817696F006AE1D1 /* Codextended */,
+				12AB41612869467F00D54786 /* OrderedCollections */,
 			);
 			productName = Contempt;
 			productReference = 12F4FDB3273DFCD000B6AE64 /* Serpent.framework */;
@@ -853,6 +870,7 @@
 				12894919274C91C700850D5E /* GuildChannel.swift in Sources */,
 				1259D6D82816AA55006AE1D1 /* Decodable+Int.swift in Sources */,
 				12E6DDA82867D89E00FD72A2 /* PrivateChannel.swift in Sources */,
+				12AB415E28691A0300D54786 /* Cache.swift in Sources */,
 				12552C9C273F3DDA007D92B1 /* HTTP.swift in Sources */,
 				B8EFC2F6275197ED0010B894 /* PermissionOverwrites.swift in Sources */,
 				12945081274D3A240024C744 /* Message.swift in Sources */,
@@ -869,6 +887,7 @@
 				128C7677273E04D2008FD585 /* Disguise.swift in Sources */,
 				12E6DDA42867D66700FD72A2 /* ChannelType.swift in Sources */,
 				12BB68092861BF9E0078CCEC /* WebSocketState.swift in Sources */,
+				12AB4160286925F200D54786 /* ReadyPacket.swift in Sources */,
 				12F4FDB7273DFCD000B6AE64 /* Serpent.docc in Sources */,
 				12894915274C8FB900850D5E /* Snowflake.swift in Sources */,
 				12861A76285DC49C00C85F86 /* Ref.swift in Sources */,
@@ -1133,7 +1152,6 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 12.1;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = zone.slice.BasiliskTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1152,7 +1170,6 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 12.1;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = zone.slice.BasiliskTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1438,6 +1455,11 @@
 			productName = Codextended;
 		};
 		12A66643285567A200172D99 /* OrderedCollections */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 12A66642285567A200172D99 /* XCRemoteSwiftPackageReference "swift-collections" */;
+			productName = OrderedCollections;
+		};
+		12AB41612869467F00D54786 /* OrderedCollections */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 12A66642285567A200172D99 /* XCRemoteSwiftPackageReference "swift-collections" */;
 			productName = OrderedCollections;

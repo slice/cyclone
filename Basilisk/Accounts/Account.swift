@@ -13,6 +13,6 @@ struct Account: Hashable, Codable, Identifiable {
   /// The Discord gateway URL to connect to.
   var gatewayURL: URL
 
-  /// The base Discord API to connect to.
+  /// The base Discord API to use when making HTTP requests.
   var baseURL: URL
 }

@@ -173,10 +173,8 @@ extension NavigatorViewController: NSOutlineViewDelegate {
     case let item as NavigatorOutlineItem:
       switch item.kind {
       case .section:
-        let view = outlineView.makeView(
-          withIdentifier: .navigatorSection,
-          owner: nil
-        ) as! NSTableCellView
+        let view = outlineView.makeView(withIdentifier: .navigatorSection, owner: nil) as! NSTableCellView
+
         let name: String
         switch item.id {
         case "pinned":
@@ -208,23 +206,39 @@ extension NavigatorViewController: NSOutlineViewDelegate {
     case let channelRef as ChannelRef:
       // TODO: don't use .navigatorGuild
       let view = outlineView.makeView(withIdentifier: .navigatorGuild, owner: nil) as! NavigatorGuildCellView
+      guard let textField = view.textField, let imageView = view.imageView else { return nil }
 
       if channelRef.isPrivate {
         let privateChannel = privateChannel(withID: Snowflake(uint64: channelRef.id))
-        view.textField?.stringValue = privateChannel.name()
+        let participants = delegate?.navigatorViewController(self, didRequestPrivateParticipantsForChannel: privateChannel.id)
 
         if case .groupDM(let groupDMChannel) = privateChannel {
+          if let name = groupDMChannel.name {
+            textField.stringValue = name
+          } else if let participants = participants {
+            textField.stringValue = participants.map(\.username).formatted(.list(type: .and, width: .short))
+          } else {
+            textField.stringValue = "Group DM"
+          }
+
           if let url = groupDMChannel.icon?.url(withFileExtension: "png") {
-            view.imageView?.kf.setImage(with: url)
+            imageView.kf.setImage(with: url)
             view.roundingView.radius = 6.0
           } else {
-            view.imageView?.image = NSImage(systemSymbolName: "person.2.fill", accessibilityDescription: "Group Direct Message")
+            imageView.image = NSImage(systemSymbolName: "person.2.fill", accessibilityDescription: "Group Direct Message")
             view.roundingView.radius = 0
           }
         } else {
-          // TODO: implement caching, then use the recipient's avatar here
-          view.imageView?.image = NSImage(systemSymbolName: "person.fill", accessibilityDescription: "Direct Message")
+          imageView.image = NSImage(systemSymbolName: "person.fill", accessibilityDescription: "Direct Message")
           view.roundingView.radius = 0
+
+          if let recipient = participants?.first {
+            if let recipientAvatarURL = participants?.first?.avatar?.url(withFileExtension: "png") {
+              imageView.kf.setImage(with: recipientAvatarURL)
+              view.roundingView.radius = 6.0
+            }
+            textField.stringValue = recipient.username
+          }
         }
       } else {
         guard let guildID = channelRef.guildID else {
@@ -237,11 +251,11 @@ extension NavigatorViewController: NSOutlineViewDelegate {
         let channelID = Snowflake(uint64: channelRef.id)
         let channel = guild.channels.first(where: { $0.id == channelID })!
 
-        view.imageView?.image = NSImage(
+        imageView.image = NSImage(
           systemSymbolName: channel.type.systemSymbolName,
           accessibilityDescription: nil
         )
-        view.textField?.stringValue = channel.name
+        textField.stringValue = channel.name
       }
 
       return view

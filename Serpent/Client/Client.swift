@@ -26,21 +26,16 @@ public class Client {
   /// The Discord API HTTP client.
   public var http: HTTP!
 
-  var gatewaySink: AnyCancellable!
+  /// The associated cache used for tracking state.
+  public private(set) var cache = Cache()
 
-  /// The user's settings, received from the `READY` packet.
-  public private(set) var userSettings: JSON?
-  public private(set) var currentUser: CurrentUser?
+  /// The task that handles incoming gateway packets.
+  private var packetHandlerTask: Task<Void, Never>?
 
-  /// A Combine `Publisher` that publishes when the user settings have changed.
-  /// The partial data fragment sent by the gateway is published.
-  public private(set) var userSettingsChanged = PassthroughSubject<JSON, Never>()
-
-  /// The guilds that this client has.
-  public private(set) var guilds: [Guild] = []
-
-  /// The private (DM, group DM) channels visible to the client.
-  public private(set) var privateChannels: [PrivateChannel] = []
+  /// A Combine `Publisher` that publishes when the gateway sends us `READY`.
+  ///
+  /// By the time this publishes, the ``cache`` will be populated with values.
+  public private(set) var ready = PassthroughSubject<Void, Never>()
 
   /// A Combine `Publisher` that publishes when the client's guild list has
   /// changed in some way.
@@ -91,16 +86,17 @@ public class Client {
 
   /// Connect to the Discord gateway.
   public func connect() {
-    gatewaySink = gatewayConnection.receivedPackets.sink { [weak self] packet in
-      do {
-        try self?.processPacket(packet)
-      } catch let error as DecodingError {
-        self?.log.error("failed to decode packet: \(String(describing: error), privacy: .public)")
-        self?.log.error("while processing packet: \(String(describing: packet))")
-        fatalError("failed to decode a gateway packet, whoops.")
-      } catch {
-        self?.log.error("failed to process packet: \(String(describing: error), privacy: .public)")
-        fatalError("failed to process a gateway packet, whoops.")
+    packetHandlerTask = Task.detached(priority: .high) {
+      for await packet in self.gatewayConnection.receivedPackets.bufferInfinitely().values {
+        do {
+          try await self.processPacket(packet)
+        } catch let error as DecodingError {
+          self.log.error("failed to decode gateway packet: \(error, privacy: .public) while processing packet: \(String(describing: packet), privacy: .public)")
+          fatalError("failed to decode a gateway packet, whoops!")
+        } catch {
+          self.log.error("failed to process gateway packet: \(error, privacy: .public)")
+          fatalError("failed to process a gateway packet, whoops!")
+        }
       }
     }
 
@@ -110,37 +106,7 @@ public class Client {
     )
   }
 
-  func handleReady(packet: AnyGatewayPacket) throws {
-    guard let eventData = packet.packet.eventData else {
-      return
-    }
-
-    struct Ready: Decodable {
-      let user: CurrentUser
-      let guilds: [Guild]
-      let privateChannels: [PrivateChannel]
-
-      enum CodingKeys: String, CodingKey {
-        case user = "user"
-        case guilds = "guilds"
-        case privateChannels = "private_channels"
-      }
-    }
-
-    let ready: Ready = try packet.reparse()
-    currentUser = ready.user
-
-    guilds = ready.guilds
-    guildsChanged.send()
-
-    privateChannels = ready.privateChannels
-    privateChannelsChanged.send()
-
-    userSettings = eventData["user_settings"]
-    userSettingsChanged.send(userSettings!)
-  }
-
-  func processPacket(_ packet: AnyGatewayPacket) throws {
+  func processPacket(_ packet: AnyGatewayPacket) async throws {
     guard let eventName = packet.packet.eventName,
           let eventData = packet.packet.eventData else {
       return
@@ -149,13 +115,15 @@ public class Client {
     switch eventName {
     case "READY":
       log.debug("discord is READY. now we have to get READY!")
-      try handleReady(packet: packet)
-    case "GUILD_CREATE":
-      guilds.append(try packet.reparse())
+      try await cache.ingestReadyPacket(packet)
       guildsChanged.send()
+      privateChannelsChanged.send()
+      ready.send()
+    case "GUILD_CREATE":
+      let guild: Guild = try packet.reparse()
+      await cache.upsert(guild: guild)
     case "USER_SETTINGS_UPDATE":
-      try userSettings?.merge(with: eventData)
-      userSettingsChanged.send(eventData)
+      await cache.upsert(userSettings: eventData)
     default:
       break
     }
@@ -163,6 +131,7 @@ public class Client {
 
   /// Disconnect from the Discord gateway.
   public func disconnect() async throws {
+    packetHandlerTask?.cancel()
     try await gatewayConnection.disconnect()
   }
 }

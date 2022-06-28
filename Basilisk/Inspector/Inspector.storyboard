@@ -86,7 +86,7 @@
         <scene sceneID="ad0-WY-ccq">
             <objects>
                 <viewController title="Messages" id="aU6-ws-Sck" customClass="InspectorMessagesController" customModule="Basilisk" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" misplaced="YES" id="6ju-8M-5sG">
+                    <view key="view" id="6ju-8M-5sG">
                         <rect key="frame" x="0.0" y="0.0" width="665" height="400"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>

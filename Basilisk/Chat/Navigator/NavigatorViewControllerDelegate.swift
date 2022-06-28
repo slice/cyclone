@@ -20,4 +20,9 @@ import Serpent
   /// in user's ID.
   func navigatorViewController(_ navigatorViewController: NavigatorViewController,
                                didRequestCurrentUserID: Void) -> Snowflake?
+
+  /// Called whenever the navigator view controller needs the participants for
+  /// a private channel.
+  func navigatorViewController(_ navigatorViewController: NavigatorViewController,
+                               didRequestPrivateParticipantsForChannel: PrivateChannel.ID) -> [User]
 }

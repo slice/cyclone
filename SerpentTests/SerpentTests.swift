@@ -16,28 +16,13 @@ class SerpentTests: XCTestCase {
     _ = Client(branch: .canary, token: "t")
   }
 
-  func testDisguiseEncode() throws {
-    let disguise = Disguise(
-      userAgent: "???",
-      capabilities: 0,
-      os: "Mac OS X",
-      browser: "Discord Client",
-      releaseChannel: .canary,
-      clientVersion: "0.0.278",
-      osVersion: "21.2.0",
-      osArch: "x64",
-      systemLocale: "en-US",
-      clientBuildNumber: 104_572,
-      clientEventSource: nil
-    )
+  func testPrivateChannelSorting() {
+    let privateChannels: [PrivateChannel] = [
+      .dm(DMChannel(id: 1, lastMessageID: nil, recipientIDs: [])),
+      .groupDM(GroupDMChannel(id: 2, icon: nil, lastMessageID: .init(id: 5), lastPinTimestamp: nil, name: nil, ownerID: .init(id: 100), recipients: [])),
+      .dm(DMChannel(id: 3, lastMessageID: nil, recipientIDs: []))
+    ]
 
-    let expected = """
-    {"os":"Mac OS X","browser":"Discord Client",\
-    "release_channel":"canary","client_version":"0.0.278",\
-    "os_version":"21.2.0","os_arch":"x64","system_locale":"en-US",\
-    "client_build_number":104572,"client_event_source":null}
-    """
-
-    XCTAssertEqual(disguise.superPropertiesJSONString(), expected)
+    XCTAssertEqual(privateChannels.sortedChronologically().map(\.id), [2, 3, 1])
   }
 }

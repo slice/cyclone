@@ -3,9 +3,16 @@ fileprivate enum PrivateChannelError: Error {
 }
 
 /// An enumeration representing either a group DM or DM channel.
-public enum PrivateChannel: Identifiable {
+public enum PrivateChannel: Identifiable, Equatable {
   case groupDM(GroupDMChannel)
   case dm(DMChannel)
+
+  public var lastMessageID: Ref<Message>? {
+    switch self {
+    case .groupDM(let gdm): return gdm.lastMessageID
+    case .dm(let dm): return dm.lastMessageID
+    }
+  }
 
   public var id: Snowflake {
     switch self {

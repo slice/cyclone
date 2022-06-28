@@ -20,7 +20,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     if let viewController = activeViewControllers.first,
-       let account = Accounts.accounts.first?.value {
+       let account = Accounts.accounts.first?.value,
+       UserDefaults.standard.bool(forKey: "BSLKAutomaticallyAuthorizeWithFirstAccount") {
       NSLog("automatically connecting with account: \(account.name)")
       Task {
         try! await viewController.connect(authorizingWithToken: account.token)

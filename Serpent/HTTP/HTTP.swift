@@ -132,8 +132,10 @@ public class HTTP {
       return nil
     }
     urlComponents.path += "/api/v9" + pathComponents
-    urlComponents.queryItems = query.map { key, value in
-      URLQueryItem(name: key, value: value)
+    if !query.isEmpty {
+      urlComponents.queryItems = query.map { key, value in
+        URLQueryItem(name: key, value: value)
+      }
     }
 
     guard let finalURL = urlComponents.url else {

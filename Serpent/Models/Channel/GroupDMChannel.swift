@@ -6,7 +6,17 @@ public struct GroupDMChannel: Identifiable {
   public let lastPinTimestamp: Date?
   public let name: String?
   public let ownerID: Ref<User>
-  public let recipients: [Ref<User>]
+  public let recipients: Set<Ref<User>>
+}
+
+extension GroupDMChannel: Hashable {
+  public static func == (lhs: GroupDMChannel, rhs: GroupDMChannel) -> Bool {
+    lhs.id == rhs.id
+  }
+
+  public func hash(into hasher: inout Hasher) {
+    hasher.combine(id)
+  }
 }
 
 extension GroupDMChannel: Decodable {

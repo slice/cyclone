@@ -198,7 +198,7 @@ extension NavigatorViewController: NSOutlineViewDelegate {
         view.roundingView.radius = 6.0
 
         if let url = guild.icon?.url(withFileExtension: "png") {
-          view.imageView?.kf.setImage(with: url)
+          view.imageView!.setImage(loadingFrom: url)
         }
 
         return view
@@ -222,7 +222,7 @@ extension NavigatorViewController: NSOutlineViewDelegate {
           }
 
           if let url = groupDMChannel.icon?.url(withFileExtension: "png") {
-            imageView.kf.setImage(with: url)
+            imageView.setImage(loadingFrom: url)
             view.roundingView.radius = 6.0
           } else {
             imageView.image = NSImage(systemSymbolName: "person.2.fill", accessibilityDescription: "Group Direct Message")
@@ -234,7 +234,7 @@ extension NavigatorViewController: NSOutlineViewDelegate {
 
           if let recipient = participants?.first {
             if let recipientAvatarURL = participants?.first?.avatar?.url(withFileExtension: "png") {
-              imageView.kf.setImage(with: recipientAvatarURL)
+              imageView.setImage(loadingFrom: recipientAvatarURL)
               view.roundingView.radius = 6.0
             }
             textField.stringValue = recipient.username

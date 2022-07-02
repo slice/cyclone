@@ -11,6 +11,8 @@ final class LoadingAttachmentView: NSView, Placeholder {
   }()
 
   private var hasSwitchedToDeterminate: Bool = false
+  var shouldFillSuperview: Bool = false
+  private var hasFilledSuperview: Bool = false
 
   override init(frame frameRect: NSRect) {
     super.init(frame: frameRect)
@@ -20,6 +22,18 @@ final class LoadingAttachmentView: NSView, Placeholder {
   required init?(coder: NSCoder) {
     super.init(coder: coder)
     setupView()
+  }
+
+  override func viewDidMoveToSuperview() {
+    if let superview = superview, shouldFillSuperview && !hasFilledSuperview {
+      NSLayoutConstraint.activate([
+        progressIndicator.leadingAnchor.constraint(equalTo: superview.leadingAnchor),
+        progressIndicator.trailingAnchor.constraint(equalTo: superview.trailingAnchor),
+        progressIndicator.leftAnchor.constraint(equalTo: superview.leftAnchor),
+        progressIndicator.rightAnchor.constraint(equalTo: superview.rightAnchor),
+      ])
+      hasFilledSuperview = true
+    }
   }
 
   private func setupView() {

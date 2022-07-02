@@ -28,6 +28,7 @@
 		126A8801285E95B90014DC40 /* HTTPLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126A8800285E95B90014DC40 /* HTTPLog.swift */; };
 		126A8803285E97830014DC40 /* InspectorSummaryCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126A8802285E97830014DC40 /* InspectorSummaryCellView.swift */; };
 		126A8805285ECEA40014DC40 /* JSONInspectorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126A8804285ECEA40014DC40 /* JSONInspectorViewController.swift */; };
+		126B91022870B48C002AA7AA /* NSImageView+Kingfisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126B91012870B48C002AA7AA /* NSImageView+Kingfisher.swift */; };
 		12861A76285DC49C00C85F86 /* Ref.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12861A75285DC49B00C85F86 /* Ref.swift */; };
 		12861A78285DD21600C85F86 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12861A77285DD21600C85F86 /* Constants.swift */; };
 		12894913274C8FA200850D5E /* Guild.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12894912274C8FA200850D5E /* Guild.swift */; };
@@ -175,6 +176,7 @@
 		126A8800285E95B90014DC40 /* HTTPLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPLog.swift; sourceTree = "<group>"; };
 		126A8802285E97830014DC40 /* InspectorSummaryCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InspectorSummaryCellView.swift; sourceTree = "<group>"; };
 		126A8804285ECEA40014DC40 /* JSONInspectorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONInspectorViewController.swift; sourceTree = "<group>"; };
+		126B91012870B48C002AA7AA /* NSImageView+Kingfisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSImageView+Kingfisher.swift"; sourceTree = "<group>"; };
 		12861A75285DC49B00C85F86 /* Ref.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ref.swift; sourceTree = "<group>"; };
 		12861A77285DD21600C85F86 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		12894912274C8FA200850D5E /* Guild.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Guild.swift; sourceTree = "<group>"; };
@@ -470,6 +472,7 @@
 				12E80A592752AC1F00ACD979 /* NSView+Nib.swift */,
 				12093A5D281BC11000FAE304 /* BasiliskError.swift */,
 				12DAC9DC286116F8006B3B1D /* NSScrollView+Scrolling.swift */,
+				126B91012870B48C002AA7AA /* NSImageView+Kingfisher.swift */,
 			);
 			path = Support;
 			sourceTree = "<group>";
@@ -817,6 +820,7 @@
 				129B6031286AEBF60096FB67 /* IntrinsicImageView.swift in Sources */,
 				1260A75B275163F00099CA3B /* NavigatorViewControllerDelegate.swift in Sources */,
 				12BB68072861ADC00078CCEC /* ConnectionStatusView.swift in Sources */,
+				126B91022870B48C002AA7AA /* NSImageView+Kingfisher.swift in Sources */,
 				12AB3D80274C224200934345 /* InspectorController.swift in Sources */,
 				123F622F275183A8001D3D61 /* NavigatorGuildCellView.swift in Sources */,
 				126A8805285ECEA40014DC40 /* JSONInspectorViewController.swift in Sources */,

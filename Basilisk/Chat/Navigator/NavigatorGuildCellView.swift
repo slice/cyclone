@@ -6,6 +6,7 @@ class NavigatorGuildCellView: NSTableCellView {
   override func prepareForReuse() {
     super.prepareForReuse()
     imageView?.image = nil
+    imageView?.kf.cancelDownloadTask()
     textField?.stringValue = ""
   }
 }

@@ -1,5 +1,6 @@
 import Cocoa
 import Serpent
+import Kingfisher
 
 final class UnifiedMessageRow: NSTableCellView {
   @IBOutlet var roundingView: RoundingView!
@@ -62,7 +63,7 @@ final class UnifiedMessageRow: NSTableCellView {
     authorLabel.stringValue = message.author.username
     roundingView.radius = 10
     if let avatar = message.author.avatar {
-      avatarImageView.kf.setImage(with: avatar.url(withFileExtension: "png"))
+      avatarImageView.setImage(loadingFrom: avatar.url(withFileExtension: "png"))
     }
 
     timestampLabel.stringValue = message.id.timestamp.formatted(
@@ -141,13 +142,7 @@ final class UnifiedMessageRow: NSTableCellView {
       ])
 
       if !performingMeasurements {
-        let loading = LoadingAttachmentView(frame: .zero)
-        loading.translatesAutoresizingMaskIntoConstraints = false
-
-        imageView.kf.setImage(with: attachment.proxyURL, placeholder: loading, progressBlock: { receivedSize, totalSize in
-          if width > 100 { loading.switchToDeterminate(attachmentWidth: width) }
-          loading.updateProgress(receivedSize: receivedSize, totalSize: totalSize)
-        })
+        imageView.setImage(loadingFrom: attachment.proxyURL)
       }
 
       contentStackView.addView(roundingView, in: .bottom)
@@ -183,6 +178,8 @@ final class UnifiedMessageRow: NSTableCellView {
   override func prepareForReuse() {
     super.prepareForReuse()
     messageContentLabel.isHidden = false
+    avatarImageView.image = nil
+    avatarImageView.kf.cancelDownloadTask()
     resetMessageAccessories()
   }
 }

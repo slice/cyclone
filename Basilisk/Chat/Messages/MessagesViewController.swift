@@ -41,6 +41,14 @@ final class MessagesViewController: NSViewController {
   /// oldest to newest.
   public var messages: OrderedDictionary<Message.ID, Message> = [:]
 
+  /// Cached message row heights.
+  ///
+  /// This is needed in the first place because the table view remeasures the
+  /// height of every row upon a reload. We cannot selectively reload by an
+  /// index set because we prepend and append frequently, which shifts all of
+  /// rows in a direction.
+  private var cachedMessageHeights: [Message.ID: Double] = [:]
+
   /// The ID of the oldest message this view controller is showing.
   public var oldestMessageID: Message.ID? { messages.elements[0].value.id }
 
@@ -164,8 +172,20 @@ final class MessagesViewController: NSViewController {
     delegate?.messagesController(self, messageSent: fieldText)
   }
 
+  /// Removes a cached row height for a message with a certain ID.
+  func invalidateCachedRowHeight(forMessageWithID messageID: Message.ID) {
+    cachedMessageHeights.removeValue(forKey: messageID)
+  }
+
   /// Measures the height of a message as it would appear in the table view.
+  ///
+  /// The result is cached for performance. To invalidate message heights (such
+  /// as in the event of a message edit, see ``invalidateCachedRowHeight(forMessageWithID:)``.
   func measureRowHeight(forMessage message: Message) -> Double {
+    if let cachedMessageHeight = cachedMessageHeights[message.id] {
+      return cachedMessageHeight
+    }
+
     let signpostID = signposter.makeSignpostID()
     let state = signposter.beginInterval("Message Row Height Measurement", id: signpostID)
 
@@ -174,6 +194,7 @@ final class MessagesViewController: NSViewController {
     messageSizingTemplate.configure(withMessage: message, isGroupHeader: messageIsFirstInSection(id: message.id), forMeasurements: true)
     signposter.emitEvent("View configuration complete", id: signpostID)
     let height = messageSizingTemplate.fittingSize.height
+    cachedMessageHeights[message.id] = height
     signposter.emitEvent("Measurement complete", id: signpostID)
     signposter.endInterval("Message Row Height Measurement", state)
 

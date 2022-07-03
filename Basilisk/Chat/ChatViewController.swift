@@ -18,7 +18,16 @@ final class ChatViewController: NSSplitViewController {
     statusBarController.containedViewController as! MessagesViewController
   }
 
-  var client: Client?
+  var session: Session?
+
+  var client: Client? {
+    session?.client
+  }
+
+  var account: Account? {
+    session?.account
+  }
+
   var gatewayPacketHandler: Task<Void, Never>?
 
   private var cancellables = Set<AnyCancellable>()
@@ -189,30 +198,7 @@ final class ChatViewController: NSSplitViewController {
     }
 
     switch command {
-    case "connect":
-      guard let token = arguments.first else {
-        say("[system] you need a user token, silly!")
-        return
-      }
 
-      if client != nil {
-        try await tearDownClient()
-      }
-
-      do {
-        try await connect(authorizingWithToken: token)
-      } catch {
-        say("[system] failed to connect: \(error)")
-      }
-    case "focus":
-      guard let channelIDString = arguments.first else {
-        say("[system] provide a channel id... maybe...")
-        return
-      }
-      let channelID = Snowflake(string: channelIDString)
-
-      focusedChannelID = channelID
-      say("[system] focusing into <#\(channelID)>")
     case "disconnect":
       try await tearDownClient()
       say("[system] disconnected!")
@@ -234,67 +220,36 @@ final class ChatViewController: NSSplitViewController {
     }
   }
 
-  func connect(authorizingWithToken token: String) async throws {
-    let truncatedToken =
-      "\(token[token.startIndex ..< token.index(token.startIndex, offsetBy: 5)])..."
+  /// Associates this view controller with an existing session.
+  ///
+  /// This method doesn't instruct the session's client to connect.
+  func associateWithSession(_ session: Session, immediatelyLoading immediatelyLoad: Bool = true) {
+    self.session = session
+    let client = session.client
 
-    messagesViewController.appendToConsole(
-      line: "[system] connecting to canary with token (\(truncatedToken))"
-    )
+    // Cancel all existing sinks.
+    cancellables = []
 
-    let client = Client(branch: .canary, token: token)
-    self.client = client
-
-    client.http.subject.receive(on: DispatchQueue.main)
-      .sink { log in
-        let message = LogMessage(direction: .sent, timestamp: Date.now, variant: .http(log))
-        (NSApp.delegate as! AppDelegate).gatewayLogStore.appendMessage(message)
-      }
-      .store(in: &cancellables)
-
-    try await client.http.requestLandingPage()
-    client.connect()
-
-    // TODO(skip): Probably just use a damn delegate for this.
     setUpGatewayPacketHandler()
     setupConnectionStateSink()
 
     client.gatewayConnection.reconnects.receive(on: DispatchQueue.main)
-      .sink { [weak self] _ in
+      .sink { [unowned self] _ in
         // The websocket connection has been reset, so we need to reset our sink
         // too.
-        self?.setupConnectionStateSink()
+        Task { await self.setupConnectionStateSink() }
       }
       .store(in: &cancellables)
 
     client.guildsChanged.receive(on: DispatchQueue.main)
       .sink { [unowned self] _ in
-        Task { await self.refetchGuilds() }
+        Task { await self.fetchGuilds() }
       }
       .store(in: &cancellables)
 
     client.privateChannelsChanged.receive(on: DispatchQueue.main)
       .sink { [unowned self] _ in
-        Task {
-          let privateChannels = await client.cache.privateChannels
-          knownPrivateChannels = privateChannels
-
-          // Resolve all private channel participants using information in the
-          // cache.
-          let allParticipants: Set<Ref<User>> = privateChannels.values.map({ privateChannel -> Set<Ref<User>> in
-            switch privateChannel {
-            case .groupDM(let gdm): return gdm.recipients
-            case .dm(let dm): return Set(dm.recipientIDs)
-            }
-          }).reduce(Set(), { n, r in n.union(r) })
-          let resolvedUsers = await client.cache.batchResolve(users: allParticipants)
-          knownPrivateParticipants = Dictionary(uniqueKeysWithValues: resolvedUsers.map { ($0.id, $0) })
-          if resolvedUsers.count != allParticipants.count {
-            log.warning("failed to resolve all private participants")
-          }
-
-          navigatorViewController.reload(privateChannelIDs: privateChannels.values.map(\.id))
-        }
+        Task { await self.fetchPrivateChannels() }
       }
       .store(in: &cancellables)
 
@@ -321,15 +276,55 @@ final class ChatViewController: NSSplitViewController {
         .sink { [unowned self] json in
           guard let json = json, json["guild_positions"].exists() || json["guild_folders"].exists() else { return }
           // Resort guilds.
-          Task { await self.refetchGuilds() }
+          Task { await self.fetchGuilds() }
         }
         .store(in: &cancellables)
     }
+
+    // If instructed to (for example, if we're a new tab/window spawned off of
+    // an existing session), then immediately try to fetch the necessary state
+    // for reloading the navigator.
+    //
+    // We need to do this because the relevant subscribers set up above aren't
+    // interacting with `CurrentValueSubject`s, which immediately send a value
+    // upon attaching a subscriber. So, we need to initiate the fetches
+    // manually.
+    if immediatelyLoad {
+      Task {
+        await self.fetchPrivateChannels()
+        await self.fetchGuilds()
+      }
+    }
   }
 
-  /// Refetch all guilds from the cache, sorting them and reloading the
-  /// navigation view controller.
-  private func refetchGuilds() async {
+  /// Fetch the necessary state from the client cache to display private
+  /// channels and reload the navigator.
+  private func fetchPrivateChannels() async {
+    guard let client else { return }
+
+    let privateChannels = await client.cache.privateChannels
+    knownPrivateChannels = privateChannels
+
+    // Resolve all private channel participants using information in the
+    // cache.
+    let allParticipants: Set<Ref<User>> = privateChannels.values.map({ privateChannel -> Set<Ref<User>> in
+      switch privateChannel {
+      case .groupDM(let gdm): return gdm.recipients
+      case .dm(let dm): return Set(dm.recipientIDs)
+      }
+    }).reduce(Set(), { n, r in n.union(r) })
+    let resolvedUsers = await client.cache.batchResolve(users: allParticipants)
+    knownPrivateParticipants = Dictionary(uniqueKeysWithValues: resolvedUsers.map { ($0.id, $0) })
+    if resolvedUsers.count != allParticipants.count {
+      log.warning("failed to resolve all private participants")
+    }
+
+    navigatorViewController.reload(privateChannelIDs: privateChannels.values.map(\.id))
+  }
+
+  /// Fetch all guilds from the cache, sorting them and reloading the
+  /// navigator.
+  private func fetchGuilds() async {
     guard let client = client else { return }
     let guilds = await client.cache.guilds
     guard let sortedGuilds = await sortGuildsAccordingToUserSettings(guilds) else { return }
@@ -416,10 +411,11 @@ final class ChatViewController: NSSplitViewController {
     }
     log.info("disconnected")
 
-    // Immediately (try to) dealloc the client here. Some Combine subscribers
-    // will not get a chance to respond to the disconnect, but that's fine since
-    // we've already cleanly disconnected by now.
-    client = nil
+    // Release the session here. It won't necessarily dealloc here, since it'll
+    // be held by the app delegate. Some Combine subscribers will not get a
+    // chance to respond to the disconnect, but that's fine since we've already
+    // cleanly disconnected by now.
+    session = nil
 
     focusedChannelID = nil
     selectedGuildID = nil

@@ -1,11 +1,60 @@
 import Cocoa
+import Serpent
+import Combine
 
 @main
 class AppDelegate: NSObject, NSApplicationDelegate {
   var gatewayLogStore = LogStore()
 
+  /// The application's active sessions.
+  var sessions: [Session] = []
+
+  var managedChatWindowControllers: [ChatWindowController] = []
+
+  var windowManagementCancellables: Set<AnyCancellable> = []
+  var loggingCancellables: Set<AnyCancellable> = []
+
   var activeViewControllers: [ChatViewController] {
     NSApp.windows.compactMap { $0.contentViewController as? ChatViewController }
+  }
+
+  func createSession(withAccount account: Account) -> Session {
+    let client = Client(baseURL: account.baseURL, token: account.token)
+    let session = Session(account: account, client: client)
+    sessions.append(session)
+    client.http.subject.receive(on: DispatchQueue.main)
+      .sink { [unowned self] log in
+        Task { @MainActor in
+          let message = LogMessage(direction: .sent, timestamp: Date.now, variant: .http(log))
+          gatewayLogStore.appendMessage(message)
+        }
+      }
+      .store(in: &windowManagementCancellables)
+    NSLog("added session: %@ (# sessions is now %d)", String(describing: session), sessions.count)
+    return session
+  }
+
+  func createManagedChatWindow(associatingWithSession session: Session? = nil, immediatelyLoading immediatelyLoad: Bool) -> ChatWindowController {
+    let windowController = NSStoryboard(name: "Main", bundle: Bundle.main)
+      .instantiateController(withIdentifier: .init("chat")) as! ChatWindowController
+    let chatController = windowController.contentViewController as! ChatViewController
+    if let session {
+      chatController.associateWithSession(session, immediatelyLoading: immediatelyLoad)
+    }
+    managedChatWindowControllers.append(windowController)
+    NotificationCenter.default.publisher(for: NSWindow.willCloseNotification, object: windowController.window!)
+      .sink { [unowned self] notification in
+        let window = notification.object as! NSWindow
+        NSLog("%@ has closed, removing from managed window controllers", window)
+        guard let index = managedChatWindowControllers.firstIndex(of: window.windowController as! ChatWindowController) else {
+          NSLog("failed to find managed window controller for %@", window)
+          return
+        }
+        managedChatWindowControllers.remove(at: index)
+        NSLog("now have %d managed window controllers", managedChatWindowControllers.count)
+      }
+      .store(in: &windowManagementCancellables)
+    return windowController
   }
 
   func applicationDidFinishLaunching(_: Notification) {
@@ -19,12 +68,23 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                                     userInfo: [NSURLErrorKey: Accounts.defaultAccountsPath]))
     }
 
-    if let viewController = activeViewControllers.first,
-       let account = Accounts.accounts.first?.value,
+    if let account = Accounts.accounts.first?.value,
        UserDefaults.standard.bool(forKey: "BSLKAutomaticallyAuthorizeWithFirstAccount") {
-      NSLog("automatically connecting with account: \(account.name)")
+      NSLog("automatically creating session with account: \(account.name)")
       Task {
-        try! await viewController.connect(authorizingWithToken: account.token)
+        do {
+          let session = createSession(withAccount: account)
+          try await session.client.http.requestLandingPage()
+          session.client.connect(gatewayURL: account.gatewayURL)
+
+          Task { @MainActor in
+            let windowController = createManagedChatWindow(associatingWithSession: session, immediatelyLoading: false)
+            windowController.window!.makeKeyAndOrderFront(nil)
+          }
+        } catch {
+          NSLog("failed to connect: %@", String(describing: error))
+          await NSApp.presentError(error)
+        }
       }
     }
   }

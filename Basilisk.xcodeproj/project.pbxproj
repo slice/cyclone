@@ -29,6 +29,8 @@
 		126A8803285E97830014DC40 /* InspectorSummaryCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126A8802285E97830014DC40 /* InspectorSummaryCellView.swift */; };
 		126A8805285ECEA40014DC40 /* JSONInspectorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126A8804285ECEA40014DC40 /* JSONInspectorViewController.swift */; };
 		126B91022870B48C002AA7AA /* NSImageView+Kingfisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126B91012870B48C002AA7AA /* NSImageView+Kingfisher.swift */; };
+		126B91042870E87B002AA7AA /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126B91032870E87B002AA7AA /* Session.swift */; };
+		126B91062870EF6E002AA7AA /* ChatWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126B91052870EF6E002AA7AA /* ChatWindowController.swift */; };
 		12861A76285DC49C00C85F86 /* Ref.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12861A75285DC49B00C85F86 /* Ref.swift */; };
 		12861A78285DD21600C85F86 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12861A77285DD21600C85F86 /* Constants.swift */; };
 		12894913274C8FA200850D5E /* Guild.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12894912274C8FA200850D5E /* Guild.swift */; };
@@ -177,6 +179,8 @@
 		126A8802285E97830014DC40 /* InspectorSummaryCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InspectorSummaryCellView.swift; sourceTree = "<group>"; };
 		126A8804285ECEA40014DC40 /* JSONInspectorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONInspectorViewController.swift; sourceTree = "<group>"; };
 		126B91012870B48C002AA7AA /* NSImageView+Kingfisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSImageView+Kingfisher.swift"; sourceTree = "<group>"; };
+		126B91032870E87B002AA7AA /* Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
+		126B91052870EF6E002AA7AA /* ChatWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatWindowController.swift; sourceTree = "<group>"; };
 		12861A75285DC49B00C85F86 /* Ref.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ref.swift; sourceTree = "<group>"; };
 		12861A77285DD21600C85F86 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		12894912274C8FA200850D5E /* Guild.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Guild.swift; sourceTree = "<group>"; };
@@ -374,6 +378,7 @@
 				121F9314274CF609007F81CC /* Navigator */,
 				121F9315274CF613007F81CC /* Messages */,
 				12F4FD85273DFC1900B6AE64 /* ChatViewController.swift */,
+				126B91052870EF6E002AA7AA /* ChatWindowController.swift */,
 				1210E6E9274CC18300BF8C9B /* RoundingView.swift */,
 				12BB68042861A83A0078CCEC /* StatusBarContainerController.swift */,
 				12BB68062861ADC00078CCEC /* ConnectionStatusView.swift */,
@@ -394,6 +399,7 @@
 				12D23C1927540BAE00F3D18D /* Account.swift */,
 				12D23C1B27540CF200F3D18D /* Accounts.swift */,
 				129ED06A2818ED4B009FDAD7 /* AccountEditorController.swift */,
+				126B91032870E87B002AA7AA /* Session.swift */,
 			);
 			path = Accounts;
 			sourceTree = "<group>";
@@ -810,6 +816,7 @@
 				12DAC9DD286116F8006B3B1D /* NSScrollView+Scrolling.swift in Sources */,
 				12B99C2427410B010048D2DB /* PacketDirection.swift in Sources */,
 				12D23C2127541C0B00F3D18D /* WindowTitleUpdatingTabViewController.swift in Sources */,
+				126B91062870EF6E002AA7AA /* ChatWindowController.swift in Sources */,
 				12E80A5A2752AC1F00ACD979 /* NSView+Nib.swift in Sources */,
 				12F4FD86273DFC1900B6AE64 /* ChatViewController.swift in Sources */,
 				12DAC9E128611B10006B3B1D /* MessagesViewController+Data Source.swift in Sources */,
@@ -835,6 +842,7 @@
 				12DAC9DF286117A7006B3B1D /* MessagesViewControllerDelegate.swift in Sources */,
 				12EB5FA62866A46D0012F938 /* HTTPInspectorController.swift in Sources */,
 				12093A5E281BC11000FAE304 /* BasiliskError.swift in Sources */,
+				126B91042870E87B002AA7AA /* Session.swift in Sources */,
 				12DCEAA52751E60C00A0A626 /* ChannelSorting.swift in Sources */,
 				1297448B2857415200CDB201 /* LoadingAttachmentView.swift in Sources */,
 				12B99C1E27410A5A0048D2DB /* LogStore.swift in Sources */,

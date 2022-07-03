@@ -59,18 +59,13 @@ public class Client {
     clientEventSource: nil
   )
 
-  public init(branch: Branch, token: String) {
+  public init(baseURL: URL, token: String) {
     guard !token.isEmpty else {
       preconditionFailure("attempted to make client with empty token")
     }
     self.token = token
 
-    guard let endpoint = branch.baseURL else {
-      preconditionFailure(
-        "attempted to make client with branch \(branch), which has no base url"
-      )
-    }
-    self.endpoint = endpoint
+    self.endpoint = baseURL
 
     // TODO(skip): Don't hardcode these. Scrape the necessary values at runtime.
     disguise = Self.defaultDisguise
@@ -85,7 +80,7 @@ public class Client {
   }
 
   /// Connect to the Discord gateway.
-  public func connect() {
+  public func connect(gatewayURL: URL) {
     packetHandlerTask = Task.detached(priority: .high) {
       for await packet in self.gatewayConnection.receivedPackets.bufferInfinitely().values {
         do {
@@ -101,7 +96,7 @@ public class Client {
     }
 
     gatewayConnection.connect(
-      toGateway: URL(string: "wss://gateway.discord.gg/?encoding=json&v=9")!,
+      toGateway: gatewayURL,
       fromDiscordEndpoint: endpoint
     )
   }

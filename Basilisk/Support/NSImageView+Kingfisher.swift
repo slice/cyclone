@@ -34,7 +34,7 @@ extension NSImageView {
         loading.updateProgress(receivedSize: receivedSize, totalSize: totalSize)
       }
     ) { result in
-      if case .failure(let error) = result, !error.isTaskCancelled {
+      if case .failure(let error) = result, !error.isTaskCancelled && !error.isNotCurrentTask {
         NSLog("[loading image view] failed to load from %@: %@", source.absoluteString, String(describing: error))
       }
     }

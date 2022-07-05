@@ -61,10 +61,13 @@
                                             <rect key="frame" x="0.0" y="0.0" width="608" height="50"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
+                                                <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="3aR-m9-uFM">
+                                                    <rect key="frame" x="0.0" y="47" width="608" height="5"/>
+                                                </box>
                                                 <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="jkn-6t-Wmr">
                                                     <rect key="frame" x="10" y="10" width="588" height="30"/>
-                                                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" borderStyle="bezel" alignment="left" bezelStyle="round" id="vPp-p8-EvV">
-                                                        <font key="font" usesAppearanceFont="YES"/>
+                                                    <textFieldCell key="cell" controlSize="large" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" borderStyle="bezel" alignment="left" bezelStyle="round" id="vPp-p8-EvV">
+                                                        <font key="font" metaFont="system"/>
                                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                     </textFieldCell>
@@ -74,7 +77,11 @@
                                                 </textField>
                                             </subviews>
                                             <constraints>
+                                                <constraint firstAttribute="trailing" secondItem="3aR-m9-uFM" secondAttribute="trailing" id="8ss-b3-pjN"/>
+                                                <constraint firstItem="3aR-m9-uFM" firstAttribute="top" secondItem="c5f-84-Zae" secondAttribute="top" id="D3i-c8-XSn"/>
                                                 <constraint firstItem="jkn-6t-Wmr" firstAttribute="leading" secondItem="c5f-84-Zae" secondAttribute="leading" constant="10" id="MHx-yK-ghm"/>
+                                                <constraint firstItem="3aR-m9-uFM" firstAttribute="leading" secondItem="c5f-84-Zae" secondAttribute="leading" id="OOh-IK-iRn"/>
+                                                <constraint firstItem="3aR-m9-uFM" firstAttribute="width" secondItem="c5f-84-Zae" secondAttribute="width" id="PfS-F0-vRc"/>
                                                 <constraint firstItem="jkn-6t-Wmr" firstAttribute="top" secondItem="c5f-84-Zae" secondAttribute="top" constant="10" id="RxH-ZI-tgs"/>
                                                 <constraint firstAttribute="trailing" secondItem="jkn-6t-Wmr" secondAttribute="trailing" constant="10" id="eAl-Qj-N5D"/>
                                                 <constraint firstAttribute="bottom" secondItem="jkn-6t-Wmr" secondAttribute="bottom" constant="10" id="hcZ-Op-QbF"/>
@@ -83,7 +90,6 @@
                                         <constraints>
                                             <constraint firstAttribute="height" constant="50" id="buY-QW-kMv"/>
                                         </constraints>
-                                        <color key="fillColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                     </box>
                                 </subviews>
                                 <constraints>

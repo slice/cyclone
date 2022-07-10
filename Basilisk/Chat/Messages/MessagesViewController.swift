@@ -62,6 +62,11 @@ final class MessagesViewController: NSViewController {
   var dataSource: MessagesDiffableDataSource!
   var clipViewBoundsChangedSink: AnyCancellable!
 
+  // State for tracking the frame of the table view. Needed because invalidating
+  // cached message heights is necessary due to wrapping.
+  var tableViewFrameChangedSink: AnyCancellable!
+  var lastKnownTableViewFrame: NSRect?
+
   let log = Logger(subsystem: "zone.slice.Basilisk", category: "messages-view-controller")
   lazy var signposter = {
     OSSignposter(logger: log)
@@ -75,8 +80,33 @@ final class MessagesViewController: NSViewController {
     tableView.delegate = self
     tableView.register(UnifiedMessageRow.nib!, forIdentifier: .unifiedMessageRow)
 
-    self.messageSizingTemplate =
+    messageSizingTemplate =
       (tableView.makeView(withIdentifier: .unifiedMessageRow, owner: nil)! as! UnifiedMessageRow)
+
+    tableView.postsFrameChangedNotifications = true
+    tableViewFrameChangedSink = NotificationCenter.default.publisher(
+      for: NSView.frameDidChangeNotification,
+      object: tableView
+    ).sink { [unowned self] _ in
+      guard let lastKnownTableViewFrame,
+            lastKnownTableViewFrame.width != tableView.frame.width else {
+        lastKnownTableViewFrame = tableView.frame
+        return
+      }
+
+      let lastKnownString = String(describing: lastKnownTableViewFrame)
+      let currentString = String(describing: tableView.frame)
+      log.debug("horizontal window resize occurred from \(lastKnownString, privacy: .public) to \(currentString, privacy: .public); invalidating \(cachedMessageHeights.count, privacy: .public) cached message heights")
+
+      // Delete all cached message heights.
+      //
+      // What happens now? Well, we fall back to the table view's internal
+      // height cache. This should be fine, but in the future we should really
+      // find a way to make this more robust.
+      cachedMessageHeights = [:]
+
+      self.lastKnownTableViewFrame = tableView.frame
+    }
 
     let clipView = scrollView.contentView
     clipView.postsBoundsChangedNotifications = true
@@ -84,8 +114,7 @@ final class MessagesViewController: NSViewController {
       for: NSView.boundsDidChangeNotification,
       object: clipView
     )
-    .sink { [weak self] _ in
-      guard let self = self else { return }
+    .sink { [unowned self] _ in
       if self.scrollView.scrollPercentage < 0.25 {
         self.delegate?.messagesControllerDidScrollNearTop(self)
       }
@@ -191,10 +220,29 @@ final class MessagesViewController: NSViewController {
 
     messageSizingTemplate.prepareForReuse()
     signposter.emitEvent("Reuse preparation complete", id: signpostID)
-    messageSizingTemplate.configure(withMessage: message, isGroupHeader: messageIsFirstInSection(id: message.id), forMeasurements: true)
+
+    let isHeader = messageIsFirstInSection(id: message.id)
+    messageSizingTemplate.configure(withMessage: message, isGroupHeader: isHeader, forMeasurements: true)
     signposter.emitEvent("View configuration complete", id: signpostID)
-    let height = messageSizingTemplate.fittingSize.height
+
+    // Because our message sizing template isn't actually inside of a table view
+    // and is just floating around in empty space, we need to manually wrap the
+    // message content label ourselves.
+    //
+    // XXX: This needs to be updated manually in the future if changes are made
+    //      to the layout.
+    messageSizingTemplate.messageContentLabel.preferredMaxLayoutWidth = tableView.frame.width - 50
+
+    // For some reason, the fitting size is wrong if the message row has any
+    // accessories (such as image attachments). I have no idea why this happens,
+    // so crudely estimate the height from the fitting sizes of the stack views.
+    //
+    // Yes, the fitting sizes of the stack views are bigger than the fitting
+    // size of the superview containing both stack views. This makes no sense.
+    let height: Double = messageSizingTemplate.hasAccessoriesNecessitatingCrudeHeightMeasurement ? messageSizingTemplate.crudeHeight : messageSizingTemplate.fittingSize.height
+
     cachedMessageHeights[message.id] = height
+
     signposter.emitEvent("Measurement complete", id: signpostID)
     signposter.endInterval("Message Row Height Measurement", state)
 
@@ -207,5 +255,26 @@ extension MessagesViewController: NSTableViewDelegate {
     let messageID = dataSource.itemIdentifier(forRow: row)!
     let message = self.messages[messageID]!
     return measureRowHeight(forMessage: message)
+  }
+
+  func tableView(_ tableView: NSTableView, didAdd rowView: NSTableRowView, forRow row: Int) {
+    // If we don't do this, then the row views won't shrink after growing due to
+    // window resizes.
+    rowView.translatesAutoresizingMaskIntoConstraints = false
+  }
+
+  func tableViewSelectionDidChange(_ notification: Notification) {
+    guard UserDefaults.standard.bool(forKey: "BSLKMessageRowHeightDebugging"),
+          tableView.selectedRow > -1,
+          let messageID = dataSource.itemIdentifier(forRow: tableView.selectedRow),
+          let view = tableView.view(atColumn: 0, row: tableView.selectedRow, makeIfNecessary: false) as? UnifiedMessageRow else {
+      return
+    }
+
+    let mismatching: String = cachedMessageHeights[messageID] != view.bounds.height ? " *** MISMATCH *** " : ""
+    log.debug("*** Selected row #\(self.tableView.selectedRow, privacy: .public), message ID: \(messageID.string, privacy: .public)")
+    let cachedHeight: String = cachedMessageHeights[messageID].map { String($0) } ?? "<not cached>"
+    log.debug("    actual height = \(view.bounds.height, privacy: .public), cached = \(cachedHeight)\(mismatching)")
+    log.debug("    content = \(self.messages[messageID]?.content ?? "<?>")")
   }
 }

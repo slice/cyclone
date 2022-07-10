@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="21179.7" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="21208.1" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21179.7"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21208.1"/>
         <capability name="NSView safe area layout guides" minToolsVersion="12.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -18,10 +18,10 @@
                     <rect key="frame" x="43" y="0.0" width="426" height="60"/>
                     <subviews>
                         <stackView identifier="HeaderIdentity" distribution="fill" orientation="horizontal" alignment="firstBaseline" spacing="5" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" verticalCompressionResistancePriority="250" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2Mw-dN-G5U" userLabel="Header Identity Stack View">
-                            <rect key="frame" x="0.0" y="41" width="426" height="19"/>
+                            <rect key="frame" x="0.0" y="19" width="426" height="41"/>
                             <subviews>
                                 <textField horizontalHuggingPriority="255" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Ug7-lf-K9C">
-                                    <rect key="frame" x="-2" y="0.0" width="160" height="19"/>
+                                    <rect key="frame" x="-2" y="22" width="160" height="19"/>
                                     <textFieldCell key="cell" lineBreakMode="clipping" title="Message Author Name" id="4iU-Ay-aaL">
                                         <font key="font" textStyle="title3" name=".SFNS-Regular"/>
                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -29,7 +29,7 @@
                                     </textFieldCell>
                                 </textField>
                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="tOi-Zv-130">
-                                    <rect key="frame" x="159" y="1" width="269" height="16"/>
+                                    <rect key="frame" x="159" y="23" width="269" height="16"/>
                                     <textFieldCell key="cell" lineBreakMode="clipping" title="Today at 6:49 PM" id="KiU-t4-Gk9">
                                         <font key="font" metaFont="system"/>
                                         <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
@@ -47,10 +47,10 @@
                             </customSpacing>
                         </stackView>
                         <stackView identifier="ContentStack" distribution="fill" orientation="vertical" alignment="leading" spacing="10" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CYr-nE-9y1">
-                            <rect key="frame" x="0.0" y="0.0" width="426" height="38"/>
+                            <rect key="frame" x="0.0" y="0.0" width="426" height="16"/>
                             <subviews>
-                                <textField horizontalHuggingPriority="249" verticalHuggingPriority="249" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="xl7-w3-Bpq">
-                                    <rect key="frame" x="-2" y="0.0" width="430" height="38"/>
+                                <textField horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="xl7-w3-Bpq">
+                                    <rect key="frame" x="-2" y="0.0" width="178" height="16"/>
                                     <textFieldCell key="cell" title="This is the message content." id="OAL-6Y-js7">
                                         <font key="font" metaFont="system"/>
                                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>

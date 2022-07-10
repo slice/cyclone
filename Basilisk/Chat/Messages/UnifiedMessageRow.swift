@@ -1,6 +1,7 @@
 import Cocoa
 import Serpent
 import Kingfisher
+import os.log
 
 final class UnifiedMessageRow: NSTableCellView {
   @IBOutlet var roundingView: RoundingView!
@@ -43,6 +44,25 @@ final class UnifiedMessageRow: NSTableCellView {
   // These are hardcoded for now. (dizzy)
   static let maximumImageWidth = 450.0
   static let maximumImageHeight = 300.0
+
+  /// A crudely calculated height for this unified message row.
+  ///
+  /// This is only useful because the `fittingSize` is incorrect if there are
+  /// any accessories for some reason. It doesn't seem like it uses the fitting
+  /// sizes of the stack views, so we have to do that manually here.
+  var crudeHeight: Double {
+    let headerHeight = isGroupHeader ? (headerIdentityStack.fittingSize.height + 9.0) : 0.0
+    return headerHeight + contentStackView.fittingSize.height + 4.0
+  }
+
+  /// Indicates whether this message row is currently set up as a group header.
+  var isGroupHeader: Bool = true
+
+  /// Indicates whether this message row contains message accessories that
+  /// necessitates a crude height measurement.
+  var hasAccessoriesNecessitatingCrudeHeightMeasurement: Bool = false
+
+  static let log = Logger(subsystem: "zone.slice.Basilisk", category: "unified-message-row")
 
   override func awakeFromNib() {
     super.awakeFromNib()
@@ -100,10 +120,15 @@ final class UnifiedMessageRow: NSTableCellView {
   }
 
   func setupAccessories(message: Message, forMeasurements performingMeasurements: Bool = false) {
-    for attachment in message.attachments {
+    guard !UserDefaults.standard.bool(forKey: "BSLKIgnoreMessageAccessories") else {
+      return
+    }
+
+    for attachment in message.attachments where attachment.contentType?.isSubtype(of: .image) ?? false {
       guard let width = attachment.width.map(Double.init), let height = attachment.height.map(Double.init) else {
         continue
       }
+
 
       let imageView = IntrinsicImageView()
       imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -123,21 +148,12 @@ final class UnifiedMessageRow: NSTableCellView {
       roundingView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
       roundingView.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
 
-      // The image wants to be at the clamped dimensions, but should shrink if
-      // the user sizes the window down.
-      let widthConstraint = imageView.widthAnchor.constraint(equalToConstant: clampedWidth)
-      widthConstraint.priority = .defaultLow
-      let heightConstraint = imageView.heightAnchor.constraint(equalToConstant: clampedHeight)
-      heightConstraint.priority = .defaultLow
-
       NSLayoutConstraint.activate([
         imageView.topAnchor.constraint(equalTo: roundingView.topAnchor),
         imageView.bottomAnchor.constraint(equalTo: roundingView.bottomAnchor),
         imageView.trailingAnchor.constraint(equalTo: roundingView.trailingAnchor),
         imageView.leadingAnchor.constraint(equalTo: roundingView.leadingAnchor),
         imageView.widthAnchor.constraint(greaterThanOrEqualToConstant: 50.0),
-        widthConstraint,
-        heightConstraint,
         imageView.widthAnchor.constraint(equalTo: imageView.heightAnchor, multiplier: aspectRatio)
       ])
 
@@ -145,12 +161,32 @@ final class UnifiedMessageRow: NSTableCellView {
         imageView.setImage(loadingFrom: attachment.proxyURL)
       }
 
-      contentStackView.addView(roundingView, in: .bottom)
+      contentStackView.addArrangedSubview(roundingView)
+
+      if UserDefaults.standard.bool(forKey: "BSLKMessageRowHeightDebugging") {
+        Self.log.debug("*** Set up an attachment for \(message.id.string, privacy: .public) (\"\(message.content, privacy: .public)\")")
+        Self.log.debug("    accessory height: \(roundingView.fittingSize.height, privacy: .public), (incorrect) fitting size for this view: \(self.fittingSize.height, privacy: .public)")
+        Self.log.debug("    is group header? \(self.isGroupHeader, privacy: .public)")
+
+        func printFittingSize(_ view: NSView, label: String) {
+          Self.log.debug("    \(label, privacy: .public)'s fitting height: \(view.fittingSize.height, privacy: .public)")
+        }
+
+        printFittingSize(self, label: "myself")
+        printFittingSize(contentStackView, label: "content stack view")
+        printFittingSize(headerIdentityStack, label: "identity stack view")
+        printFittingSize(messageHeaderContent, label: "header content")
+      }
+
+      hasAccessoriesNecessitatingCrudeHeightMeasurement = true
     }
   }
 
   func resetMessageAccessories() {
-    contentStackView.setViews([], in: .bottom)
+    for arrangedSubview in contentStackView.arrangedSubviews where arrangedSubview != self.messageContentLabel {
+      contentStackView.removeArrangedSubview(arrangedSubview)
+      arrangedSubview.removeFromSuperview()
+    }
   }
 
   /// Configures this message row for a group header or normal appearance.
@@ -173,6 +209,7 @@ final class UnifiedMessageRow: NSTableCellView {
     pinAvatarToTopOfCell.constant = isGroupHeader ? 10 : 5
 
     headerContentHeightConstraint.isActive = isGroupHeader
+    self.isGroupHeader = isGroupHeader
   }
 
   override func prepareForReuse() {
@@ -181,5 +218,7 @@ final class UnifiedMessageRow: NSTableCellView {
     avatarImageView.image = nil
     avatarImageView.kf.cancelDownloadTask()
     resetMessageAccessories()
+    hasAccessoriesNecessitatingCrudeHeightMeasurement = false
+    isGroupHeader = true
   }
 }

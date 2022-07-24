@@ -233,14 +233,7 @@ final class MessagesViewController: NSViewController {
     //      to the layout.
     messageSizingTemplate.messageContentLabel.preferredMaxLayoutWidth = tableView.frame.width - 50
 
-    // For some reason, the fitting size is wrong if the message row has any
-    // accessories (such as image attachments). I have no idea why this happens,
-    // so crudely estimate the height from the fitting sizes of the stack views.
-    //
-    // Yes, the fitting sizes of the stack views are bigger than the fitting
-    // size of the superview containing both stack views. This makes no sense.
-    let height: Double = messageSizingTemplate.hasAccessoriesNecessitatingCrudeHeightMeasurement ? messageSizingTemplate.crudeHeight : messageSizingTemplate.fittingSize.height
-
+    let height = messageSizingTemplate.fittingSize.height
     cachedMessageHeights[message.id] = height
 
     signposter.emitEvent("Measurement complete", id: signpostID)

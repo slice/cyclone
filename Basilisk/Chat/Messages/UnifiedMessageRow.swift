@@ -45,22 +45,8 @@ final class UnifiedMessageRow: NSTableCellView {
   static let maximumImageWidth = 450.0
   static let maximumImageHeight = 300.0
 
-  /// A crudely calculated height for this unified message row.
-  ///
-  /// This is only useful because the `fittingSize` is incorrect if there are
-  /// any accessories for some reason. It doesn't seem like it uses the fitting
-  /// sizes of the stack views, so we have to do that manually here.
-  var crudeHeight: Double {
-    let headerHeight = isGroupHeader ? (headerIdentityStack.fittingSize.height + 9.0) : 0.0
-    return headerHeight + contentStackView.fittingSize.height + 4.0
-  }
-
   /// Indicates whether this message row is currently set up as a group header.
   var isGroupHeader: Bool = true
-
-  /// Indicates whether this message row contains message accessories that
-  /// necessitates a crude height measurement.
-  var hasAccessoriesNecessitatingCrudeHeightMeasurement: Bool = false
 
   static let log = Logger(subsystem: "zone.slice.Basilisk", category: "unified-message-row")
 
@@ -129,7 +115,6 @@ final class UnifiedMessageRow: NSTableCellView {
         continue
       }
 
-
       let imageView = IntrinsicImageView()
       imageView.translatesAutoresizingMaskIntoConstraints = false
       imageView.imageScaling = .scaleAxesIndependently
@@ -139,14 +124,20 @@ final class UnifiedMessageRow: NSTableCellView {
 
       imageView.overriddenIntrinsicContentSize = NSSize(width: clampedWidth, height: clampedHeight)
       imageView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
-      imageView.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
+      // When performing measurements, use a required content compression
+      // resistance priority. If we use `defaultLow`, then the template view
+      // will shrink itself to a size that is nowhere near representative
+      // of the message's true height in the table view, resulting in janky
+      // scrolling due to the height mismatches.
+      imageView.setContentCompressionResistancePriority(performingMeasurements ? .required : .defaultLow, for: .vertical)
 
       let roundingView = RoundingView()
       roundingView.radius = 5.0
       roundingView.translatesAutoresizingMaskIntoConstraints = false
       roundingView.addSubview(imageView)
       roundingView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
-      roundingView.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
+      // Ditto.
+      roundingView.setContentCompressionResistancePriority(performingMeasurements ? .required : .defaultLow, for: .vertical)
 
       NSLayoutConstraint.activate([
         imageView.topAnchor.constraint(equalTo: roundingView.topAnchor),
@@ -177,8 +168,6 @@ final class UnifiedMessageRow: NSTableCellView {
         printFittingSize(headerIdentityStack, label: "identity stack view")
         printFittingSize(messageHeaderContent, label: "header content")
       }
-
-      hasAccessoriesNecessitatingCrudeHeightMeasurement = true
     }
   }
 
@@ -218,7 +207,6 @@ final class UnifiedMessageRow: NSTableCellView {
     avatarImageView.image = nil
     avatarImageView.kf.cancelDownloadTask()
     resetMessageAccessories()
-    hasAccessoriesNecessitatingCrudeHeightMeasurement = false
     isGroupHeader = true
   }
 }

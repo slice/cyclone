@@ -19,11 +19,17 @@ class HTTPInspectorController: NSViewController {
     didSet {
       updateSummaries()
       guard let log = log else { return }
-      requestDetailController.headers = OrderedDictionary(log.requestHeaders, uniquingKeysWith: { first, second in first })
-      requestDetailController.body = log.requestBody ?? .empty
-      responseDetailController.headers = OrderedDictionary(log.responseHeaders, uniquingKeysWith: { first, second in first })
-      responseDetailController.body = log.responseBody ?? .empty
+      populateDetailController(requestDetailController, data: log.requestBody, headers: log.requestHeaders)
+      populateDetailController(responseDetailController, data: log.responseBody, headers: log.responseHeaders)
     }
+  }
+
+  private func populateDetailController(_ controller: HTTPInspectorBodyHeadersController, data: Data?, headers: [String: String]) {
+    if let data {
+      let isJSON = headers["Content-Type"].map { $0 == "application/json" } ?? false
+      controller.populateBody(body: data, isJSON: isJSON)
+    }
+    controller.headers = OrderedDictionary(headers, uniquingKeysWith: { first, second in first })
   }
 
   override func viewDidLoad() {

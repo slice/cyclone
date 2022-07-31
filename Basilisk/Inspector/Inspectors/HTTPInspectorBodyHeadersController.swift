@@ -1,5 +1,6 @@
 import Cocoa
 import OrderedCollections
+import SwiftyJSON
 
 class HTTPInspectorBodyHeadersController: NSViewController {
   @IBOutlet var headersTableView: NSTableView!
@@ -17,19 +18,23 @@ class HTTPInspectorBodyHeadersController: NSViewController {
     }
   }
 
-  var body: Data = .empty {
-    didSet {
-      updateBody()
-    }
-  }
+  private var body: Data = .empty
 
-  func updateBody() {
+  func populateBody(body: Data, isJSON: Bool = false) {
+    if isJSON, let json = try? JSON(data: body) {
+      jsonInspectorController.jsonData = json
+      jsonInspectorController.reloadData()
+      bodyTabView.selectTabViewItem(at: 1)
+      return
+    }
+
     guard let string = String(data: body, encoding: .utf8) else {
       bodyTextView.string = "<binary data>"
       return
     }
 
     bodyTextView.string = string
+    bodyTabView.selectTabViewItem(at: 0)
   }
 
   override func viewDidLoad() {

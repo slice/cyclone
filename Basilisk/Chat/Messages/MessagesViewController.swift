@@ -83,6 +83,8 @@ final class MessagesViewController: NSViewController {
     messageSizingTemplate =
       (tableView.makeView(withIdentifier: .unifiedMessageRow, owner: nil)! as! UnifiedMessageRow)
 
+    scrollView.applyInnerInsets(bottom: 10)
+
     tableView.postsFrameChangedNotifications = true
     tableViewFrameChangedSink = NotificationCenter.default.publisher(
       for: NSView.frameDidChangeNotification,
@@ -165,7 +167,7 @@ final class MessagesViewController: NSViewController {
         newPosition = savedScrollPosition
       case .toBottom:
         // Scroll to the bottom of the scroll view.
-        newPosition = newHeight - scrollView.contentView.bounds.height
+        newPosition = scrollView.bottomYCoordinate
       }
 
       scrollView.contentView.scroll(to: NSPoint(x: 0.0, y: newPosition))

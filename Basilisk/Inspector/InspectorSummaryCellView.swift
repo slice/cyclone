@@ -28,7 +28,7 @@ class InspectorSummaryCellView: NSTableCellView {
       eventTextField.stringValue = String(describing: gatewayPacket.packet.op)
       if gatewayPacket.packet.op == .dispatch {
         eventTextField.textColor = .secondaryLabelColor
-        primaryTextField.stringValue = gatewayPacket.packet.eventName ?? "(UNKNOWN))"
+        primaryTextField.stringValue = gatewayPacket.packet.eventName ?? "(unknown)"
       } else {
         primaryTextField.isHidden = true
       }

@@ -18,6 +18,13 @@ class InspectorSummaryCellView: NSTableCellView {
   /// (HTTP or gateway).
   @IBOutlet var packetOriginImageView: NSImageView!
 
+  // TODO: Don't hardcode these replacements.
+  private static let attachments: [String: APIURLTruncationAttachment] = [
+    "https://canary.discord.com/api/v9": APIURLTruncationAttachment(text: "v9", backgroundColor: .systemOrange),
+    "https://ptb.discord.com/api/v9": APIURLTruncationAttachment(text: "v9", backgroundColor: .systemBlue),
+    "https://discord.com/api/v9": APIURLTruncationAttachment(text: "v9", backgroundColor: .systemGray)
+  ]
+
   func setup(logMessage: LogMessage) {
     let font = NSFont.preferredFont(forTextStyle: .body)
     primaryTextField.font = .monospacedSystemFont(ofSize: font.pointSize, weight: .regular)
@@ -37,9 +44,22 @@ class InspectorSummaryCellView: NSTableCellView {
       eventTextField.isHidden = true
       var string = AttributedString(log.method.rawValue + " ")
       string.font = .monospacedSystemFont(ofSize: font.pointSize, weight: .bold)
-      var url = AttributedString(log.url.absoluteString)
+
+      var logURL = log.url.absoluteString
+      var attachment: APIURLTruncationAttachment?
+
+      if let (apiURL, replacementAttachment) = Self.attachments.first(where: { (apiURL, attachment) in logURL.starts(with: apiURL) }) {
+        logURL = logURL.replacingOccurrences(of: apiURL, with: "")
+        attachment = replacementAttachment
+      }
+
+      if let attachment {
+        string.append(AttributedString(NSAttributedString(attachment: attachment)))
+      }
+      var url = AttributedString(logURL)
       url.font = .monospacedSystemFont(ofSize: font.pointSize, weight: .regular)
       string.append(url)
+
       let style = NSMutableParagraphStyle()
       style.lineBreakMode = .byTruncatingTail
       string.paragraphStyle = style

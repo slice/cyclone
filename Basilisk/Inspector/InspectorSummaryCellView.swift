@@ -36,13 +36,13 @@ class InspectorSummaryCellView: NSTableCellView {
       packetOriginImageView.image = NSImage(systemSymbolName: "envelope.fill", accessibilityDescription: "HTTP")
       eventTextField.isHidden = true
       var string = AttributedString(log.method.rawValue + " ")
-      string[AttributeScopes.AppKitAttributes.FontAttribute.self] = .monospacedSystemFont(ofSize: font.pointSize, weight: .bold)
+      string.font = .monospacedSystemFont(ofSize: font.pointSize, weight: .bold)
       var url = AttributedString(log.url.absoluteString)
-      url[AttributeScopes.AppKitAttributes.FontAttribute.self] = .monospacedSystemFont(ofSize: font.pointSize, weight: .regular)
+      url.font = .monospacedSystemFont(ofSize: font.pointSize, weight: .regular)
       string.append(url)
       let style = NSMutableParagraphStyle()
       style.lineBreakMode = .byTruncatingTail
-      string[AttributeScopes.AppKitAttributes.ParagraphStyleAttribute.self] = style
+      string.paragraphStyle = style
       primaryTextField.attributedStringValue = NSAttributedString(string)
     }
   }

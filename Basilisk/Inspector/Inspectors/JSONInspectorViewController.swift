@@ -190,14 +190,16 @@ extension JSONInspectorViewController: NSOutlineViewDelegate {
     var attributedString = AttributedString()
 
     if let key = key {
-      var keyAttributedString = AttributedString(key + ": ")
-      keyAttributedString[AttributeScopes.AppKitAttributes.FontAttribute.self] = NSFont.boldSystemFont(ofSize: NSFont.smallSystemFontSize)
+      var keyAttributedString = AttributedString(
+        key + ": ",
+        attributes: .init([.font: NSFont.boldSystemFont(ofSize: NSFont.smallSystemFontSize)])
+      )
       attributedString.append(keyAttributedString)
     }
 
     let paragraphStyle = NSMutableParagraphStyle()
     paragraphStyle.lineBreakMode = .byTruncatingTail
-    attributedString[AttributeScopes.AppKitAttributes.ParagraphStyleAttribute.self] = paragraphStyle
+    attributedString.paragraphStyle = paragraphStyle
     attributedString.append(AttributedString(json.stringified))
 
     view.textField?.attributedStringValue = NSAttributedString(attributedString)

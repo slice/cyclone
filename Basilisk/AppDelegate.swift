@@ -83,7 +83,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
           }
         } catch {
           NSLog("failed to connect: %@", String(describing: error))
-          await NSApp.presentError(error)
+          let _ = await NSApp.presentError(error)
         }
       }
     }

@@ -36,6 +36,7 @@ extension NSUserInterfaceItemIdentifier {
 final class MessagesViewController: NSViewController {
   @IBOutlet var scrollView: NSScrollView!
   @IBOutlet var tableView: NSTableView!
+  @IBOutlet var messageInputField: NSTextField!
 
   /// The ordered set of messages this view controller is showing, ordered from
   /// oldest to newest.
@@ -66,6 +67,8 @@ final class MessagesViewController: NSViewController {
   // cached message heights is necessary due to wrapping.
   var tableViewFrameChangedSink: AnyCancellable!
   var lastKnownTableViewFrame: NSRect?
+
+  var messageInputFieldTextChangedSink: AnyCancellable!
 
   let log = Logger(subsystem: "zone.slice.Basilisk", category: "messages-view-controller")
   lazy var signposter = {
@@ -125,6 +128,12 @@ final class MessagesViewController: NSViewController {
     if UserDefaults.standard.bool(forKey: "BSLKApplySampleMessages") {
       applySampleData()
     }
+
+    messageInputFieldTextChangedSink = NotificationCenter.default
+      .publisher(for: NSControl.textDidChangeNotification, object: messageInputField)
+      .sink { [unowned self] notification in
+        self.delegate?.messagesControllerMessageInputFieldDidChange(self, notification: notification)
+      }
   }
 
   /// Returns a Boolean indicating whether a message is the first in a section

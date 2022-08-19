@@ -11,6 +11,9 @@ import Cocoa
     _ messagesController: MessagesViewController,
     messageSent: String)
 
+  /// Tells the delegate that the message input field changed.
+  func messagesControllerMessageInputFieldDidChange(_ messagesController: MessagesViewController, notification: Notification)
+
   /// Tells the delegate that the scroll view has neared the top of the
   /// available space.
   func messagesControllerDidScrollNearTop(_ messagesController: MessagesViewController)

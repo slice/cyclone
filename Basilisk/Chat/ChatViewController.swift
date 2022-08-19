@@ -85,6 +85,10 @@ final class ChatViewController: NSSplitViewController {
   /// it without having to `await`.
   private var knownPrivateParticipants: [User.ID: User]?
 
+  private var messageInputFieldDidChange = PassthroughSubject<Void, Never>()
+
+  private var lastSentTypingTimestamps: [Snowflake: Date] = [:]
+
   let log = Logger(subsystem: "zone.slice.Basilisk", category: "chat-view-controller")
 
   deinit {
@@ -232,6 +236,38 @@ final class ChatViewController: NSSplitViewController {
 
     setUpGatewayPacketHandler()
     setupConnectionStateSink()
+
+    messageInputFieldDidChange
+      // TODO: As of 2022-08-19, it seems that the client actually throttles new
+      //       typing events to a request every ~3 seconds (given that the user
+      //       isn't in the middle of typing a long message; in that case, it's
+      //       free to immediately send a new one as long as at least 10 seconds
+      //       have elapsed). This behavior should be fine for now.
+      .sink { [unowned self] _ in
+        guard let focusedChannelID else { return }
+
+        let messageInputField = messagesViewController.messageInputField!
+        guard !messageInputField.stringValue.isEmpty else {
+          // If the user has deleted the content of the input field since then,
+          // then don't send a typing event.
+          return
+        }
+
+        if let lastSentTyping = lastSentTypingTimestamps[focusedChannelID], Date.now.timeIntervalSince(lastSentTyping) < 10 {
+          // If we have sent a typing event in the last 10 seconds, then don't.
+          return
+        }
+
+        lastSentTypingTimestamps[focusedChannelID] = Date.now
+        Task {
+          do {
+            try await beginTypingInFocusedChannel()
+          } catch {
+            log.error("failed to send typing event to focused channel: \(String(describing: error), privacy: .public)")
+          }
+        }
+      }
+      .store(in: &cancellables)
 
     client.gatewayConnection.reconnects.receive(on: DispatchQueue.main)
       .sink { [unowned self] _ in
@@ -433,6 +469,15 @@ final class ChatViewController: NSSplitViewController {
     view.window?.title = "Basilisk"
     view.window?.subtitle = ""
   }
+
+  func beginTypingInFocusedChannel() async throws {
+    guard let focusedChannelID, let client, let request = try client.http.apiRequest(to: "/channels/\(focusedChannelID.string)/typing", method: .post) else {
+      return
+    }
+
+    log.debug("sending typing event to \(focusedChannelID.string)")
+    let _ = try await client.http.request(request, withSpoofedHeadersFor: .xhr)
+  }
 }
 
 extension ChatViewController: MessagesViewControllerDelegate {
@@ -448,6 +493,10 @@ extension ChatViewController: MessagesViewControllerDelegate {
           )
       }
     }
+  }
+
+  func messagesControllerMessageInputFieldDidChange(_ messagesController: MessagesViewController, notification: Notification) {
+    messageInputFieldDidChange.send()
   }
 
   func messagesController(_ messagesController: MessagesViewController, messageSent message: String) {
@@ -467,6 +516,7 @@ extension ChatViewController: MessagesViewControllerDelegate {
           ]
         )!
         let _ = try await client.http.request(request, withSpoofedHeadersFor: .xhr)
+        lastSentTypingTimestamps.removeValue(forKey: focusedChannelID)
       } catch {
         log.error("failed to send message: \(error, privacy: .public)")
         messagesViewController.appendToConsole(line: "[system] failed to send message: \(error)")

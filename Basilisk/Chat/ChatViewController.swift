@@ -273,19 +273,19 @@ final class ChatViewController: NSSplitViewController {
       .sink { [unowned self] _ in
         // The websocket connection has been reset, so we need to reset our sink
         // too.
-        Task { await self.setupConnectionStateSink() }
+        setupConnectionStateSink()
       }
       .store(in: &cancellables)
 
     client.guildsChanged.receive(on: DispatchQueue.main)
       .sink { [unowned self] _ in
-        Task { await self.fetchGuilds() }
+        Task { await fetchGuilds() }
       }
       .store(in: &cancellables)
 
     client.privateChannelsChanged.receive(on: DispatchQueue.main)
       .sink { [unowned self] _ in
-        Task { await self.fetchPrivateChannels() }
+        Task { await fetchPrivateChannels() }
       }
       .store(in: &cancellables)
 

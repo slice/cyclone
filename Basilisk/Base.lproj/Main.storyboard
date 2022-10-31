@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="21179.7" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="21223" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21179.7"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21223"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -890,43 +890,54 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <containerView translatesAutoresizingMaskIntoConstraints="NO" id="QB3-Wd-e9Y">
-                                <rect key="frame" x="0.0" y="22" width="450" height="305"/>
+                                <rect key="frame" x="0.0" y="30" width="450" height="297"/>
                                 <connections>
                                     <segue destination="n48-mC-yKy" kind="embed" id="LJW-7d-CAo"/>
                                 </connections>
                             </containerView>
                             <box boxType="custom" borderType="none" borderWidth="0.0" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="KOL-zF-JYi">
-                                <rect key="frame" x="0.0" y="0.0" width="450" height="22"/>
+                                <rect key="frame" x="0.0" y="0.0" width="450" height="30"/>
                                 <view key="contentView" id="VGE-TN-NtX">
-                                    <rect key="frame" x="0.0" y="0.0" width="450" height="22"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="450" height="30"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="qBh-wM-QTD">
-                                            <rect key="frame" x="0.0" y="19" width="450" height="5"/>
+                                            <rect key="frame" x="0.0" y="27" width="450" height="5"/>
                                         </box>
                                         <stackView distribution="fill" orientation="horizontal" alignment="centerY" spacing="2" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wj9-Ig-jWf">
-                                            <rect key="frame" x="7" y="0.0" width="438" height="22"/>
+                                            <rect key="frame" x="7" y="0.0" width="438" height="30"/>
                                             <subviews>
-                                                <customView horizontalCompressionResistancePriority="748" translatesAutoresizingMaskIntoConstraints="NO" id="ic4-el-Soj" customClass="ConnectionStatusView" customModule="Basilisk" customModuleProvider="target">
-                                                    <rect key="frame" x="0.0" y="0.0" width="22" height="22"/>
-                                                </customView>
-                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="oTL-04-r6T">
-                                                    <rect key="frame" x="22" y="4" width="418" height="14"/>
+                                                <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="oyw-fz-ciD">
+                                                    <rect key="frame" x="-2" y="7" width="385" height="16"/>
+                                                    <textFieldCell key="cell" lineBreakMode="clipping" title=":3" id="OUc-70-WFn">
+                                                        <font key="font" metaFont="system"/>
+                                                        <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                    </textFieldCell>
+                                                </textField>
+                                                <textField horizontalHuggingPriority="751" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="oTL-04-r6T">
+                                                    <rect key="frame" x="381" y="8" width="33" height="14"/>
                                                     <textFieldCell key="cell" lineBreakMode="clipping" title="Label" id="xNJ-wY-wbj">
                                                         <font key="font" metaFont="smallSystem"/>
                                                         <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                     </textFieldCell>
                                                 </textField>
+                                                <customView horizontalHuggingPriority="751" translatesAutoresizingMaskIntoConstraints="NO" id="ic4-el-Soj" customClass="ConnectionStatusView" customModule="Basilisk" customModuleProvider="target">
+                                                    <rect key="frame" x="414" y="3" width="24" height="24"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="24" id="hxV-pm-g48"/>
+                                                        <constraint firstAttribute="height" constant="24" id="vMU-4I-TVM"/>
+                                                    </constraints>
+                                                </customView>
                                             </subviews>
-                                            <constraints>
-                                                <constraint firstItem="ic4-el-Soj" firstAttribute="width" secondItem="wj9-Ig-jWf" secondAttribute="height" id="aoa-X2-LrI"/>
-                                            </constraints>
                                             <visibilityPriorities>
+                                                <integer value="1000"/>
                                                 <integer value="1000"/>
                                                 <integer value="1000"/>
                                             </visibilityPriorities>
                                             <customSpacing>
+                                                <real value="3.4028234663852886e+38"/>
                                                 <real value="3.4028234663852886e+38"/>
                                                 <real value="3.4028234663852886e+38"/>
                                             </customSpacing>
@@ -956,13 +967,14 @@
                             <constraint firstItem="KOL-zF-JYi" firstAttribute="top" secondItem="QB3-Wd-e9Y" secondAttribute="bottom" id="hVO-uC-LZV"/>
                             <constraint firstItem="QB3-Wd-e9Y" firstAttribute="leading" secondItem="iIc-WU-rMx" secondAttribute="leading" id="sAo-I3-vup"/>
                             <constraint firstItem="KOL-zF-JYi" firstAttribute="leading" secondItem="iIc-WU-rMx" secondAttribute="leading" id="uFw-Za-lDj"/>
-                            <constraint firstAttribute="bottom" secondItem="QB3-Wd-e9Y" secondAttribute="bottom" constant="22" id="y43-ZL-DbS"/>
+                            <constraint firstAttribute="bottom" secondItem="QB3-Wd-e9Y" secondAttribute="bottom" constant="30" id="y43-ZL-DbS"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="connectionStatus" destination="ic4-el-Soj" id="pA3-zB-6Sl"/>
                         <outlet property="connectionStatusLabel" destination="oTL-04-r6T" id="e4h-cN-CxB"/>
                         <outlet property="containedView" destination="iIc-WU-rMx" id="6Jr-oM-nYA"/>
+                        <outlet property="statusBarStackView" destination="wj9-Ig-jWf" id="jql-a8-BYA"/>
                     </connections>
                 </viewController>
                 <customObject id="sTp-H2-PKb" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>

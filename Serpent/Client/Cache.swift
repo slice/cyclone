@@ -31,6 +31,27 @@ public actor Cache {
   /// All known guilds.
   public private(set) var guilds: [Guild.ID: Guild] = [:]
 
+  /// How long before a typing event expires.
+  public static let typingEventTimeout: TimeInterval = 10.0
+
+  /// Typing states.
+  private var typing: [Snowflake: [User.ID: TypingState]] = [:]
+
+  public func beginTyping(user: User.ID, at beganTypingAt: Date = .now, location: Snowflake) {
+    var states = typing[location] ?? [:]
+    states[user] = TypingState(beganTypingAt: beganTypingAt)
+    typing[location] = states
+  }
+
+  public func endTyping(user: User.ID, location: Snowflake) {
+    typing[location]?.removeValue(forKey: user)
+  }
+
+  /// Returns the users currently typing in a channel.
+  public func usersCurrentlyTyping(in location: Snowflake) -> [User.ID: TypingState] {
+    (typing[location] ?? [:]).filter { Date.now.timeIntervalSince($0.value.beganTypingAt) < Self.typingEventTimeout }
+  }
+
   /// Populate the cache with a `READY` packet from the gateway.
   public func ingestReadyPacket(_ packet: AnyGatewayPacket) throws {
     func identifiablesToDictionary<I: Identifiable>(_ identifiables: [I]) -> [I.ID: I] {
@@ -82,5 +103,10 @@ public actor Cache {
   /// Updates the user settings.
   public func upsert(userSettings: JSON) {
     self.userSettings.send(userSettings)
+  }
+
+  /// Adds a user to the cache, replacing any user with the same ID.
+  public func upsert(user: User) {
+    self[user.ref] = user
   }
 }

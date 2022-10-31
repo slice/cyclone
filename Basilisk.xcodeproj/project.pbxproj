@@ -34,6 +34,10 @@
 		126B91062870EF6E002AA7AA /* ChatWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126B91052870EF6E002AA7AA /* ChatWindowController.swift */; };
 		12861A76285DC49C00C85F86 /* Ref.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12861A75285DC49B00C85F86 /* Ref.swift */; };
 		12861A78285DD21600C85F86 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12861A77285DD21600C85F86 /* Constants.swift */; };
+		12880BBD28B4D67300A01238 /* TypingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12880BBC28B4D67300A01238 /* TypingView.swift */; };
+		12880BBF28B4D6C200A01238 /* TypingBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12880BBE28B4D6C200A01238 /* TypingBridge.swift */; };
+		12880BC328B4E3BC00A01238 /* TypingEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12880BC228B4E3BC00A01238 /* TypingEvent.swift */; };
+		12880BC528B4E7E400A01238 /* JSON+Reparse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12880BC428B4E7E400A01238 /* JSON+Reparse.swift */; };
 		12894913274C8FA200850D5E /* Guild.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12894912274C8FA200850D5E /* Guild.swift */; };
 		12894915274C8FB900850D5E /* Snowflake.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12894914274C8FB900850D5E /* Snowflake.swift */; };
 		12894917274C904E00850D5E /* Asset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12894916274C904E00850D5E /* Asset.swift */; };
@@ -81,6 +85,7 @@
 		12DAC9E5286127B4006B3B1D /* MessagesViewController+Messages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12DAC9E4286127B4006B3B1D /* MessagesViewController+Messages.swift */; };
 		12DCEAA32751E38500A0A626 /* NavigatorOutlineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12DCEAA22751E38500A0A626 /* NavigatorOutlineItem.swift */; };
 		12DCEAA52751E60C00A0A626 /* ChannelSorting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12DCEAA42751E60C00A0A626 /* ChannelSorting.swift */; };
+		12E2100328B9BB0E00834C8F /* TypingState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12E2100228B9BB0E00834C8F /* TypingState.swift */; };
 		12E6DD9F2867CF9800FD72A2 /* GroupDMChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12E6DD9E2867CF9800FD72A2 /* GroupDMChannel.swift */; };
 		12E6DDA22867D5A600FD72A2 /* SerpentJSONDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12E6DDA12867D5A600FD72A2 /* SerpentJSONDecoder.swift */; };
 		12E6DDA42867D66700FD72A2 /* ChannelType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12E6DDA32867D66700FD72A2 /* ChannelType.swift */; };
@@ -185,6 +190,10 @@
 		126B91052870EF6E002AA7AA /* ChatWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatWindowController.swift; sourceTree = "<group>"; };
 		12861A75285DC49B00C85F86 /* Ref.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ref.swift; sourceTree = "<group>"; };
 		12861A77285DD21600C85F86 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		12880BBC28B4D67300A01238 /* TypingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypingView.swift; sourceTree = "<group>"; };
+		12880BBE28B4D6C200A01238 /* TypingBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypingBridge.swift; sourceTree = "<group>"; };
+		12880BC228B4E3BC00A01238 /* TypingEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypingEvent.swift; sourceTree = "<group>"; };
+		12880BC428B4E7E400A01238 /* JSON+Reparse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "JSON+Reparse.swift"; sourceTree = "<group>"; };
 		12894912274C8FA200850D5E /* Guild.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Guild.swift; sourceTree = "<group>"; };
 		12894914274C8FB900850D5E /* Snowflake.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Snowflake.swift; sourceTree = "<group>"; };
 		12894916274C904E00850D5E /* Asset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Asset.swift; sourceTree = "<group>"; };
@@ -227,6 +236,7 @@
 		12DAC9E4286127B4006B3B1D /* MessagesViewController+Messages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MessagesViewController+Messages.swift"; sourceTree = "<group>"; };
 		12DCEAA22751E38500A0A626 /* NavigatorOutlineItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigatorOutlineItem.swift; sourceTree = "<group>"; };
 		12DCEAA42751E60C00A0A626 /* ChannelSorting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelSorting.swift; sourceTree = "<group>"; };
+		12E2100228B9BB0E00834C8F /* TypingState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypingState.swift; sourceTree = "<group>"; };
 		12E6DD9E2867CF9800FD72A2 /* GroupDMChannel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupDMChannel.swift; sourceTree = "<group>"; };
 		12E6DDA12867D5A600FD72A2 /* SerpentJSONDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SerpentJSONDecoder.swift; sourceTree = "<group>"; };
 		12E6DDA32867D66700FD72A2 /* ChannelType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelType.swift; sourceTree = "<group>"; };
@@ -357,6 +367,15 @@
 			path = HTTP;
 			sourceTree = "<group>";
 		};
+		12880BBB28B4D66C00A01238 /* Typing */ = {
+			isa = PBXGroup;
+			children = (
+				12880BBC28B4D67300A01238 /* TypingView.swift */,
+				12880BBE28B4D6C200A01238 /* TypingBridge.swift */,
+			);
+			path = Typing;
+			sourceTree = "<group>";
+		};
 		12894911274C8F9E00850D5E /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -377,6 +396,7 @@
 		1289491C274CB34E00850D5E /* Chat */ = {
 			isa = PBXGroup;
 			children = (
+				12880BBB28B4D66C00A01238 /* Typing */,
 				121F9314274CF609007F81CC /* Navigator */,
 				121F9315274CF613007F81CC /* Messages */,
 				12F4FD85273DFC1900B6AE64 /* ChatViewController.swift */,
@@ -414,6 +434,7 @@
 				129AF794273E653100B3851C /* GatewayPacket.swift */,
 				1259D6E328176E0E006AE1D1 /* AnyGatewayPacket.swift */,
 				12AB415F286925F200D54786 /* ReadyPacket.swift */,
+				12880BC228B4E3BC00A01238 /* TypingEvent.swift */,
 			);
 			path = Gateway;
 			sourceTree = "<group>";
@@ -424,6 +445,7 @@
 				128C7672273DFD0E008FD585 /* Client.swift */,
 				128C7676273E04D2008FD585 /* Disguise.swift */,
 				12AB415D28691A0300D54786 /* Cache.swift */,
+				12E2100228B9BB0E00834C8F /* TypingState.swift */,
 			);
 			path = Client;
 			sourceTree = "<group>";
@@ -449,6 +471,7 @@
 			children = (
 				12CD0226274217E600F136A5 /* Publisher+Buffer.swift */,
 				1259D6D72816AA55006AE1D1 /* Decodable+Int.swift */,
+				12880BC428B4E7E400A01238 /* JSON+Reparse.swift */,
 			);
 			path = Support;
 			sourceTree = "<group>";
@@ -821,6 +844,7 @@
 				12D23C2127541C0B00F3D18D /* WindowTitleUpdatingTabViewController.swift in Sources */,
 				126B91062870EF6E002AA7AA /* ChatWindowController.swift in Sources */,
 				12E80A5A2752AC1F00ACD979 /* NSView+Nib.swift in Sources */,
+				12880BBF28B4D6C200A01238 /* TypingBridge.swift in Sources */,
 				12F4FD86273DFC1900B6AE64 /* ChatViewController.swift in Sources */,
 				12DAC9E128611B10006B3B1D /* MessagesViewController+Data Source.swift in Sources */,
 				121F931C274CF841007F81CC /* NavigatorViewController.swift in Sources */,
@@ -829,6 +853,7 @@
 				12DAC9E5286127B4006B3B1D /* MessagesViewController+Messages.swift in Sources */,
 				129B6031286AEBF60096FB67 /* IntrinsicImageView.swift in Sources */,
 				1260A75B275163F00099CA3B /* NavigatorViewControllerDelegate.swift in Sources */,
+				12880BBD28B4D67300A01238 /* TypingView.swift in Sources */,
 				12BB68072861ADC00078CCEC /* ConnectionStatusView.swift in Sources */,
 				126B91022870B48C002AA7AA /* NSImageView+Kingfisher.swift in Sources */,
 				12AB3D80274C224200934345 /* InspectorController.swift in Sources */,
@@ -882,7 +907,9 @@
 				12894919274C91C700850D5E /* GuildChannel.swift in Sources */,
 				1259D6D82816AA55006AE1D1 /* Decodable+Int.swift in Sources */,
 				12E6DDA82867D89E00FD72A2 /* PrivateChannel.swift in Sources */,
+				12880BC328B4E3BC00A01238 /* TypingEvent.swift in Sources */,
 				12AB415E28691A0300D54786 /* Cache.swift in Sources */,
+				12880BC528B4E7E400A01238 /* JSON+Reparse.swift in Sources */,
 				12552C9C273F3DDA007D92B1 /* HTTP.swift in Sources */,
 				B8EFC2F6275197ED0010B894 /* PermissionOverwrites.swift in Sources */,
 				12945081274D3A240024C744 /* Message.swift in Sources */,
@@ -897,6 +924,7 @@
 				1259D6E428176E0E006AE1D1 /* AnyGatewayPacket.swift in Sources */,
 				12897BF4273E2BF400403E5B /* Opcode.swift in Sources */,
 				128C7677273E04D2008FD585 /* Disguise.swift in Sources */,
+				12E2100328B9BB0E00834C8F /* TypingState.swift in Sources */,
 				12E6DDA42867D66700FD72A2 /* ChannelType.swift in Sources */,
 				12BB68092861BF9E0078CCEC /* WebSocketState.swift in Sources */,
 				12AB4160286925F200D54786 /* ReadyPacket.swift in Sources */,

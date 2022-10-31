@@ -4,6 +4,7 @@ import Serpent
 import SwiftyJSON
 import os.log
 import OrderedCollections
+import SwiftUI
 
 final class ChatViewController: NSSplitViewController {
   var navigatorViewController: NavigatorViewController {
@@ -60,6 +61,10 @@ final class ChatViewController: NSSplitViewController {
     }
   }
 
+  private var typingBridge: TypingBridge!
+  private var typingHostingView: NSHostingView<TypingView>!
+  private var typingView: TypingView!
+
   /// The current user this view controller knows about.
   ///
   /// This information is copied from the cache because we need quick access to
@@ -86,7 +91,7 @@ final class ChatViewController: NSSplitViewController {
   private var knownPrivateParticipants: [User.ID: User]?
 
   private var messageInputFieldDidChange = PassthroughSubject<Void, Never>()
-
+  private var typingCancellationTasks: [User.ID: AnyCancellable] = [:]
   private var lastSentTypingTimestamps: [Snowflake: Date] = [:]
 
   let log = Logger(subsystem: "zone.slice.Basilisk", category: "chat-view-controller")
@@ -109,6 +114,20 @@ final class ChatViewController: NSSplitViewController {
 
     navigatorViewController.delegate = self
     messagesViewController.delegate = self
+
+    typingBridge = TypingBridge()
+    typingView = TypingView(bridge: typingBridge)
+    typingHostingView = NSHostingView(rootView: typingView)
+    typingHostingView.setContentHuggingPriority(.defaultLow, for: .horizontal)
+    typingHostingView.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
+
+    // Remove the placeholder view that we set up in IB.
+    statusBarController.statusBarStackView.arrangedSubviews.first!.removeFromSuperview()
+    statusBarController.statusBarStackView.insertArrangedSubview(typingHostingView, at: 0)
+
+    // This is where I would try to align the last baselines of the typing view
+    // and the connection status label, but that doesn't seem to work for some
+    // reason. Oh well.
   }
 
   func requestedToLoadMoreHistory() {
@@ -159,12 +178,49 @@ final class ChatViewController: NSSplitViewController {
     }
   }
 
+  /// Update the typing bridge from the cache.
+  ///
+  /// Typing events are received even when the channel is not focused, which
+  /// means that we might need to show live typing states.
+  func updateTypingUsersFromCache() async {
+    guard let focusedChannelID, let client else { return }
+
+    log.debug("cancelling \(self.typingCancellationTasks.count) cancellation tasks")
+    typingCancellationTasks = [:]
+    var users: [User] = []
+
+    for (typingUserID, typingState) in await client.cache.usersCurrentlyTyping(in: focusedChannelID) {
+      guard let resolvedUser = await client.cache.users[typingUserID] else { continue }
+      users.append(resolvedUser)
+
+      let remainingInterval = Date.now.distance(to: typingState.beganTypingAt.advanced(by: Cache.typingEventTimeout))
+      log.debug("removing \(resolvedUser.id.string) from typing bridge in \(remainingInterval)")
+      typingCancellationTasks[resolvedUser.id] =
+        Timer.publish(every: remainingInterval, on: .main, in: .default).autoconnect().first().sink { [unowned self] _ in
+          log.debug("removing \(resolvedUser.id.string) from typing bridge")
+          Task { removeTypingUserFromBridge(withID: resolvedUser.id) }
+        }
+    }
+
+    withAnimation(TypingView.animation) {
+      typingBridge.users = users
+    }
+  }
+
+  @MainActor func removeTypingUserFromBridge(withID userID: User.ID) {
+    withAnimation(TypingView.animation) {
+      typingBridge.users.removeAll(where: { $0.id == userID })
+    }
+  }
+
   func selectChannel(withID channelRef: Snowflake) async {
     guard let client = client else {
       return
     }
 
     focusedChannelID = channelRef
+
+    await updateTypingUsersFromCache()
 
     if let selectedGuild = await selectedGuild,
        let channel = selectedGuild.channels.first(where: { $0.id == channelRef }) {
@@ -280,6 +336,14 @@ final class ChatViewController: NSSplitViewController {
     client.guildsChanged.receive(on: DispatchQueue.main)
       .sink { [unowned self] _ in
         Task { await fetchGuilds() }
+      }
+      .store(in: &cancellables)
+
+    client.typingEvents.receive(on: DispatchQueue.main)
+      .sink { [unowned self] event in
+        Task {
+          await updateTypingUsersFromCache()
+        }
       }
       .store(in: &cancellables)
 
@@ -431,6 +495,8 @@ final class ChatViewController: NSSplitViewController {
 
       let message: Message = try! packet.reparse()
       messagesViewController.appendNewlyReceivedMessage(message)
+
+      removeTypingUserFromBridge(withID: message.author.id)
     }
   }
 

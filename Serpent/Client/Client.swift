@@ -45,6 +45,9 @@ public class Client {
   /// list has changed in some way.
   public private(set) var privateChannelsChanged = PassthroughSubject<Void, Never>()
 
+  /// A Combine `Publisher` that publishes new typing events.
+  public private(set) var typingEvents = PassthroughSubject<TypingEvent, Never>()
+
   static let defaultDisguise = Disguise(
     userAgent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) discord/0.0.278 Chrome/91.0.4472.164 Electron/13.4.0 Safari/537.36",
     capabilities: 509,
@@ -114,11 +117,25 @@ public class Client {
       guildsChanged.send()
       privateChannelsChanged.send()
       ready.send()
+    case "MESSAGE_CREATE":
+      let message: Message = try packet.reparse()
+      let channelID = Snowflake(string: packet.packet.eventData!["channel_id"].string!)
+      await cache.endTyping(user: message.author.id, location: channelID)
     case "GUILD_CREATE":
       let guild: Guild = try packet.reparse()
       await cache.upsert(guild: guild)
     case "USER_SETTINGS_UPDATE":
       await cache.upsert(userSettings: eventData)
+    case "TYPING_START":
+      // If the typing event contains a user (which is the case in guilds),
+      // upsert them into the cache in case we don't know about this yet.
+      if let user: User = try packet.packet.eventData?["member"]["user"].reparse() {
+        await cache.upsert(user: user)
+      }
+
+      let event: TypingEvent = try packet.reparse()
+      typingEvents.send(event)
+      await cache.beginTyping(user: event.user.id, at: event.timestamp, location: event.channel.id)
     default:
       break
     }

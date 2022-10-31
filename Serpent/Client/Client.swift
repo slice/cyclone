@@ -105,19 +105,35 @@ public class Client {
     )
   }
 
+  func dumpPacket(_ packet: AnyGatewayPacket, named name: String) throws {
+    let formattedDate = Date.now.formatted(.iso8601)
+    let temporaryFilePath = FileManager.default.temporaryDirectory.appendingPathComponent("Basilisk\(name)Packet-\(formattedDate).json")
+    try packet.raw.write(to: temporaryFilePath)
+    log.info("dumped \(name) packet to \(temporaryFilePath)")
+  }
+
   func processPacket(_ packet: AnyGatewayPacket) async throws {
     guard let eventName = packet.packet.eventName,
           let eventData = packet.packet.eventData else {
       return
     }
 
+    let dumpDefaultKey = "BSLKDumpReadyPacket"
+
     switch eventName {
     case "READY":
       log.debug("discord is READY. now we have to get READY!")
+      if UserDefaults.standard.bool(forKey: dumpDefaultKey) {
+        try! dumpPacket(packet, named: "Ready")
+      }
       try await cache.ingestReadyPacket(packet)
       guildsChanged.send()
       privateChannelsChanged.send()
       ready.send()
+    case "READY_SUPPLEMENTAL":
+      if UserDefaults.standard.bool(forKey: dumpDefaultKey) {
+        try! dumpPacket(packet, named: "ReadySupplemental")
+      }
     case "MESSAGE_CREATE":
       let message: Message = try packet.reparse()
       let channelID = Snowflake(string: packet.packet.eventData!["channel_id"].string!)

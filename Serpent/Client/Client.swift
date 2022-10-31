@@ -48,17 +48,18 @@ public class Client {
   /// A Combine `Publisher` that publishes new typing events.
   public private(set) var typingEvents = PassthroughSubject<TypingEvent, Never>()
 
+  // Last update: 2022-08-26
   static let defaultDisguise = Disguise(
     userAgent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) discord/0.0.278 Chrome/91.0.4472.164 Electron/13.4.0 Safari/537.36",
-    capabilities: 509,
+    capabilities: 1201,
     os: "Mac OS X",
     browser: "Discord Client",
     releaseChannel: .canary,
-    clientVersion: "0.0.62",
-    osVersion: "21.5.0",
+    clientVersion: "0.0.63",
+    osVersion: "21.6.0",
     osArch: "arm64",
     systemLocale: "en-US",
-    clientBuildNumber: 132857,
+    clientBuildNumber: 144188,
     clientEventSource: nil
   )
 

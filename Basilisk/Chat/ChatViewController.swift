@@ -224,7 +224,7 @@ final class ChatViewController: NSSplitViewController {
 
     if let selectedGuild = await selectedGuild,
        let channel = selectedGuild.channels.first(where: { $0.id == channelRef }) {
-      view.window?.title = selectedGuild.name
+      view.window?.title = selectedGuild.properties.name
       view.window?.subtitle = "#\(channel.name)" + (channel.topic.map { " \u{2014} \($0)" } ?? "")
 
       if client.gatewayConnection.guildSubscriptions[selectedGuild.id] == nil {

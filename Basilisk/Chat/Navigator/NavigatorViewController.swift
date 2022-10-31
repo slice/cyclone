@@ -193,11 +193,11 @@ extension NavigatorViewController: NSOutlineViewDelegate {
 
         let snowflake = Snowflake(string: item.id)
         let guild = guild(withID: snowflake)
-        view.textField?.stringValue = guild.name
+        view.textField?.stringValue = guild.properties.name
 
         view.roundingView.radius = 6.0
 
-        if let url = guild.icon?.url(withFileExtension: "png") {
+        if let url = guild.properties.icon?.url(withFileExtension: "png") {
           view.imageView!.setImage(loadingFrom: url)
         }
 

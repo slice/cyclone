@@ -73,6 +73,19 @@ public class GatewayConnection {
   /// or `NWConnection.State.ready` means that we have reconnected.
   private var isReconnecting: Bool = false
 
+  /// The guild subscriptions managed by this gateway connection.
+  ///
+  /// It is unknown whether this is what the official client actually does to
+  /// track guild subscriptions, so we are making a guess here.
+  public var guildSubscriptions: [Guild.ID: GuildSubscription] = [:]
+
+  /// The "call connections" managed by this gateway connection.
+  ///
+  /// This is not related to Discord voice calls or voice channels. Discord
+  /// sends an OP 13 ``CALL_CONNECT`` to (group) direct message channels in
+  /// order to subscribe to typing events.
+  public var callConnections: [Snowflake] = []
+
   deinit {
     heartbeatTimer = nil
   }
@@ -181,6 +194,23 @@ public class GatewayConnection {
       "op": Opcode.heartbeat.rawValue,
       "d": sequence ?? 0,
     ])
+  }
+
+  /// Sends a new guild subscription to the gateway.
+  public func updateGuildSubscription(for guildID: Guild.ID, subscription: GuildSubscription) async throws {
+    let json: JSON = [
+      "op": Opcode.guildSubscriptions.rawValue,
+      "d": JSON(try subscription.encoded())
+    ]
+    try await send(json: json)
+    guildSubscriptions[guildID] = subscription
+  }
+
+  /// Sends a "call connect" event to the gateway.
+  public func sendCallConnect(for channelID: Snowflake) async throws {
+    let json: JSON = ["op": Opcode.callConnect.rawValue, "d": ["channel_id": channelID.string]]
+    try await send(json: json)
+    callConnections.append(channelID)
   }
 
   /// Begin heartbeating at a fixed interval.

@@ -226,9 +226,19 @@ final class ChatViewController: NSSplitViewController {
        let channel = selectedGuild.channels.first(where: { $0.id == channelRef }) {
       view.window?.title = selectedGuild.name
       view.window?.subtitle = "#\(channel.name)" + (channel.topic.map { " \u{2014} \($0)" } ?? "")
+
+      if client.gatewayConnection.guildSubscriptions[selectedGuild.id] == nil {
+        let subscription = GuildSubscription(guild: selectedGuild.ref, activities: false, threads: false, typing: true)
+        log.debug("updating guild subscription for \(selectedGuild.id.string): \(String(describing: subscription))")
+        try! await client.gatewayConnection.updateGuildSubscription(for: selectedGuild.id, subscription: subscription)
+      }
     } else if let privateChannel: PrivateChannel = await client.cache[channelRef.ref()] {
       view.window?.title = privateChannel.name()
       view.window?.subtitle = ""
+
+      if !client.gatewayConnection.callConnections.contains(channelRef) {
+        try! await client.gatewayConnection.sendCallConnect(for: channelRef)
+      }
     }
 
     let request = try! client.http.apiRequest(to: "/channels/\(channelRef.string)/messages", query: ["limit": "50"])!

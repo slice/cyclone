@@ -36,6 +36,7 @@
 		12861A78285DD21600C85F86 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12861A77285DD21600C85F86 /* Constants.swift */; };
 		12880BBD28B4D67300A01238 /* TypingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12880BBC28B4D67300A01238 /* TypingView.swift */; };
 		12880BBF28B4D6C200A01238 /* TypingBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12880BBE28B4D6C200A01238 /* TypingBridge.swift */; };
+		12880BC128B4DF2600A01238 /* GuildSubscription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12880BC028B4DF2600A01238 /* GuildSubscription.swift */; };
 		12880BC328B4E3BC00A01238 /* TypingEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12880BC228B4E3BC00A01238 /* TypingEvent.swift */; };
 		12880BC528B4E7E400A01238 /* JSON+Reparse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12880BC428B4E7E400A01238 /* JSON+Reparse.swift */; };
 		12894913274C8FA200850D5E /* Guild.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12894912274C8FA200850D5E /* Guild.swift */; };
@@ -192,6 +193,7 @@
 		12861A77285DD21600C85F86 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		12880BBC28B4D67300A01238 /* TypingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypingView.swift; sourceTree = "<group>"; };
 		12880BBE28B4D6C200A01238 /* TypingBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypingBridge.swift; sourceTree = "<group>"; };
+		12880BC028B4DF2600A01238 /* GuildSubscription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuildSubscription.swift; sourceTree = "<group>"; };
 		12880BC228B4E3BC00A01238 /* TypingEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypingEvent.swift; sourceTree = "<group>"; };
 		12880BC428B4E7E400A01238 /* JSON+Reparse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "JSON+Reparse.swift"; sourceTree = "<group>"; };
 		12894912274C8FA200850D5E /* Guild.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Guild.swift; sourceTree = "<group>"; };
@@ -434,6 +436,7 @@
 				129AF794273E653100B3851C /* GatewayPacket.swift */,
 				1259D6E328176E0E006AE1D1 /* AnyGatewayPacket.swift */,
 				12AB415F286925F200D54786 /* ReadyPacket.swift */,
+				12880BC028B4DF2600A01238 /* GuildSubscription.swift */,
 				12880BC228B4E3BC00A01238 /* TypingEvent.swift */,
 			);
 			path = Gateway;
@@ -938,6 +941,7 @@
 				12E6DD9F2867CF9800FD72A2 /* GroupDMChannel.swift in Sources */,
 				12E6DDAA2867D8B900FD72A2 /* DMChannel.swift in Sources */,
 				12894917274C904E00850D5E /* Asset.swift in Sources */,
+				12880BC128B4DF2600A01238 /* GuildSubscription.swift in Sources */,
 				120A78D82741E9A70099834B /* WebSocket.swift in Sources */,
 				126A8801285E95B90014DC40 /* HTTPLog.swift in Sources */,
 				12894913274C8FA200850D5E /* Guild.swift in Sources */,

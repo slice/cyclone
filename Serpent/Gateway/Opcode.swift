@@ -1,5 +1,7 @@
 /// Discord gateway opcodes.
 public enum Opcode: Int, Codable {
+  // Last updated: 2022-08-24
+
   case dispatch = 0
   case heartbeat = 1
   case identify = 2
@@ -14,7 +16,7 @@ public enum Opcode: Int, Codable {
   case heartbeatAck = 11
   case guildSync = 12
   case callConnect = 13
-  case updateGuildSubscriptions = 14
+  case guildSubscriptions = 14
   case lobbyConnect = 15
   case lobbyDisconnect = 16
   case lobbyVoiceStatesUpdate = 17
@@ -24,5 +26,10 @@ public enum Opcode: Int, Codable {
   case streamPing = 21
   case streamSetPaused = 22
   // 23?
-  case queryApplicationCommands = 24
+  case requestGuildApplicationCommands = 24
+  case embeddedActivityLaunch = 25
+  case embeddedActivityClose = 26
+  case embeddedActivityUpdate = 27
+  case requestForumUnreads = 28
+  case remoteCommand = 29
 }

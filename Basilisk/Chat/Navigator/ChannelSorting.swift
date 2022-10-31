@@ -4,12 +4,18 @@ import Serpent
 // within a category. (Any channel that isn't within a category can be assumed
 // to be in a special category that is always ordered first.)
 //
-// Then, sort the categories according to their position, falling back to the
-// ID. Then, within each category, sort the channels according to their type
-// (text comes before voice), then position, then ID.
+// To begin, sort the categories themselves by ascending position, falling
+// back to the ID if no position is present [1]. Within each category, sort the
+// channels according to their type [2], position, then ID.
+//
+// [1]: Although the position property is marked as optional in the
+//      documentation, this doesn't seem to be true in practice.
+//      See: https://github.com/discord/discord-api-docs/issues/4613#issuecomment-1063254358
+// [2]: Channels of different types cannot be interleaved. Notice that voice
+//      channels must be positioned below text channels.
 //
 // Assume positions to only be unique within each combination of category and
-// type. It is important to stress that they are not globally unique.
+// type. It is important to know that positions are not globally unique.
 //
 // For example:
 //
@@ -30,7 +36,7 @@ import Serpent
 //   [Voice: 1]
 //   [Voice: 3]
 //
-// Kudos to Danny#0007 and some friends in Dannyware for their assistance.
+// Kudos to Danny#0007 and friends in the Dannyware server for their assistance.
 
 public extension Array where Element == GuildChannel {
   /// Sorts an array of channels according to their type, then position, then

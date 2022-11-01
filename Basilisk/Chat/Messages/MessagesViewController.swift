@@ -101,7 +101,7 @@ final class MessagesViewController: NSViewController {
 
       let lastKnownString = String(describing: lastKnownTableViewFrame)
       let currentString = String(describing: tableView.frame)
-      log.debug("horizontal window resize occurred from \(lastKnownString, privacy: .public) to \(currentString, privacy: .public); invalidating \(cachedMessageHeights.count, privacy: .public) cached message heights")
+      log.debug("horizontal window resize occurred from \(lastKnownString, privacy: .public) to \(currentString, privacy: .public); invalidating \(self.cachedMessageHeights.count, privacy: .public) cached message heights")
 
       // Delete all cached message heights.
       //

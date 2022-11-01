@@ -190,7 +190,7 @@ extension JSONInspectorViewController: NSOutlineViewDelegate {
     var attributedString = AttributedString()
 
     if let key = key {
-      var keyAttributedString = AttributedString(
+      let keyAttributedString = AttributedString(
         key + ": ",
         attributes: .init([.font: NSFont.boldSystemFont(ofSize: NSFont.smallSystemFontSize)])
       )

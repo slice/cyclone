@@ -19,7 +19,7 @@ extension MessagesViewController {
   /// view controller.
   ///
   /// The most recent messages should come first in the array.
-  public func applyInitialMessages(_ messages: [Message]) {
+  func applyInitialMessages(_ messages: [Message]) {
     var snapshot = NSDiffableDataSourceSnapshot<MessagesSection, Message.ID>()
 
     if messages.isEmpty {
@@ -32,7 +32,7 @@ extension MessagesViewController {
     // so we have to reverse the array here.
     self.messages = OrderedDictionary(
       messages.map { message in (message.id, message) }.reversed(),
-      uniquingKeysWith: { (left, right) in left }
+      uniquingKeysWith: { left, _ in left }
     )
 
     let firstMessage = self.messages.elements[0].value
@@ -53,7 +53,7 @@ extension MessagesViewController {
   }
 
   /// Prepends old messages to the view controller.
-  public func prependOldMessages(_ messagesNewestFirst: [Message]) {
+  func prependOldMessages(_ messagesNewestFirst: [Message]) {
     var snapshot = dataSource.snapshot()
 
     guard !messages.isEmpty else {
@@ -105,7 +105,7 @@ extension MessagesViewController {
   }
 
   /// Appends a newly received message to the view controller.
-  public func appendNewlyReceivedMessage(_ message: Message) {
+  func appendNewlyReceivedMessage(_ message: Message) {
     var snapshot = dataSource.snapshot()
 
     var lastSection = snapshot.sectionIdentifiers.last

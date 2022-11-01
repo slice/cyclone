@@ -2,7 +2,7 @@ import Foundation
 
 struct Account: Hashable, Codable, Identifiable {
   /// The account ID.
-  var id: UUID = UUID()
+  var id: UUID = .init()
 
   /// A human-friendly name for this account.
   var name: String

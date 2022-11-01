@@ -22,7 +22,7 @@ class InspectorSummaryCellView: NSTableCellView {
   private static let attachments: [String: APIURLTruncationAttachment] = [
     "https://canary.discord.com/api/v9": APIURLTruncationAttachment(text: "v9", backgroundColor: .systemOrange),
     "https://ptb.discord.com/api/v9": APIURLTruncationAttachment(text: "v9", backgroundColor: .systemBlue),
-    "https://discord.com/api/v9": APIURLTruncationAttachment(text: "v9", backgroundColor: .systemGray)
+    "https://discord.com/api/v9": APIURLTruncationAttachment(text: "v9", backgroundColor: .systemGray),
   ]
 
   func setup(logMessage: LogMessage) {
@@ -30,7 +30,7 @@ class InspectorSummaryCellView: NSTableCellView {
     primaryTextField.font = .monospacedSystemFont(ofSize: font.pointSize, weight: .regular)
 
     switch logMessage.variant {
-    case .gateway(let gatewayPacket):
+    case let .gateway(gatewayPacket):
       packetOriginImageView.image = NSImage(systemSymbolName: "bolt.horizontal.fill", accessibilityDescription: "Gateway")
       eventTextField.stringValue = String(describing: gatewayPacket.packet.op)
       if gatewayPacket.packet.op == .dispatch {
@@ -39,7 +39,7 @@ class InspectorSummaryCellView: NSTableCellView {
       } else {
         primaryTextField.isHidden = true
       }
-    case .http(let log):
+    case let .http(log):
       packetOriginImageView.image = NSImage(systemSymbolName: "envelope.fill", accessibilityDescription: "HTTP")
       eventTextField.isHidden = true
       var string = AttributedString(log.method.rawValue + " ")
@@ -48,7 +48,7 @@ class InspectorSummaryCellView: NSTableCellView {
       var logURL = log.url.absoluteString
       var attachment: APIURLTruncationAttachment?
 
-      if let (apiURL, replacementAttachment) = Self.attachments.first(where: { (apiURL, attachment) in logURL.starts(with: apiURL) }) {
+      if let (apiURL, replacementAttachment) = Self.attachments.first(where: { apiURL, _ in logURL.starts(with: apiURL) }) {
         logURL = logURL.replacingOccurrences(of: apiURL, with: "")
         attachment = replacementAttachment
       }

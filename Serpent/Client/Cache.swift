@@ -1,12 +1,12 @@
-import SwiftyJSON
 import Combine
 import OrderedCollections
+import SwiftyJSON
 
 public enum CacheError: Error {
   case readyPacketLacksEventData
 }
 
-extension Array where Element == PrivateChannel {
+extension [PrivateChannel] {
   func sortedChronologically() -> [PrivateChannel] {
     sorted { first, second in
       first.lastMessageID?.id ?? first.id > second.lastMessageID?.id ?? second.id

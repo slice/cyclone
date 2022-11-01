@@ -20,7 +20,7 @@ final class NavigatorViewController: NSViewController {
   }
 
   func reload(guildIDs ids: [Guild.ID]) {
-    if guildIDs.isEmpty && !ids.isEmpty {
+    if guildIDs.isEmpty, !ids.isEmpty {
       // If we are receiving our first guilds, automatically expand the guild
       // list so the user can immediately see them.
       let guildsItem = NavigatorOutlineItem.rootItems.first { $0.id == "guilds" }
@@ -54,8 +54,7 @@ extension NavigatorViewController {
 }
 
 extension NavigatorViewController: NSOutlineViewDataSource {
-  func outlineView(_: NSOutlineView, child index: Int, ofItem item: Any?) -> Any
-  {
+  func outlineView(_: NSOutlineView, child index: Int, ofItem item: Any?) -> Any {
     let userID = delegate?.navigatorViewController(self, didRequestCurrentUserID: ())
 
     if item == nil {
@@ -140,7 +139,8 @@ extension NavigatorViewController: NSOutlineViewDataSource {
       }
     case let channel as ChannelRef:
       guard channel.type == .category,
-            let guildID = channel.guildID else {
+            let guildID = channel.guildID
+      else {
         return 0
       }
       let guild = guild(withID: Snowflake(uint64: guildID))
@@ -212,10 +212,10 @@ extension NavigatorViewController: NSOutlineViewDelegate {
         let privateChannel = privateChannel(withID: Snowflake(uint64: channelRef.id))
         let participants = delegate?.navigatorViewController(self, didRequestPrivateParticipantsForChannel: privateChannel.id)
 
-        if case .groupDM(let groupDMChannel) = privateChannel {
+        if case let .groupDM(groupDMChannel) = privateChannel {
           if let name = groupDMChannel.name {
             textField.stringValue = name
-          } else if let participants = participants {
+          } else if let participants {
             textField.stringValue = participants.map(\.username).formatted(.list(type: .and, width: .short))
           } else {
             textField.stringValue = "Group DM"

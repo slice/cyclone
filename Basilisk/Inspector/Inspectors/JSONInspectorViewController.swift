@@ -32,9 +32,10 @@ final class JSONInspectorViewController: NSViewController {
     }
   }
 
-  @IBAction func copyClickedJSONValue(_ sender: Any) {
+  @IBAction func copyClickedJSONValue(_: Any) {
     guard outlineView.clickedRow > -1,
-          let item = outlineView.item(atRow: outlineView.clickedRow) else {
+          let item = outlineView.item(atRow: outlineView.clickedRow)
+    else {
       return
     }
 
@@ -84,7 +85,7 @@ struct JSONArrayValue {
 }
 
 /// Downcasts `Any` into some kind of optionally keyed JSON value.
-fileprivate func downcastJSON(_ item: Any) -> (key: String?, value: JSON)? {
+private func downcastJSON(_ item: Any) -> (key: String?, value: JSON)? {
   switch item {
   case let json as JSON: return (key: nil, value: json)
   case let objectPair as JSONObjectPair: return (key: objectPair.key, value: objectPair.value)
@@ -93,7 +94,7 @@ fileprivate func downcastJSON(_ item: Any) -> (key: String?, value: JSON)? {
   }
 }
 
-fileprivate extension JSON {
+private extension JSON {
   /// A terse string representing this JSON value.
   ///
   /// Returns `nil` for dictionaries and arrays.
@@ -128,12 +129,12 @@ fileprivate extension JSON {
 }
 
 extension JSONInspectorViewController: NSOutlineViewDataSource {
-  func outlineView(_ outlineView: NSOutlineView, child index: Int, ofItem item: Any?) -> Any {
-    guard let item = item else {
+  func outlineView(_: NSOutlineView, child index: Int, ofItem item: Any?) -> Any {
+    guard let item else {
       return jsonData!
     }
 
-    guard case (_, let json)? = downcastJSON(item) else {
+    guard case let (_, json)? = downcastJSON(item) else {
       preconditionFailure("JSON inspector child was not JSON")
     }
 
@@ -150,12 +151,12 @@ extension JSONInspectorViewController: NSOutlineViewDataSource {
     }
   }
 
-  func outlineView(_ outlineView: NSOutlineView, numberOfChildrenOfItem item: Any?) -> Int {
-    guard let item = item else {
+  func outlineView(_: NSOutlineView, numberOfChildrenOfItem item: Any?) -> Int {
+    guard let item else {
       return jsonData == nil ? 0 : 1
     }
 
-    guard case (_, let json)? = downcastJSON(item) else {
+    guard case let (_, json)? = downcastJSON(item) else {
       return 0
     }
 
@@ -166,8 +167,8 @@ extension JSONInspectorViewController: NSOutlineViewDataSource {
     }
   }
 
-  func outlineView(_ outlineView: NSOutlineView, isItemExpandable item: Any) -> Bool {
-    guard case (_, let json)? = downcastJSON(item) else {
+  func outlineView(_: NSOutlineView, isItemExpandable item: Any) -> Bool {
+    guard case let (_, json)? = downcastJSON(item) else {
       preconditionFailure("Item was not JSON-like - while determining expandability of item")
     }
 
@@ -180,16 +181,16 @@ extension JSONInspectorViewController: NSOutlineViewDataSource {
 }
 
 extension JSONInspectorViewController: NSOutlineViewDelegate {
-  func outlineView(_ outlineView: NSOutlineView, viewFor tableColumn: NSTableColumn?, item: Any) -> NSView? {
+  func outlineView(_ outlineView: NSOutlineView, viewFor _: NSTableColumn?, item: Any) -> NSView? {
     let view = outlineView.makeView(withIdentifier: .init("json"), owner: nil) as! NSTableCellView
 
-    guard case (let key, let json)? = downcastJSON(item) else {
+    guard case let (key, json)? = downcastJSON(item) else {
       preconditionFailure("Item was not JSON-like - while populating view")
     }
 
     var attributedString = AttributedString()
 
-    if let key = key {
+    if let key {
       let keyAttributedString = AttributedString(
         key + ": ",
         attributes: .init([.font: NSFont.boldSystemFont(ofSize: NSFont.smallSystemFontSize)])

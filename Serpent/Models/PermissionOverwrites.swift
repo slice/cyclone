@@ -1,6 +1,7 @@
 struct Permissions: OptionSet {
   let rawValue: Int
 
+  // swiftformat:disable all
   static let createInstantInvite   = Permissions(rawValue: 1 << 0)
   static let kickMembers           = Permissions(rawValue: 1 << 1)
   static let banMembers            = Permissions(rawValue: 1 << 2)
@@ -40,6 +41,7 @@ struct Permissions: OptionSet {
   static let createPrivateThreads  = Permissions(rawValue: 1 << 36)
   static let externalStickers      = Permissions(rawValue: 1 << 37)
   static let sendMessagesInThreads = Permissions(rawValue: 1 << 38)
+  // swiftformat:enable all
 }
 
 extension Permissions: Decodable {
@@ -60,7 +62,7 @@ public struct PermissionOverwrites: Decodable {
   let type: PermissionOverwritesType?
 }
 
-public extension Array where Element == PermissionOverwrites {
+public extension [PermissionOverwrites] {
   func isChannelVisible(for userID: Snowflake?) -> Bool {
     !contains { $0.deny.contains(.readMessages) && $0.id == userID }
   }

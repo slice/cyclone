@@ -18,7 +18,7 @@ class AccountEditorController: NSViewController {
     }
 
     set(account) {
-      guard let account = account else { return }
+      guard let account else { return }
       Accounts.accounts[editingAccountID] = account
     }
   }
@@ -34,7 +34,7 @@ class AccountEditorController: NSViewController {
     gatewayURLField.stringValue = editingAccount?.gatewayURL.absoluteString ?? ""
   }
 
-  @IBAction func finishedEditing(_ sender: Any) {
+  @IBAction func finishedEditing(_: Any) {
     editingAccount?.name = nameField.stringValue
     editingAccount?.token = tokenField.stringValue
     guard let newBaseURL = URL(string: baseURLField.stringValue) else {

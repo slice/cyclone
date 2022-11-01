@@ -4,8 +4,8 @@ import CoreImage
 import CoreImage.CIFilterBuiltins
 import Kingfisher
 import OrderedCollections
-import Serpent
 import os.log
+import Serpent
 
 struct MessagesSection: Hashable {
   let authorID: User.ID
@@ -71,9 +71,7 @@ final class MessagesViewController: NSViewController {
   var messageInputFieldTextChangedSink: AnyCancellable!
 
   let log = Logger(subsystem: "zone.slice.Basilisk", category: "messages-view-controller")
-  lazy var signposter = {
-    OSSignposter(logger: log)
-  }()
+  lazy var signposter = OSSignposter(logger: log)
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -94,7 +92,8 @@ final class MessagesViewController: NSViewController {
       object: tableView
     ).sink { [unowned self] _ in
       guard let lastKnownTableViewFrame,
-            lastKnownTableViewFrame.width != tableView.frame.width else {
+            lastKnownTableViewFrame.width != tableView.frame.width
+      else {
         lastKnownTableViewFrame = tableView.frame
         return
       }
@@ -152,12 +151,13 @@ final class MessagesViewController: NSViewController {
   /// be saved. It will be restored after the closure returns, accounting for
   /// any possible changes in the content height.
   func preserveScrollPosition(by behavior: ScrollingBehavior,
-                              whileMakingChanges changes: @escaping (@escaping (() -> Void)) -> Void) {
+                              whileMakingChanges changes: @escaping (@escaping (() -> Void)) -> Void)
+  {
     let scrollView = tableView.enclosingScrollView!
     let savedScrollPosition = scrollView.scrollPosition
     let savedContentHeight = scrollView.documentView!.bounds.height
 
-    changes({
+    changes {
       let newHeight = scrollView.documentView!.bounds.height
       guard newHeight != savedContentHeight else {
         self.log.warning("the height didn't change after making changes")
@@ -183,7 +183,7 @@ final class MessagesViewController: NSViewController {
       scrollView.reflectScrolledClipView(scrollView.contentView)
 
       self.log.debug("adjusting scroll position (saved: \(savedScrollPosition), current: \(scrollView.scrollPosition)) to \(newPosition) (by: \(String(describing: behavior)))")
-    })
+    }
   }
 
   func appendToConsole(line _: String) {
@@ -205,7 +205,8 @@ final class MessagesViewController: NSViewController {
 
       delegate?.messagesController(
         self, commandInvoked: command,
-        arguments: tokens.dropFirst().map(String.init))
+        arguments: tokens.dropFirst().map(String.init)
+      )
       return
     }
 
@@ -255,23 +256,24 @@ final class MessagesViewController: NSViewController {
 }
 
 extension MessagesViewController: NSTableViewDelegate {
-  func tableView(_ tableView: NSTableView, heightOfRow row: Int) -> CGFloat {
+  func tableView(_: NSTableView, heightOfRow row: Int) -> CGFloat {
     let messageID = dataSource.itemIdentifier(forRow: row)!
     let message = self.messages[messageID]!
     return measureRowHeight(forMessage: message)
   }
 
-  func tableView(_ tableView: NSTableView, didAdd rowView: NSTableRowView, forRow row: Int) {
+  func tableView(_: NSTableView, didAdd _: NSTableRowView, forRow _: Int) {
     // If we don't do this, then the row views won't shrink after growing due to
     // window resizes.
-    rowView.translatesAutoresizingMaskIntoConstraints = false
+//    rowView.translatesAutoresizingMaskIntoConstraints = false
   }
 
-  func tableViewSelectionDidChange(_ notification: Notification) {
+  func tableViewSelectionDidChange(_: Notification) {
     guard UserDefaults.standard.bool(forKey: "BSLKMessageRowHeightDebugging"),
           tableView.selectedRow > -1,
           let messageID = dataSource.itemIdentifier(forRow: tableView.selectedRow),
-          let view = tableView.view(atColumn: 0, row: tableView.selectedRow, makeIfNecessary: false) as? UnifiedMessageRow else {
+          let view = tableView.view(atColumn: 0, row: tableView.selectedRow, makeIfNecessary: false) as? UnifiedMessageRow
+    else {
       return
     }
 

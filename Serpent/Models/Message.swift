@@ -13,7 +13,7 @@ public struct Message: Identifiable {
 }
 
 extension Message: Hashable {
-  public static func ==(lhs: Message, rhs: Message) -> Bool {
+  public static func == (lhs: Message, rhs: Message) -> Bool {
     lhs.id == rhs.id
   }
 

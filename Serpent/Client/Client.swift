@@ -59,7 +59,7 @@ public class Client {
     osVersion: "21.6.0",
     osArch: "arm64",
     systemLocale: "en-US",
-    clientBuildNumber: 144188,
+    clientBuildNumber: 144_188,
     clientEventSource: nil
   )
 
@@ -114,7 +114,8 @@ public class Client {
 
   func processPacket(_ packet: AnyGatewayPacket) async throws {
     guard let eventName = packet.packet.eventName,
-          let eventData = packet.packet.eventData else {
+          let eventData = packet.packet.eventData
+    else {
       return
     }
 

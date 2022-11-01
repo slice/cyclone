@@ -25,7 +25,7 @@ final class LoadingAttachmentView: NSView, Placeholder {
   }
 
   override func viewDidMoveToSuperview() {
-    if let superview = superview, shouldFillSuperview && !hasFilledSuperview {
+    if let superview, shouldFillSuperview, !hasFilledSuperview {
       NSLayoutConstraint.activate([
         progressIndicator.leadingAnchor.constraint(equalTo: superview.leadingAnchor),
         progressIndicator.trailingAnchor.constraint(equalTo: superview.trailingAnchor),
@@ -41,7 +41,7 @@ final class LoadingAttachmentView: NSView, Placeholder {
 
     NSLayoutConstraint.activate([
       progressIndicator.centerXAnchor.constraint(equalTo: centerXAnchor),
-      progressIndicator.centerYAnchor.constraint(equalTo: centerYAnchor)
+      progressIndicator.centerYAnchor.constraint(equalTo: centerYAnchor),
     ])
   }
 

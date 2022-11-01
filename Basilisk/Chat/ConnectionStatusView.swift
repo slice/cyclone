@@ -47,11 +47,11 @@ final class ConnectionStatusView: NSView {
       progressIndicator.bottomAnchor.constraint(equalTo: bottomAnchor, constant: Self.inset),
       progressIndicator.leadingAnchor.constraint(equalTo: leadingAnchor, constant: Self.inset),
       progressIndicator.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -Self.inset),
-      widthAnchor.constraint(equalTo: heightAnchor, multiplier: 1.0)
+      widthAnchor.constraint(equalTo: heightAnchor, multiplier: 1.0),
     ])
   }
 
-  override func draw(_ dirtyRect: NSRect) {
+  override func draw(_: NSRect) {
     if connectionStatus == .connecting {
       return
     }

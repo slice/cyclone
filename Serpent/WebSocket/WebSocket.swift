@@ -68,7 +68,7 @@ class WebSocket {
     }
 
     connection.viabilityUpdateHandler = { [weak self] viability in
-      guard let self = self else { return }
+      guard let self else { return }
       self.log.info("connection viability updated to: \(viability)")
       if viability {
         if self.hasConnectedInitially {
@@ -89,18 +89,18 @@ class WebSocket {
     }
 
     connection.stateUpdateHandler = { [weak self] connectionState in
-      guard let self = self else { return }
+      guard let self else { return }
       self.log.info("connection state has changed to: \(String(describing: connectionState))")
       self.events.send(.connectionStateUpdate(connectionState))
 
       switch connectionState {
       case .ready:
         self.state.send(WebSocketState.connected)
-      case .failed(_):
+      case .failed:
         self.state.send(.failed)
         self.log.error("ending events stream, state = failed")
         self.events.send(completion: .finished)
-      case .setup, .preparing, .waiting(_):
+      case .setup, .preparing, .waiting:
         self.state.send(.connecting)
       case .cancelled:
         self.state.send(.disconnected)
@@ -143,16 +143,16 @@ class WebSocket {
 
   private func handleMessage() {
     connection.receiveMessage { [weak self] data, context, _, error in
-      guard let self = self else { return }
+      guard let self else { return }
 
-      if let error = error, shouldSendError(error) {
+      if let error, shouldSendError(error) {
         self.log.error("errored while trying to recv: \(error)")
         return
       }
 
-      guard let data = data,
+      guard let data,
             !data.isEmpty,
-            let context = context,
+            let context,
             let firstMetadata = context.protocolMetadata.first as? NWProtocolWebSocket.Metadata
       else {
         return
@@ -183,13 +183,13 @@ class WebSocket {
     // it *should* be redundant here.
     let _: Void =
       try await withCheckedThrowingContinuation { [weak self] continuation in
-        guard let self = self else { return }
+        guard let self else { return }
 
         self.connection.send(
           content: data,
           contentContext: context,
           completion: .contentProcessed { error in
-            if let error = error {
+            if let error {
               continuation.resume(throwing: error)
               return
             }
@@ -241,7 +241,7 @@ class WebSocket {
         content: nil,
         contentContext: context,
         completion: .contentProcessed { error in
-          if let error = error, shouldSendError(error) {
+          if let error, shouldSendError(error) {
             continuation.resume(throwing: error)
             return
           }

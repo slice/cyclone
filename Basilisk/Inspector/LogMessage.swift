@@ -1,5 +1,5 @@
-import Serpent
 import Foundation
+import Serpent
 
 /// A log message that is displayed in the gateway inspector.
 struct LogMessage: Identifiable {

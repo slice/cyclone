@@ -1,11 +1,11 @@
 /// Important constants and URLs.
-public class Constants {
+public enum Constants {
   /// The Discord epoch.
   ///
   /// The number of milliseconds to the first day of 2015 at midnight,
   /// relative to the Unix epoch. This is used to extract the timestamp from
   /// ``Snowflake``s.
-  public static let discordEpoch: Int = 1420070400000
+  public static let discordEpoch: Int = 1_420_070_400_000
 
   /// The URL to the Discord CDN.
   public static let cdnURL = URL(string: "https://cdn.discordapp.com")!

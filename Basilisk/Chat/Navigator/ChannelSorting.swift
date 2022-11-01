@@ -38,7 +38,7 @@ import Serpent
 //
 // Kudos to Danny#0007 and friends in the Dannyware server for their assistance.
 
-public extension Array where Element == GuildChannel {
+public extension [GuildChannel] {
   /// Sorts an array of channels according to their type, then position, then
   /// ID.
   func sortedByTypeAndPosition() -> [GuildChannel] {

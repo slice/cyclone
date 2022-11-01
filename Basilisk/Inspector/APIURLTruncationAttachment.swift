@@ -6,7 +6,8 @@ final class APIURLTruncationAttachment: NSTextAttachment {
     attachmentCell = Cell(text: text, font: font, backgroundColor: backgroundColor)
   }
 
-  required init?(coder: NSCoder) {
+  @available(*, unavailable)
+  required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
 
@@ -28,11 +29,12 @@ final class APIURLTruncationAttachment: NSTextAttachment {
       super.init()
     }
 
-    required init(coder: NSCoder) {
+    @available(*, unavailable)
+    required init(coder _: NSCoder) {
       fatalError("init(coder:) has not been implemented")
     }
 
-    override func draw(withFrame cellFrame: NSRect, in controlView: NSView?) {
+    override func draw(withFrame cellFrame: NSRect, in _: NSView?) {
       NSBezierPath(roundedRect: cellFrame, xRadius: 5.0, yRadius: 5.0).reversed.setClip()
       backgroundColor.setFill()
       cellFrame.fill()
@@ -41,7 +43,7 @@ final class APIURLTruncationAttachment: NSTextAttachment {
     }
 
     override func cellBaselineOffset() -> NSPoint {
-      return .init(x: 0, y: drawingFont.descender)
+      .init(x: 0, y: drawingFont.descender)
     }
 
     override func cellSize() -> NSSize {

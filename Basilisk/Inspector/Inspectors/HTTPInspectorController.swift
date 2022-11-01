@@ -1,6 +1,6 @@
 import Cocoa
-import Serpent
 import OrderedCollections
+import Serpent
 
 class HTTPInspectorController: NSViewController {
   @IBOutlet var requestSummaryLabel: NSTextField!
@@ -18,7 +18,7 @@ class HTTPInspectorController: NSViewController {
   var log: HTTPLog? {
     didSet {
       updateSummaries()
-      guard let log = log else { return }
+      guard let log else { return }
       populateDetailController(requestDetailController, data: log.requestBody, headers: log.requestHeaders)
       populateDetailController(responseDetailController, data: log.responseBody, headers: log.responseHeaders)
     }
@@ -29,7 +29,7 @@ class HTTPInspectorController: NSViewController {
       let isJSON = headers["Content-Type"].map { $0 == "application/json" } ?? false
       controller.populateBody(body: data, isJSON: isJSON)
     }
-    controller.headers = OrderedDictionary(headers, uniquingKeysWith: { first, second in first })
+    controller.headers = OrderedDictionary(headers, uniquingKeysWith: { first, _ in first })
   }
 
   override func viewDidLoad() {
@@ -37,7 +37,7 @@ class HTTPInspectorController: NSViewController {
   }
 
   func updateSummaries() {
-    guard let log = log else { return }
+    guard let log else { return }
 
     let paragraphStyle = NSMutableParagraphStyle()
     paragraphStyle.lineBreakMode = .byTruncatingTail

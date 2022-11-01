@@ -20,7 +20,7 @@ class SerpentTests: XCTestCase {
     let privateChannels: [PrivateChannel] = [
       .dm(DMChannel(id: 1, lastMessageID: nil, recipientIDs: [])),
       .groupDM(GroupDMChannel(id: 2, icon: nil, lastMessageID: .init(id: 5), lastPinTimestamp: nil, name: nil, ownerID: .init(id: 100), recipients: [])),
-      .dm(DMChannel(id: 3, lastMessageID: nil, recipientIDs: []))
+      .dm(DMChannel(id: 3, lastMessageID: nil, recipientIDs: [])),
     ]
 
     XCTAssertEqual(privateChannels.sortedChronologically().map(\.id), [2, 3, 1])

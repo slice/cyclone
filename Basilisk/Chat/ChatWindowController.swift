@@ -1,7 +1,7 @@
 import Cocoa
 
 final class ChatWindowController: NSWindowController {
-  @IBAction override func newWindowForTab(_ sender: Any?) {
+  @IBAction override func newWindowForTab(_: Any?) {
     let currentSession = (contentViewController as? ChatViewController)?.session
     let delegate = NSApp.delegate as! AppDelegate
     let windowController = delegate.createManagedChatWindow(associatingWithSession: currentSession, immediatelyLoading: true)

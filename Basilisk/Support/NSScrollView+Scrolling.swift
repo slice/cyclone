@@ -3,7 +3,7 @@ import Cocoa
 extension NSScrollView {
   /// The amount the scroll view has scrolled.
   var scrollPosition: CGFloat {
-    return contentView.bounds.origin.y
+    contentView.bounds.origin.y
   }
 
   /// A Boolean value that indicates whether the scroll view is currently
@@ -40,6 +40,6 @@ extension NSScrollView {
 
   /// The percentage the user has scrolled.
   var scrollPercentage: Double {
-    return contentView.bounds.minY / (documentView!.frame.height - contentView.bounds.height)
+    contentView.bounds.minY / (documentView!.frame.height - contentView.bounds.height)
   }
 }

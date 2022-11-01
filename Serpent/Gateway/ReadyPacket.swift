@@ -6,9 +6,9 @@ public struct ReadyPacket: Decodable {
   public let privateChannels: [PrivateChannel]
 
   enum CodingKeys: String, CodingKey {
-    case user = "user"
-    case users = "users"
-    case guilds = "guilds"
+    case user
+    case users
+    case guilds
     case privateChannels = "private_channels"
   }
 }

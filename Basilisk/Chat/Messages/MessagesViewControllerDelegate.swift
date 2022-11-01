@@ -4,12 +4,14 @@ import Cocoa
   /// Tells the delegate that a command was invoked.
   func messagesController(
     _ messagesController: MessagesViewController,
-    commandInvoked: String, arguments: [String])
+    commandInvoked: String, arguments: [String]
+  )
 
   /// Tells the delegate that a message was sent.
   func messagesController(
     _ messagesController: MessagesViewController,
-    messageSent: String)
+    messageSent: String
+  )
 
   /// Tells the delegate that the message input field changed.
   func messagesControllerMessageInputFieldDidChange(_ messagesController: MessagesViewController, notification: Notification)

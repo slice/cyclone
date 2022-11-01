@@ -1,6 +1,6 @@
 import Cocoa
-import Serpent
 import Combine
+import Serpent
 
 @main
 class AppDelegate: NSObject, NSApplicationDelegate {
@@ -69,7 +69,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     if let account = Accounts.accounts.first?.value,
-       UserDefaults.standard.bool(forKey: "BSLKAutomaticallyAuthorizeWithFirstAccount") {
+       UserDefaults.standard.bool(forKey: "BSLKAutomaticallyAuthorizeWithFirstAccount")
+    {
       NSLog("automatically creating session with account: \(account.name)")
       Task {
         do {

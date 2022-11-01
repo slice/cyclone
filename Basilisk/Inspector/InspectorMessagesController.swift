@@ -5,7 +5,7 @@ enum GatewayInspectorSection {
   case main
 }
 
-fileprivate extension NSUserInterfaceItemIdentifier {
+private extension NSUserInterfaceItemIdentifier {
   static let timestamp: Self = .init("timestamp")
   static let direction: Self = .init("direction")
   static let gatewaySequence: Self = .init("gatewaySequence")
@@ -51,7 +51,7 @@ class InspectorMessagesController: NSViewController {
         let timestamp = message.timestamp.formatted(date: .omitted, time: .standard)
         view.textField?.stringValue = timestamp
       case .gatewaySequence:
-        if case .gateway(let packet) = message.variant {
+        if case let .gateway(packet) = message.variant {
           view.textField?.stringValue = packet.packet.sequence.map { String(Int($0)) } ?? ""
         } else {
           view.textField?.stringValue = ""
@@ -75,7 +75,7 @@ class InspectorMessagesController: NSViewController {
     applyInitialSnapshot()
     messagesSink = logStore.newMessages.receive(on: RunLoop.main)
       .sink { [weak self] message in
-        guard let self = self else { return }
+        guard let self else { return }
         var snapshot = self.dataSource.snapshot()
         snapshot.appendItems([message.id])
         self.dataSource.apply(snapshot, animatingDifferences: true)

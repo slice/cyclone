@@ -13,7 +13,7 @@ class AccountsViewController: NSViewController, NSTableViewDelegate {
 
   override func viewDidLoad() {
     super.viewDidLoad()
-    accountsDataSource = NSTableViewDiffableDataSource(tableView: accountsTableView) { tableView, tableColumn, row, identifier in
+    accountsDataSource = NSTableViewDiffableDataSource(tableView: accountsTableView) { tableView, _, _, identifier in
       guard let account = Accounts.accounts[identifier] else {
         fatalError("failed to find account when making view")
       }
@@ -44,7 +44,7 @@ class AccountsViewController: NSViewController, NSTableViewDelegate {
     removeAccountButton.isEnabled = !accountsTableView.selectedRowIndexes.isEmpty
   }
 
-  func tableViewSelectionDidChange(_ notification: Notification) {
+  func tableViewSelectionDidChange(_: Notification) {
     updateDetailView()
     updateButtons()
   }
@@ -71,7 +71,7 @@ class AccountsViewController: NSViewController, NSTableViewDelegate {
     accountsDataSource.apply(snapshot, animatingDifferences: false)
   }
 
-  @IBAction func addAccount(_ sender: Any) {
+  @IBAction func addAccount(_: Any) {
     let account = Account(
       name: "Account",
       token: "",
@@ -88,7 +88,7 @@ class AccountsViewController: NSViewController, NSTableViewDelegate {
     accountsTableView.selectRowIndexes([accountsTableView.numberOfRows - 1], byExtendingSelection: false)
   }
 
-  @IBAction func removeAccount(_ sender: Any) {
+  @IBAction func removeAccount(_: Any) {
     guard let accountID = accountsDataSource.itemIdentifier(forRow: accountsTableView.selectedRow) else { return }
     Accounts.accounts.removeValue(forKey: accountID)
 

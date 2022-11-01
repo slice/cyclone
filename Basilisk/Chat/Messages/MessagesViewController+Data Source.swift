@@ -1,7 +1,7 @@
 extension MessagesViewController {
   func setupDataSource() {
     dataSource =
-      MessagesDiffableDataSource(tableView: tableView) { [unowned self] tableView, tableColumn, row, snowflake in
+      MessagesDiffableDataSource(tableView: tableView) { [unowned self] tableView, _, _, snowflake in
         let item = tableView.makeView(withIdentifier: .unifiedMessageRow, owner: nil) as! UnifiedMessageRow
 
         guard let message = self.messages[snowflake] else {

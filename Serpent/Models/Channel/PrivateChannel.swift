@@ -1,4 +1,4 @@
-fileprivate enum PrivateChannelError: Error {
+private enum PrivateChannelError: Error {
   case channelWasNotDMOrGroupDM
 }
 
@@ -9,32 +9,32 @@ public enum PrivateChannel: Identifiable, Equatable {
 
   public var lastMessageID: Ref<Message>? {
     switch self {
-    case .groupDM(let gdm): return gdm.lastMessageID
-    case .dm(let dm): return dm.lastMessageID
+    case let .groupDM(gdm): return gdm.lastMessageID
+    case let .dm(dm): return dm.lastMessageID
     }
   }
 
   public var id: Snowflake {
     switch self {
-    case .groupDM(let channel): return channel.id
-    case .dm(let channel): return channel.id
+    case let .groupDM(channel): return channel.id
+    case let .dm(channel): return channel.id
     }
   }
 
   public var type: ChannelType {
     switch self {
-    case .groupDM(_): return ChannelType.groupDM
-    case .dm(_): return ChannelType.dm
+    case .groupDM: return ChannelType.groupDM
+    case .dm: return ChannelType.dm
     }
   }
 
   /// Returns a human-friendly name for this private channel.
   public func name() -> String {
     switch self {
-    case .groupDM(let gdm):
+    case let .groupDM(gdm):
       let people = gdm.recipients.count + 1 == 1 ? "person" : "people"
       return "\(gdm.recipients.count) \(people)"
-    case .dm(let dm):
+    case let .dm(dm):
       return dm.recipient!.id.string
     }
   }

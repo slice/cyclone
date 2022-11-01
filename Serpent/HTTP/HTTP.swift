@@ -1,7 +1,7 @@
+import Combine
 import Foundation
 import os
 import SwiftyJSON
-import Combine
 
 public enum HTTPError: Error {
   case httpError(httpResponse: HTTPURLResponse, data: Data)
@@ -143,7 +143,7 @@ public class HTTP {
     }
     var request = URLRequest(url: finalURL)
     request.httpMethod = method.rawValue
-    if let body = body {
+    if let body {
       request.addValue("application/json", forHTTPHeaderField: "Content-Type")
       request.httpBody = try body.encoded()
     }
@@ -173,7 +173,8 @@ public class HTTP {
        let method = HTTPMethod(rawValue: methodString),
        let url = request.url,
        let requestHeaders = request.allHTTPHeaderFields,
-       let responseHeaders = httpResponse.allHeaderFields as? [String: String] {
+       let responseHeaders = httpResponse.allHeaderFields as? [String: String]
+    {
       let log = HTTPLog(
         method: method,
         url: url,

@@ -25,7 +25,7 @@ public struct GatewayPacket<EventData: Decodable> {
 
 extension GatewayPacket: Decodable {
   enum CodingKeys: String, CodingKey {
-    case op = "op"
+    case op
     case eventData = "d"
     case sequence = "s"
     case eventName = "t"

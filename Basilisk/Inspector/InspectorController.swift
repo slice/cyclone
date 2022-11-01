@@ -25,22 +25,23 @@ class InspectorController: NSSplitViewController {
     }
 
     messagesViewController.onSelectedMessage = { [weak self] logMessageID in
-      guard let self = self else { return }
+      guard let self else { return }
 
-      guard let logMessageID = logMessageID,
-            let message = self.logStore.messages.first(where: { $0.id == logMessageID }) else {
+      guard let logMessageID,
+            let message = self.logStore.messages.first(where: { $0.id == logMessageID })
+      else {
         // Show the empty state if nothing is selected.
         self.detailTabViewController.tabView.selectTabViewItem(at: 2)
         return
       }
 
       switch message.variant {
-      case .http(let http):
+      case let .http(http):
         let httpItem = self.detailTabViewController.tabViewItems[0]
         let httpInspectorVC = httpItem.viewController! as! HTTPInspectorController
         httpInspectorVC.log = http
         self.detailTabViewController.tabView.selectTabViewItem(httpItem)
-      case .gateway(let packet):
+      case let .gateway(packet):
         let inspectorItem = self.detailTabViewController.tabViewItems[1]
         let jsonInspectorVC = inspectorItem.viewController! as! JSONInspectorViewController
         jsonInspectorVC.jsonData = packet.packet.eventData
@@ -59,5 +60,4 @@ class InspectorController: NSSplitViewController {
     let s = count == 1 ? "" : "s"
     view.window?.subtitle = "\(count) message\(s)"
   }
-
 }

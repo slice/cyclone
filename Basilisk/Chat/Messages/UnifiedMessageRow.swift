@@ -1,7 +1,7 @@
 import Cocoa
-import Serpent
 import Kingfisher
 import os.log
+import Serpent
 
 final class UnifiedMessageRow: NSTableCellView {
   @IBOutlet var roundingView: RoundingView!
@@ -145,7 +145,7 @@ final class UnifiedMessageRow: NSTableCellView {
         imageView.trailingAnchor.constraint(equalTo: roundingView.trailingAnchor),
         imageView.leadingAnchor.constraint(equalTo: roundingView.leadingAnchor),
         imageView.widthAnchor.constraint(greaterThanOrEqualToConstant: 50.0),
-        imageView.widthAnchor.constraint(equalTo: imageView.heightAnchor, multiplier: aspectRatio)
+        imageView.widthAnchor.constraint(equalTo: imageView.heightAnchor, multiplier: aspectRatio),
       ])
 
       if !performingMeasurements {

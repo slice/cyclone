@@ -1,10 +1,10 @@
 import Cocoa
 import Combine
-import Serpent
-import SwiftyJSON
-import os.log
 import OrderedCollections
+import os.log
+import Serpent
 import SwiftUI
+import SwiftyJSON
 
 final class ChatViewController: NSSplitViewController {
   var navigatorViewController: NavigatorViewController {
@@ -12,7 +12,7 @@ final class ChatViewController: NSSplitViewController {
   }
 
   var statusBarController: StatusBarContainerController {
-    (splitViewItems[1].viewController as! StatusBarContainerController)
+    splitViewItems[1].viewController as! StatusBarContainerController
   }
 
   var messagesViewController: MessagesViewController {
@@ -136,8 +136,8 @@ final class ChatViewController: NSSplitViewController {
       return
     }
 
-    guard let client = client, !requestingMoreHistory,
-          let focusedChannelID = focusedChannelID
+    guard let client, !requestingMoreHistory,
+          let focusedChannelID
     else {
       return
     }
@@ -214,7 +214,7 @@ final class ChatViewController: NSSplitViewController {
   }
 
   func selectChannel(withID channelRef: Snowflake) async {
-    guard let client = client else {
+    guard let client else {
       return
     }
 
@@ -223,7 +223,8 @@ final class ChatViewController: NSSplitViewController {
     await updateTypingUsersFromCache()
 
     if let selectedGuild = await selectedGuild,
-       let channel = selectedGuild.channels.first(where: { $0.id == channelRef }) {
+       let channel = selectedGuild.channels.first(where: { $0.id == channelRef })
+    {
       view.window?.title = selectedGuild.properties.name
       view.window?.subtitle = "#\(channel.name)" + (channel.topic.map { " \u{2014} \($0)" } ?? "")
 
@@ -261,14 +262,13 @@ final class ChatViewController: NSSplitViewController {
 
   func handleCommand(
     named command: String,
-    arguments: [String]
+    arguments _: [String]
   ) async throws {
     let say = { message in
       self.messagesViewController.appendToConsole(line: message)
     }
 
     switch command {
-
     case "disconnect":
       try await tearDownClient()
       say("[system] disconnected!")
@@ -350,7 +350,7 @@ final class ChatViewController: NSSplitViewController {
       .store(in: &cancellables)
 
     client.typingEvents.receive(on: DispatchQueue.main)
-      .sink { [unowned self] event in
+      .sink { [unowned self] _ in
         Task {
           await updateTypingUsersFromCache()
         }
@@ -364,7 +364,7 @@ final class ChatViewController: NSSplitViewController {
       .store(in: &cancellables)
 
     client.gatewayConnection.sentPackets.receive(on: DispatchQueue.main)
-      .sink { (json, string) in
+      .sink { _, string in
         let data = string.data(using: .utf8)!
 
         let packet = try! JSONDecoder().decode(GatewayPacket<JSON>.self, from: data)
@@ -384,7 +384,7 @@ final class ChatViewController: NSSplitViewController {
       await client.cache.userSettings
         .receive(on: RunLoop.main)
         .sink { [unowned self] json in
-          guard let json = json, json["guild_positions"].exists() || json["guild_folders"].exists() else { return }
+          guard let json, json["guild_positions"].exists() || json["guild_folders"].exists() else { return }
           // Resort guilds.
           Task { await self.fetchGuilds() }
         }
@@ -417,12 +417,12 @@ final class ChatViewController: NSSplitViewController {
 
     // Resolve all private channel participants using information in the
     // cache.
-    let allParticipants: Set<Ref<User>> = privateChannels.values.map({ privateChannel -> Set<Ref<User>> in
+    let allParticipants: Set<Ref<User>> = privateChannels.values.map { privateChannel -> Set<Ref<User>> in
       switch privateChannel {
-      case .groupDM(let gdm): return gdm.recipients
-      case .dm(let dm): return Set(dm.recipientIDs)
+      case let .groupDM(gdm): return gdm.recipients
+      case let .dm(dm): return Set(dm.recipientIDs)
       }
-    }).reduce(Set(), { n, r in n.union(r) })
+    }.reduce(Set()) { n, r in n.union(r) }
     let resolvedUsers = await client.cache.batchResolve(users: allParticipants)
     knownPrivateParticipants = Dictionary(uniqueKeysWithValues: resolvedUsers.map { ($0.id, $0) })
     if resolvedUsers.count != allParticipants.count {
@@ -435,7 +435,7 @@ final class ChatViewController: NSSplitViewController {
   /// Fetch all guilds from the cache, sorting them and reloading the
   /// navigator.
   private func fetchGuilds() async {
-    guard let client = client else { return }
+    guard let client else { return }
     let guilds = await client.cache.guilds
     guard let sortedGuilds = await sortGuildsAccordingToUserSettings(guilds) else { return }
     knownGuilds = guilds
@@ -484,7 +484,7 @@ final class ChatViewController: NSSplitViewController {
   }
 
   func setUpGatewayPacketHandler() {
-    guard let client = client else { return }
+    guard let client else { return }
 
     gatewayPacketHandler = Task.detached(priority: .high) {
       for await packet in client.gatewayConnection.receivedPackets.bufferInfinitely()
@@ -557,7 +557,7 @@ final class ChatViewController: NSSplitViewController {
 }
 
 extension ChatViewController: MessagesViewControllerDelegate {
-  func messagesController(_ messagesController: MessagesViewController, commandInvoked command: String, arguments: [String]) {
+  func messagesController(_: MessagesViewController, commandInvoked command: String, arguments: [String]) {
     Task {
       do {
         try await handleCommand(named: command, arguments: arguments)
@@ -571,11 +571,11 @@ extension ChatViewController: MessagesViewControllerDelegate {
     }
   }
 
-  func messagesControllerMessageInputFieldDidChange(_ messagesController: MessagesViewController, notification: Notification) {
+  func messagesControllerMessageInputFieldDidChange(_: MessagesViewController, notification _: Notification) {
     messageInputFieldDidChange.send()
   }
 
-  func messagesController(_ messagesController: MessagesViewController, messageSent message: String) {
+  func messagesController(_: MessagesViewController, messageSent message: String) {
     guard let focusedChannelID = self.focusedChannelID, let client = self.client else {
       return
     }
@@ -588,7 +588,7 @@ extension ChatViewController: MessagesViewControllerDelegate {
           body: [
             "content": message,
             "tts": false,
-            "nonce": String(Int.random(in: 0...1_000_000_000))
+            "nonce": String(Int.random(in: 0 ... 1_000_000_000)),
           ]
         )!
         let _ = try await client.http.request(request, withSpoofedHeadersFor: .xhr)
@@ -600,32 +600,34 @@ extension ChatViewController: MessagesViewControllerDelegate {
     }
   }
 
-  func messagesControllerDidScrollNearTop(_ messagesController: MessagesViewController) {
+  func messagesControllerDidScrollNearTop(_: MessagesViewController) {
     requestedToLoadMoreHistory()
   }
 }
 
 extension ChatViewController: NavigatorViewControllerDelegate {
-  func navigatorViewController(_ navigatorViewController: NavigatorViewController,
+  func navigatorViewController(_: NavigatorViewController,
                                didSelectChannelWithID channelID: GuildChannel.ID,
-                               inGuildWithID guildID: Guild.ID?) {
+                               inGuildWithID guildID: Guild.ID?)
+  {
     selectedGuildID = guildID?.ref()
     Task {
       await selectChannel(withID: channelID)
     }
   }
 
-  func navigatorViewController(_ navigatorViewController: NavigatorViewController,
-                               requestingPrivateChannelWithID id: PrivateChannel.ID) -> PrivateChannel {
+  func navigatorViewController(_: NavigatorViewController,
+                               requestingPrivateChannelWithID id: PrivateChannel.ID) -> PrivateChannel
+  {
     guard let privateChannel = knownPrivateChannels?[id] else {
       fatalError("navigator request non-existent private channel with id: \(id), or client wasn't ready yet")
     }
     return privateChannel
   }
 
-  func navigatorViewController(_ navigatorViewController: NavigatorViewController,
-                               requestingGuildWithID id: Guild.ID
-  ) -> Guild {
+  func navigatorViewController(_: NavigatorViewController,
+                               requestingGuildWithID id: Guild.ID) -> Guild
+  {
     guard let guild = knownGuilds?[id] else {
       fatalError("navigator requested non-existent guild with id: \(id), or client wasn't ready yet")
     }
@@ -633,19 +635,20 @@ extension ChatViewController: NavigatorViewControllerDelegate {
     return guild
   }
 
-  func navigatorViewController(_ navigatorViewController: NavigatorViewController,
-                               didRequestCurrentUserID _: Void
-  ) -> Snowflake? {
+  func navigatorViewController(_: NavigatorViewController,
+                               didRequestCurrentUserID _: Void) -> Snowflake?
+  {
     knownCurrentUser?.id
   }
 
-  func navigatorViewController(_ navigatorViewController: NavigatorViewController,
-                               didRequestPrivateParticipantsForChannel privateChannelID: PrivateChannel.ID) -> [User] {
+  func navigatorViewController(_: NavigatorViewController,
+                               didRequestPrivateParticipantsForChannel privateChannelID: PrivateChannel.ID) -> [User]
+  {
     guard let privateChannel = knownPrivateChannels?[privateChannelID] else { return [] }
 
     switch privateChannel {
-    case .dm(let dm): return knownPrivateParticipants?[dm.recipient!.id].map { [$0] } ?? []
-    case .groupDM(let gdm): return gdm.recipients.compactMap { knownPrivateParticipants?[$0.id] }
+    case let .dm(dm): return knownPrivateParticipants?[dm.recipient!.id].map { [$0] } ?? []
+    case let .groupDM(gdm): return gdm.recipients.compactMap { knownPrivateParticipants?[$0.id] }
     }
   }
 }

@@ -44,7 +44,7 @@ class HTTPInspectorBodyHeadersController: NSViewController {
     bodyTextView.font = NSFont.monospacedSystemFont(ofSize: NSFont.smallSystemFontSize, weight: .regular)
   }
 
-  @IBAction func copyValueOfClickedHeader(_ sender: Any) {
+  @IBAction func copyValueOfClickedHeader(_: Any) {
     guard headersTableView.clickedRow >= 0 else {
       return
     }
@@ -53,7 +53,7 @@ class HTTPInspectorBodyHeadersController: NSViewController {
     NSPasteboard.general.setString(header.value, forType: .string)
   }
 
-  @IBAction func copyNameAndValueOfClickedHeader(_ sender: Any) {
+  @IBAction func copyNameAndValueOfClickedHeader(_: Any) {
     guard headersTableView.clickedRow >= 0 else {
       return
     }
@@ -64,14 +64,14 @@ class HTTPInspectorBodyHeadersController: NSViewController {
 }
 
 extension HTTPInspectorBodyHeadersController: NSTableViewDataSource {
-  func numberOfRows(in tableView: NSTableView) -> Int {
+  func numberOfRows(in _: NSTableView) -> Int {
     headers.count
   }
 }
 
 extension HTTPInspectorBodyHeadersController: NSTableViewDelegate {
   func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
-    guard let tableColumn = tableColumn else { return nil }
+    guard let tableColumn else { return nil }
     let view = tableView.makeView(withIdentifier: tableColumn.identifier, owner: nil) as! NSTableCellView
     let header = headers.elements[row]
     view.textField?.stringValue = tableColumn.identifier.rawValue == "name" ? header.key : header.value

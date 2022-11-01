@@ -13,19 +13,18 @@ public struct Ref<Model: Identifiable> {
   }
 }
 
-extension Ref: Hashable {
-}
+extension Ref: Hashable {}
 
-extension Identifiable where ID == Snowflake {
+public extension Identifiable where ID == Snowflake {
   /// Returns a `Ref` to this model.
-  public var ref: Ref<Self> {
+  var ref: Ref<Self> {
     Ref(id: id)
   }
 }
 
-extension Snowflake {
+public extension Snowflake {
   /// Returns this snowflake as a `Ref`.
-  public func ref<T>() -> Ref<T> {
+  func ref<T>() -> Ref<T> {
     Ref(id: self)
   }
 }

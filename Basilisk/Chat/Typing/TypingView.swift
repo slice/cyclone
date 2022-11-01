@@ -1,6 +1,6 @@
-import SwiftUI
-import Serpent
 import Kingfisher
+import Serpent
+import SwiftUI
 
 struct TypingView: View {
   @ObservedObject var bridge: TypingBridge

@@ -12,14 +12,14 @@ public struct Attachment: Identifiable {
   public let height: Int?
   public let ephemeral: Bool?
 
-  public init(fakeWithWidth: Int, height: Int) {
+  public init(fakeWithWidth _: Int, height _: Int) {
     self.id = 1
     self.filename = "fake.jpg"
     self.description = nil
     self.contentType = .jpeg
     self.size = Measurement(value: 1, unit: .megabytes)
-    let width = (640...1920).randomElement()!
-    let height = (480...1080).randomElement()!
+    let width = (640 ... 1920).randomElement()!
+    let height = (480 ... 1080).randomElement()!
     self.url = URL(string: "https://picsum.photos/\(width)/\(height)")!
     self.proxyURL = self.url
     self.width = width

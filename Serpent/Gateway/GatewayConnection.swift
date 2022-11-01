@@ -353,7 +353,9 @@ extension GatewayConnection {
         return
       }
 
-//      log.info("-> \(text)")
+      if UserDefaults.standard.bool(forKey: SerpentDefaults.logReceivedWebSocketMessages.rawValue) {
+        log.info("-> \(text)")
+      }
 
       do {
         try await handlePacket(ofJSON: text, raw: data)

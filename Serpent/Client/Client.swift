@@ -118,12 +118,10 @@ public class Client {
       return
     }
 
-    let dumpDefaultKey = "BSLKDumpReadyPacket"
-
     switch eventName {
     case "READY":
       log.debug("discord is READY. now we have to get READY!")
-      if UserDefaults.standard.bool(forKey: dumpDefaultKey) {
+      if UserDefaults.standard.bool(forKey: SerpentDefaults.dumpReadyPackets.rawValue) {
         try! dumpPacket(packet, named: "Ready")
       }
       try await cache.ingestReadyPacket(packet)
@@ -131,7 +129,7 @@ public class Client {
       privateChannelsChanged.send()
       ready.send()
     case "READY_SUPPLEMENTAL":
-      if UserDefaults.standard.bool(forKey: dumpDefaultKey) {
+      if UserDefaults.standard.bool(forKey: SerpentDefaults.dumpReadyPackets.rawValue) {
         try! dumpPacket(packet, named: "ReadySupplemental")
       }
     case "MESSAGE_CREATE":

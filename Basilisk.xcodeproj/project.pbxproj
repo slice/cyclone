@@ -32,6 +32,7 @@
 		126B91022870B48C002AA7AA /* NSImageView+Kingfisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126B91012870B48C002AA7AA /* NSImageView+Kingfisher.swift */; };
 		126B91042870E87B002AA7AA /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126B91032870E87B002AA7AA /* Session.swift */; };
 		126B91062870EF6E002AA7AA /* ChatWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126B91052870EF6E002AA7AA /* ChatWindowController.swift */; };
+		127F3BF929119CF400067C6C /* SerpentDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 127F3BF829119CF400067C6C /* SerpentDefaults.swift */; };
 		12861A76285DC49C00C85F86 /* Ref.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12861A75285DC49B00C85F86 /* Ref.swift */; };
 		12861A78285DD21600C85F86 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12861A77285DD21600C85F86 /* Constants.swift */; };
 		12880BBD28B4D67300A01238 /* TypingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12880BBC28B4D67300A01238 /* TypingView.swift */; };
@@ -189,6 +190,7 @@
 		126B91012870B48C002AA7AA /* NSImageView+Kingfisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSImageView+Kingfisher.swift"; sourceTree = "<group>"; };
 		126B91032870E87B002AA7AA /* Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
 		126B91052870EF6E002AA7AA /* ChatWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatWindowController.swift; sourceTree = "<group>"; };
+		127F3BF829119CF400067C6C /* SerpentDefaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SerpentDefaults.swift; sourceTree = "<group>"; };
 		12861A75285DC49B00C85F86 /* Ref.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ref.swift; sourceTree = "<group>"; };
 		12861A77285DD21600C85F86 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		12880BBC28B4D67300A01238 /* TypingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypingView.swift; sourceTree = "<group>"; };
@@ -598,6 +600,7 @@
 				128C7674273DFF73008FD585 /* Branch.swift */,
 				12861A77285DD21600C85F86 /* Constants.swift */,
 				12E6DDA12867D5A600FD72A2 /* SerpentJSONDecoder.swift */,
+				127F3BF829119CF400067C6C /* SerpentDefaults.swift */,
 			);
 			path = Serpent;
 			sourceTree = "<group>";
@@ -931,6 +934,7 @@
 				12E6DDA42867D66700FD72A2 /* ChannelType.swift in Sources */,
 				12BB68092861BF9E0078CCEC /* WebSocketState.swift in Sources */,
 				12AB4160286925F200D54786 /* ReadyPacket.swift in Sources */,
+				127F3BF929119CF400067C6C /* SerpentDefaults.swift in Sources */,
 				12F4FDB7273DFCD000B6AE64 /* Serpent.docc in Sources */,
 				12894915274C8FB900850D5E /* Snowflake.swift in Sources */,
 				12861A76285DC49C00C85F86 /* Ref.swift in Sources */,

@@ -7,28 +7,6 @@ import OrderedCollections
 import os.log
 import Serpent
 
-struct MessagesSection: Hashable {
-  let authorID: User.ID
-  let firstMessageID: Message.ID
-
-  init(firstMessage: Message) {
-    authorID = firstMessage.author.id
-    firstMessageID = firstMessage.id
-  }
-}
-
-typealias MessagesDiffableDataSource =
-  NSTableViewDiffableDataSource<
-    MessagesSection,
-    Message.ID
-  >
-
-typealias MessagesSnapshot =
-  NSDiffableDataSourceSnapshot<
-    MessagesSection,
-    Message.ID
-  >
-
 extension NSUserInterfaceItemIdentifier {
   static let unifiedMessageRow: Self = .init("unified-message-row")
 }
@@ -38,9 +16,15 @@ final class MessagesViewController: NSViewController {
   @IBOutlet var tableView: NSTableView!
   @IBOutlet var messageInputField: NSTextField!
 
-  /// The ordered set of messages this view controller is showing, ordered from
-  /// oldest to newest.
+  /// The ordered dictionary of messages this view controller is showing,
+  /// ordered from oldest to newest.
   public var messages: OrderedDictionary<Message.ID, Message> = [:]
+
+  /// The set of messages that are the first in their group.
+  ///
+  /// When these messages are rendered, the message author and timestamp should
+  /// be displayed.
+  var messageHeaders: Set<Message.ID> = []
 
   /// Cached message row heights.
   ///
@@ -48,7 +32,7 @@ final class MessagesViewController: NSViewController {
   /// height of every row upon a reload. We cannot selectively reload by an
   /// index set because we prepend and append frequently, which shifts all of
   /// rows in a direction.
-  private var cachedMessageHeights: [Message.ID: Double] = [:]
+  var cachedMessageHeights: [Message.ID: Double] = [:]
 
   /// The ID of the oldest message this view controller is showing.
   public var oldestMessageID: Message.ID? { messages.elements[0].value.id }
@@ -60,7 +44,6 @@ final class MessagesViewController: NSViewController {
   /// drawn to the screen.
   var messageSizingTemplate: UnifiedMessageRow!
 
-  var dataSource: MessagesDiffableDataSource!
   var clipViewBoundsChangedSink: AnyCancellable!
 
   // State for tracking the frame of the table view. Needed because invalidating
@@ -138,10 +121,7 @@ final class MessagesViewController: NSViewController {
   /// Returns a Boolean indicating whether a message is the first in a section
   /// (should be displayed with an avatar, name, and timestamp).
   func messageIsFirstInSection(id: Message.ID) -> Bool {
-    guard let section = dataSource.snapshot().sectionIdentifier(containingItem: id) else {
-      fatalError("failed to get section containing message \(id), while checking if it's first in the section")
-    }
-    return section.firstMessageID == id
+    messageHeaders.contains(id)
   }
 
   /// Make changes to the scroll view while preserving what messages are
@@ -252,35 +232,5 @@ final class MessagesViewController: NSViewController {
     signposter.endInterval("Message Row Height Measurement", state)
 
     return height
-  }
-}
-
-extension MessagesViewController: NSTableViewDelegate {
-  func tableView(_: NSTableView, heightOfRow row: Int) -> CGFloat {
-    let messageID = dataSource.itemIdentifier(forRow: row)!
-    let message = self.messages[messageID]!
-    return measureRowHeight(forMessage: message)
-  }
-
-  func tableView(_: NSTableView, didAdd _: NSTableRowView, forRow _: Int) {
-    // If we don't do this, then the row views won't shrink after growing due to
-    // window resizes.
-//    rowView.translatesAutoresizingMaskIntoConstraints = false
-  }
-
-  func tableViewSelectionDidChange(_: Notification) {
-    guard UserDefaults.standard.bool(forKey: "BSLKMessageRowHeightDebugging"),
-          tableView.selectedRow > -1,
-          let messageID = dataSource.itemIdentifier(forRow: tableView.selectedRow),
-          let view = tableView.view(atColumn: 0, row: tableView.selectedRow, makeIfNecessary: false) as? UnifiedMessageRow
-    else {
-      return
-    }
-
-    let mismatching: String = cachedMessageHeights[messageID] != view.bounds.height ? " *** MISMATCH *** " : ""
-    log.debug("*** Selected row #\(self.tableView.selectedRow, privacy: .public), message ID: \(messageID.string, privacy: .public)")
-    let cachedHeight: String = cachedMessageHeights[messageID].map { String($0) } ?? "<not cached>"
-    log.debug("    actual height = \(view.bounds.height, privacy: .public), cached = \(cachedHeight)\(mismatching)")
-    log.debug("    content = \(self.messages[messageID]?.content ?? "<?>")")
   }
 }

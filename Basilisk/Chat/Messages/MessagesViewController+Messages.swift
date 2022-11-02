@@ -15,130 +15,122 @@ enum ScrollingBehavior {
 }
 
 extension MessagesViewController {
+  /// Iterates through an array of messages, inserting message headers as
+  /// necessary.
+  ///
+  /// Older messages should come first in the array.
+  func discoverMessageHeaders(_ messages: some Collection<Message>, insertFirstMessage: Bool = false) {
+    guard let firstMessage = messages.first else {
+      fatalError("tried to discover message headers with an empty array")
+    }
+    var currentAuthor = firstMessage.author.id
+
+    if insertFirstMessage {
+      messageHeaders.insert(firstMessage.id)
+    }
+
+    for message in messages {
+      if message.author.id != currentAuthor {
+        // author has changed, so create a new section (message group)
+        messageHeaders.insert(message.id)
+        currentAuthor = message.author.id
+      }
+    }
+  }
+
+  /// Invalidate the entire row height cache of the table view.
+  func invalidateEntireRowHeightCache() {
+    NSAnimationContext.beginGrouping()
+    NSAnimationContext.current.duration = 0
+    let entireTableView: IndexSet = .init(0 ..< self.tableView.numberOfRows)
+    self.tableView.noteHeightOfRows(withIndexesChanged: entireTableView)
+    NSAnimationContext.endGrouping()
+  }
+
   /// Applies an array of initial `Message` objects to be displayed in the
   /// view controller.
   ///
   /// The most recent messages should come first in the array.
   func applyInitialMessages(_ messages: [Message]) {
-    var snapshot = NSDiffableDataSourceSnapshot<MessagesSection, Message.ID>()
+    defer {
+      self.tableView.reloadData()
+
+      // macOS 13.0 has a bug where the row height cache is not invalidated
+      // after you call `reloadData`, which causes scrolling to jump around.
+      //
+      // You'd think to call this before we touch `self.messages` and the table
+      // view itself, but that doesn't seem to work around the problem?
+      if #unavailable(macOS 13.1) {
+        self.invalidateEntireRowHeightCache()
+      }
+
+      self.scrollView.scrollToEnd()
+    }
 
     if messages.isEmpty {
       self.messages = [:]
-      dataSource.apply(snapshot, animatingDifferences: false)
       return
     }
 
-    // We want the recent messages to appear at the bottom of the scroll view,
-    // so we have to reverse the array here.
+    messageHeaders = []
+
+    // Make older messages come first. This is how we'll store it internally,
+    // and it's also the order desired by the table view (we want recent
+    // messages to appear at the bottom).
+    let reversedMessages = messages.reversed()
+    discoverMessageHeaders(reversedMessages, insertFirstMessage: true)
+
     self.messages = OrderedDictionary(
-      messages.map { message in (message.id, message) }.reversed(),
+      reversedMessages.map { message in (message.id, message) },
       uniquingKeysWith: { left, _ in left }
     )
-
-    let firstMessage = self.messages.elements[0].value
-    var currentSection = MessagesSection(firstMessage: firstMessage)
-    snapshot.appendSections([currentSection])
-
-    for message in self.messages.values {
-      if message.author.id != currentSection.authorID {
-        // author has changed, so create a new section (message group)
-        currentSection = MessagesSection(firstMessage: message)
-        snapshot.appendSections([currentSection])
-      }
-
-      snapshot.appendItems([message.id], toSection: currentSection)
-    }
-
-    applySnapshot(snapshot, scrolling: .toBottom)
   }
 
   /// Prepends old messages to the view controller.
-  func prependOldMessages(_ messagesNewestFirst: [Message]) {
-    var snapshot = dataSource.snapshot()
-
+  func prependOldMessages(_ historyNewestFirst: [Message]) {
     guard !messages.isEmpty else {
       fatalError("there are no messages being displayed, so we cannot prepend")
     }
 
-    guard !messagesNewestFirst.isEmpty else {
+    guard !historyNewestFirst.isEmpty else {
       fatalError("messages to prepend was empty")
     }
 
-    let messages: [Message] = messagesNewestFirst.reversed()
+    let history: [Message] = historyNewestFirst.reversed()
 
-    if snapshot.sectionIdentifiers.isEmpty {
-      // if we have no section identifiers, just apply the messages as if they
-      // were an initial listing
-      applyInitialMessages(messages)
-      return
-    }
-
-    let firstSection = snapshot.sectionIdentifiers.first!
-    let firstMessage = messages.first!
-    var section = MessagesSection(firstMessage: firstMessage)
-    snapshot.insertSections([section], beforeSection: firstSection)
-
-    for message in messages {
-      if message.author.id != section.authorID {
-        // author differs, start a new message group
-        let newSection = MessagesSection(firstMessage: message)
-        if snapshot.sectionIdentifiers.contains(newSection) {
-          fatalError("\(newSection) was already in the snapshot -- this should never happen")
-        }
-        snapshot.insertSections([newSection], afterSection: section)
-        section = newSection
-      }
-
-      snapshot.appendItems([message.id], toSection: section)
-    }
-
-    for message in messagesNewestFirst {
+    for message in historyNewestFirst {
       self.messages.updateValue(message, forKey: message.id, insertingAt: 0)
     }
+
+    // TODO: Remove the first message as a header if the newest message in
+    // the history is the same author.
+    let insertFirstMessage = self.messages.elements.first!.value.author.id != history.first!.author.id
+    discoverMessageHeaders(history, insertFirstMessage: insertFirstMessage)
+
+    let indexSet: IndexSet = .init(integersIn: 0 ..< history.count)
 
     // When loading older messages, the loaded messages end up pushing the
     // messages that are currently onscreen downwards. Not only is this visually
     // disorienting, but it can cause the an infinite loop of loading new
     // messages as the scroll position is still near the top. Preserve the
     // effective scroll position to prevent this by adding the new height.
-    applySnapshot(snapshot, scrolling: .addingHeightDifference)
+    self.preserveScrollPosition(by: .addingHeightDifference) { restore in
+      self.tableView.insertRows(at: indexSet)
+      restore()
+    }
   }
 
   /// Appends a newly received message to the view controller.
   func appendNewlyReceivedMessage(_ message: Message) {
-    var snapshot = dataSource.snapshot()
-
-    var lastSection = snapshot.sectionIdentifiers.last
-
-    if lastSection?.authorID != message.author.id || lastSection == nil {
-      // If the author is different or this is the first message, we should
-      // begin a new message group.
-      lastSection = MessagesSection(firstMessage: message)
-      snapshot.appendSections([lastSection!])
+    if messages.elements.last?.value.author.id != message.author.id {
+      messageHeaders.insert(message.id)
     }
-
-    snapshot.appendItems([message.id], toSection: lastSection!)
 
     messages[message.id] = message
 
-    // Because the newly received message would be below the clip view, restore
-    // the saved scroll position without performing additional calculations.
-    applySnapshot(snapshot, scrolling: .usingSavedPosition)
-  }
-
-  private func applySnapshot(
-    _ snapshot: MessagesSnapshot,
-    scrolling scrollingBehavior: ScrollingBehavior,
-    completion: (() -> Void)? = nil
-  ) {
-    let scrolledToBottom = scrollView.isScrolledToBottom
-
-    // If we're scrolled to the bottom, pin the scroll view to the bottom.
-    preserveScrollPosition(by: scrolledToBottom ? .toBottom : scrollingBehavior) { restoreScrollPosition in
-      self.dataSource.apply(snapshot, animatingDifferences: false) {
-        restoreScrollPosition()
-        completion?()
-      }
+    preserveScrollPosition(by: scrollView.isScrolledToBottom ? .toBottom : .usingSavedPosition) { [unowned self] restore in
+      tableView.insertRows(at: [tableView.numberOfRows], withAnimation: [])
+      restore()
     }
   }
 }

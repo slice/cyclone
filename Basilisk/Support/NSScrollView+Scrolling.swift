@@ -10,7 +10,9 @@ extension NSScrollView {
   /// scrolled to the bottom.
   var isScrolledToBottom: Bool {
     let bottomInset = additionalSafeAreaInsets.bottom
-    return scrollPosition + contentView.bounds.height - bottomInset == documentView!.frame.height
+    let visibleRectBottomEdge = scrollPosition + contentView.bounds.height
+    // Round this value, because the `scrollPosition` can have decimal places.
+    return visibleRectBottomEdge.rounded() - bottomInset == documentView!.frame.height
   }
 
   /// The Y coordinate of the bottom of the scroll view, in the scroll view's

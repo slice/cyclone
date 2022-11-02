@@ -48,10 +48,24 @@ public class Client {
   /// A Combine `Publisher` that publishes new typing events.
   public private(set) var typingEvents = PassthroughSubject<TypingEvent, Never>()
 
+  static let defaultCapabilities: Capabilities = [
+    .noNotesInReady,
+    .versionedReadStates,
+    .versionedUserGuildSettings,
+    .dehydratedReady,
+    .readySupplemental,
+    .guildExperimentPopulation,
+    .enhancedReadStates,
+    .authTokenSupport,
+    // skip(2022-11-02): I want to avoid implementing Protocol Buffers :+1:
+    // .removeOldUserSettings,
+    .clientCachingV2,
+  ]
+
   // Last update: 2022-08-26
   static let defaultDisguise = Disguise(
     userAgent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) discord/0.0.278 Chrome/91.0.4472.164 Electron/13.4.0 Safari/537.36",
-    capabilities: [.noNotesInReady, .dehydratedReady, .readySupplemental, .enhancedReadStates, .clientCachingV2],
+    capabilities: defaultCapabilities,
     os: "Mac OS X",
     browser: "Discord Client",
     releaseChannel: .canary,

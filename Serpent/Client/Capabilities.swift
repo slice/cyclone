@@ -15,6 +15,6 @@ struct Capabilities: OptionSet, Codable {
   static let guildExperimentPopulation = Self(rawValue: 1 << 6)
   static let enhancedReadStates = Self(rawValue: 1 << 7)
   static let authTokenSupport = Self(rawValue: 1 << 8)
-  static let userSettingsProto = Self(rawValue: 1 << 9)
+  static let removeOldUserSettings = Self(rawValue: 1 << 9)
   static let clientCachingV2 = Self(rawValue: 1 << 10)
 }

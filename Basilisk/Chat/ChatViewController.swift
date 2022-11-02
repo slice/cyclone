@@ -279,8 +279,12 @@ final class ChatViewController: NSSplitViewController {
 
   /// Sort a dictionary of `Guild`s according to the user's current settings.
   func sortGuildsAccordingToUserSettings(_ guilds: [Guild.ID: Guild]) async -> [Guild]? {
+    // Discord started storing guild positions indirectly in the guild folders.
+    // Every guild that isn't in a folder is placed in a fake folder that has no
+    // ID, name, or color.
     guard let userSettings: JSON = await client?.cache.userSettings.value,
-          let guildPositions = userSettings["guild_positions"].array?.compactMap(\.string).map(Snowflake.init(string:))
+          let guildPositions = userSettings["guild_folders"].array?.compactMap(\.dictionary).compactMap({ dictionary in dictionary["guild_ids"]?.array }).joined()
+          .compactMap({ json in json.string.map(Snowflake.init(string:)) })
     else { return Array(guilds.values) }
 
     return Array(guilds.values).sorted { a, b in

@@ -51,7 +51,7 @@ public class Client {
   // Last update: 2022-08-26
   static let defaultDisguise = Disguise(
     userAgent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) discord/0.0.278 Chrome/91.0.4472.164 Electron/13.4.0 Safari/537.36",
-    capabilities: 1201,
+    capabilities: [.noNotesInReady, .dehydratedReady, .readySupplemental, .enhancedReadStates, .clientCachingV2],
     os: "Mac OS X",
     browser: "Discord Client",
     releaseChannel: .canary,

@@ -53,7 +53,7 @@ public struct Disguise: Codable {
   let userAgent: String
 
   /// A bitfield sent in `IDENTIFY`. Purpose unknown.
-  let capabilities: Int
+  let capabilities: Capabilities
 
   /// The operating system. This should probably be "Mac OS X".
   let os: String

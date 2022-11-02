@@ -88,6 +88,7 @@
 		12DAC9E5286127B4006B3B1D /* MessagesViewController+Messages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12DAC9E4286127B4006B3B1D /* MessagesViewController+Messages.swift */; };
 		12DCEAA32751E38500A0A626 /* NavigatorOutlineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12DCEAA22751E38500A0A626 /* NavigatorOutlineItem.swift */; };
 		12DCEAA52751E60C00A0A626 /* ChannelSorting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12DCEAA42751E60C00A0A626 /* ChannelSorting.swift */; };
+		12DE5A322911D565003877D4 /* Capabilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12DE5A312911D565003877D4 /* Capabilities.swift */; };
 		12E2100328B9BB0E00834C8F /* TypingState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12E2100228B9BB0E00834C8F /* TypingState.swift */; };
 		12E6DD9F2867CF9800FD72A2 /* GroupDMChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12E6DD9E2867CF9800FD72A2 /* GroupDMChannel.swift */; };
 		12E6DDA22867D5A600FD72A2 /* SerpentJSONDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12E6DDA12867D5A600FD72A2 /* SerpentJSONDecoder.swift */; };
@@ -242,6 +243,7 @@
 		12DAC9E4286127B4006B3B1D /* MessagesViewController+Messages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MessagesViewController+Messages.swift"; sourceTree = "<group>"; };
 		12DCEAA22751E38500A0A626 /* NavigatorOutlineItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigatorOutlineItem.swift; sourceTree = "<group>"; };
 		12DCEAA42751E60C00A0A626 /* ChannelSorting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelSorting.swift; sourceTree = "<group>"; };
+		12DE5A312911D565003877D4 /* Capabilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Capabilities.swift; sourceTree = "<group>"; };
 		12E2100228B9BB0E00834C8F /* TypingState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypingState.swift; sourceTree = "<group>"; };
 		12E6DD9E2867CF9800FD72A2 /* GroupDMChannel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupDMChannel.swift; sourceTree = "<group>"; };
 		12E6DDA12867D5A600FD72A2 /* SerpentJSONDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SerpentJSONDecoder.swift; sourceTree = "<group>"; };
@@ -454,6 +456,7 @@
 				128C7676273E04D2008FD585 /* Disguise.swift */,
 				12AB415D28691A0300D54786 /* Cache.swift */,
 				12E2100228B9BB0E00834C8F /* TypingState.swift */,
+				12DE5A312911D565003877D4 /* Capabilities.swift */,
 			);
 			path = Client;
 			sourceTree = "<group>";
@@ -913,6 +916,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				12DE5A322911D565003877D4 /* Capabilities.swift in Sources */,
 				12CD0228274218AA00F136A5 /* Publisher+Buffer.swift in Sources */,
 				12894919274C91C700850D5E /* GuildChannel.swift in Sources */,
 				1259D6D82816AA55006AE1D1 /* Decodable+Int.swift in Sources */,

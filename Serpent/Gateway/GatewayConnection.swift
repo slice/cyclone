@@ -239,7 +239,7 @@ public class GatewayConnection {
 
     let identifyPayload: JSON = [
       "d": [
-        "capabilities": disguise.capabilities,
+        "capabilities": disguise.capabilities.rawValue,
         "client_state": [
           "guild_hashes": [:],
           "highest_last_message_id": "0",

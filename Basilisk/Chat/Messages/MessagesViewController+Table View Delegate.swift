@@ -23,7 +23,7 @@ extension MessagesViewController: NSTableViewDelegate {
   }
 
   func tableViewSelectionDidChange(_: Notification) {
-    guard UserDefaults.standard.bool(forKey: "BSLKMessageRowHeightDebugging"),
+    guard BasiliskDefaults.bool(.messageRowHeightDebugging),
           tableView.selectedRow > -1,
           let view = tableView.view(atColumn: 0, row: tableView.selectedRow, makeIfNecessary: false) as? UnifiedMessageRow
     else {

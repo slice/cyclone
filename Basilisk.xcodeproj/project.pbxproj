@@ -116,6 +116,7 @@
 		12FEDA8429135447006BA613 /* ReferencedMessagePreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12FEDA8329135447006BA613 /* ReferencedMessagePreviewView.swift */; };
 		12FEDA8729135E72006BA613 /* AvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12FEDA8629135E72006BA613 /* AvatarView.swift */; };
 		12FEDA892913607F006BA613 /* MessageAuthorNameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12FEDA882913607F006BA613 /* MessageAuthorNameView.swift */; };
+		12FEDA8B2913C014006BA613 /* Defaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12FEDA8A2913C014006BA613 /* Defaults.swift */; };
 		B8EFC2F6275197ED0010B894 /* PermissionOverwrites.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8EFC2F5275197ED0010B894 /* PermissionOverwrites.swift */; };
 		B8EFC2FA2751A9350010B894 /* CurrentUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8EFC2F92751A9350010B894 /* CurrentUser.swift */; };
 /* End PBXBuildFile section */
@@ -277,6 +278,7 @@
 		12FEDA8329135447006BA613 /* ReferencedMessagePreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReferencedMessagePreviewView.swift; sourceTree = "<group>"; };
 		12FEDA8629135E72006BA613 /* AvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarView.swift; sourceTree = "<group>"; };
 		12FEDA882913607F006BA613 /* MessageAuthorNameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageAuthorNameView.swift; sourceTree = "<group>"; };
+		12FEDA8A2913C014006BA613 /* Defaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Defaults.swift; sourceTree = "<group>"; };
 		B8EFC2F5275197ED0010B894 /* PermissionOverwrites.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionOverwrites.swift; sourceTree = "<group>"; };
 		B8EFC2F92751A9350010B894 /* CurrentUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentUser.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -525,6 +527,7 @@
 				12093A5D281BC11000FAE304 /* BasiliskError.swift */,
 				12DAC9DC286116F8006B3B1D /* NSScrollView+Scrolling.swift */,
 				126B91012870B48C002AA7AA /* NSImageView+Kingfisher.swift */,
+				12FEDA8A2913C014006BA613 /* Defaults.swift */,
 			);
 			path = Support;
 			sourceTree = "<group>";
@@ -881,6 +884,7 @@
 				12EB5FA92866ACB80012F938 /* HTTPInspectorBodyHeadersController.swift in Sources */,
 				12BB68052861A83A0078CCEC /* StatusBarContainerController.swift in Sources */,
 				12DAC9E5286127B4006B3B1D /* MessagesViewController+Messages.swift in Sources */,
+				12FEDA8B2913C014006BA613 /* Defaults.swift in Sources */,
 				129B6031286AEBF60096FB67 /* IntrinsicImageView.swift in Sources */,
 				1260A75B275163F00099CA3B /* NavigatorViewControllerDelegate.swift in Sources */,
 				12880BBD28B4D67300A01238 /* TypingView.swift in Sources */,

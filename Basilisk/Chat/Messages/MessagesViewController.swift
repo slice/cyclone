@@ -107,7 +107,7 @@ final class MessagesViewController: NSViewController {
       }
     }
 
-    if UserDefaults.standard.bool(forKey: "BSLKApplySampleMessages") {
+    if BasiliskDefaults.bool(.loadSampleMessages) {
       applySampleData()
     }
 

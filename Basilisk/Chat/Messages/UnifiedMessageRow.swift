@@ -148,7 +148,7 @@ final class UnifiedMessageRow: NSTableCellView {
   }
 
   func setupAccessories(message: Message, forMeasurements performingMeasurements: Bool = false) {
-    guard !UserDefaults.standard.bool(forKey: "BSLKIgnoreMessageAccessories") else {
+    guard !BasiliskDefaults.bool(.ignoreMessageAccessories) else {
       return
     }
 
@@ -196,7 +196,7 @@ final class UnifiedMessageRow: NSTableCellView {
 
       contentStackView.addArrangedSubview(roundingView)
 
-      if UserDefaults.standard.bool(forKey: "BSLKMessageRowHeightDebugging") {
+      if BasiliskDefaults.bool(.messageRowHeightDebugging) {
         Self.log.debug("*** Set up an attachment for \(message.id.string, privacy: .public) (\"\(message.content, privacy: .public)\")")
         Self.log.debug("    accessory height: \(roundingView.fittingSize.height, privacy: .public), (incorrect) fitting size for this view: \(self.fittingSize.height, privacy: .public)")
         Self.log.debug("    is group header? \(self.isGroupHeader, privacy: .public)")

@@ -69,7 +69,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     if let account = Accounts.accounts.first?.value,
-       UserDefaults.standard.bool(forKey: "BSLKAutomaticallyAuthorizeWithFirstAccount")
+       BasiliskDefaults.bool(.automaticallyLogInWithFirstAccount)
     {
       NSLog("automatically creating session with account: \(account.name)")
       Task {

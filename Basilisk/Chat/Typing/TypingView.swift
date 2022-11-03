@@ -27,19 +27,8 @@ struct TypingView: View {
         let separator = Self.separator(offset: pair.offset, total: total)
 
         HStack(spacing: 4.0) {
-          Group {
-            if let avatarURL = pair.element.avatar?.url(withFileExtension: "png") {
-              // TODO: Don't load the full image here.
-              KFImage.url(avatarURL)
-                // TODO: This placeholder is inconsistent with the rest of the UI.
-                .placeholder { _ in Color.secondary }
-                .resizable()
-            } else {
-              Color.secondary
-            }
-          }
-          .frame(width: 15.0, height: 15.0)
-          .cornerRadius(5.0, antialiased: true)
+          AvatarView(asset: pair.element.avatar)
+            .frame(width: 15, height: 15)
 
           HStack(spacing: 0) {
             Text(pair.element.username).fontWeight(.bold)

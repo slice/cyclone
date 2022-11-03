@@ -30,7 +30,7 @@ extension MessagesViewController {
     }
 
     for message in messages {
-      if message.author.id != currentAuthor {
+      if message.author.id != currentAuthor || message.reference != nil {
         // author has changed, so create a new section (message group)
         messageHeaders.insert(message.id)
         currentAuthor = message.author.id
@@ -122,7 +122,7 @@ extension MessagesViewController {
 
   /// Appends a newly received message to the view controller.
   func appendNewlyReceivedMessage(_ message: Message) {
-    if messages.elements.last?.value.author.id != message.author.id {
+    if messages.elements.last?.value.author.id != message.author.id || message.reference != nil {
       messageHeaders.insert(message.id)
     }
 

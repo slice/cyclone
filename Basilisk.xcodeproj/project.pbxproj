@@ -113,6 +113,9 @@
 		12F4FDC8273DFCD000B6AE64 /* Serpent.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 12F4FDB3273DFCD000B6AE64 /* Serpent.framework */; };
 		12F4FDC9273DFCD000B6AE64 /* Serpent.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 12F4FDB3273DFCD000B6AE64 /* Serpent.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		12FAA7652827C29E00205A5B /* InspectorMessagesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12FAA7642827C29E00205A5B /* InspectorMessagesController.swift */; };
+		12FEDA8429135447006BA613 /* ReferencedMessagePreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12FEDA8329135447006BA613 /* ReferencedMessagePreviewView.swift */; };
+		12FEDA8729135E72006BA613 /* AvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12FEDA8629135E72006BA613 /* AvatarView.swift */; };
+		12FEDA892913607F006BA613 /* MessageAuthorNameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12FEDA882913607F006BA613 /* MessageAuthorNameView.swift */; };
 		B8EFC2F6275197ED0010B894 /* PermissionOverwrites.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8EFC2F5275197ED0010B894 /* PermissionOverwrites.swift */; };
 		B8EFC2FA2751A9350010B894 /* CurrentUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8EFC2F92751A9350010B894 /* CurrentUser.swift */; };
 /* End PBXBuildFile section */
@@ -271,6 +274,9 @@
 		12F4FDBC273DFCD000B6AE64 /* SerpentTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SerpentTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		12F4FDC3273DFCD000B6AE64 /* SerpentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SerpentTests.swift; sourceTree = "<group>"; };
 		12FAA7642827C29E00205A5B /* InspectorMessagesController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InspectorMessagesController.swift; sourceTree = "<group>"; };
+		12FEDA8329135447006BA613 /* ReferencedMessagePreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReferencedMessagePreviewView.swift; sourceTree = "<group>"; };
+		12FEDA8629135E72006BA613 /* AvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarView.swift; sourceTree = "<group>"; };
+		12FEDA882913607F006BA613 /* MessageAuthorNameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageAuthorNameView.swift; sourceTree = "<group>"; };
 		B8EFC2F5275197ED0010B894 /* PermissionOverwrites.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionOverwrites.swift; sourceTree = "<group>"; };
 		B8EFC2F92751A9350010B894 /* CurrentUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentUser.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -361,6 +367,8 @@
 				12C74E43286A8E01003561A3 /* UnifiedMessageRow.xib */,
 				12C74E45286A8E4B003561A3 /* UnifiedMessageRow.swift */,
 				129B6030286AEBF60096FB67 /* IntrinsicImageView.swift */,
+				12FEDA8329135447006BA613 /* ReferencedMessagePreviewView.swift */,
+				12FEDA882913607F006BA613 /* MessageAuthorNameView.swift */,
 			);
 			path = Messages;
 			sourceTree = "<group>";
@@ -405,6 +413,7 @@
 		1289491C274CB34E00850D5E /* Chat */ = {
 			isa = PBXGroup;
 			children = (
+				12FEDA8529135E69006BA613 /* Views */,
 				12880BBB28B4D66C00A01238 /* Typing */,
 				121F9314274CF609007F81CC /* Navigator */,
 				121F9315274CF613007F81CC /* Messages */,
@@ -617,6 +626,14 @@
 				12F4FDC3273DFCD000B6AE64 /* SerpentTests.swift */,
 			);
 			path = SerpentTests;
+			sourceTree = "<group>";
+		};
+		12FEDA8529135E69006BA613 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				12FEDA8629135E72006BA613 /* AvatarView.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -851,6 +868,7 @@
 			files = (
 				12C74E46286A8E4B003561A3 /* UnifiedMessageRow.swift in Sources */,
 				121F931A274CF631007F81CC /* ChannelRef.swift in Sources */,
+				12FEDA8429135447006BA613 /* ReferencedMessagePreviewView.swift in Sources */,
 				12DAC9DD286116F8006B3B1D /* NSScrollView+Scrolling.swift in Sources */,
 				12B99C2427410B010048D2DB /* PacketDirection.swift in Sources */,
 				12D23C2127541C0B00F3D18D /* WindowTitleUpdatingTabViewController.swift in Sources */,
@@ -884,6 +902,7 @@
 				12093A5E281BC11000FAE304 /* BasiliskError.swift in Sources */,
 				126B91042870E87B002AA7AA /* Session.swift in Sources */,
 				127F3BFB2911A5D200067C6C /* MessagesViewController+Table View Delegate.swift in Sources */,
+				12FEDA892913607F006BA613 /* MessageAuthorNameView.swift in Sources */,
 				12DCEAA52751E60C00A0A626 /* ChannelSorting.swift in Sources */,
 				1297448B2857415200CDB201 /* LoadingAttachmentView.swift in Sources */,
 				12B99C1E27410A5A0048D2DB /* LogStore.swift in Sources */,
@@ -891,6 +910,7 @@
 				12DCEAA32751E38500A0A626 /* NavigatorOutlineItem.swift in Sources */,
 				120E8CFD28AFAE7900AA0EEF /* APIURLTruncationAttachment.swift in Sources */,
 				12D23C232754204B00F3D18D /* AccountsViewController.swift in Sources */,
+				12FEDA8729135E72006BA613 /* AvatarView.swift in Sources */,
 				12D23C1A27540BAE00F3D18D /* Account.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -2,6 +2,7 @@ import Cocoa
 import Kingfisher
 import os.log
 import Serpent
+import SwiftUI
 
 final class UnifiedMessageRow: NSTableCellView {
   @IBOutlet var roundingView: RoundingView!
@@ -45,6 +46,9 @@ final class UnifiedMessageRow: NSTableCellView {
   static let maximumImageWidth = 450.0
   static let maximumImageHeight = 300.0
 
+  var hostedAuthorView: NSHostingView<MessageAuthorNameView>?
+  var hostedPreviewView: NSHostingView<ReferencedMessagePreviewView>?
+
   /// Indicates whether this message row is currently set up as a group header.
   var isGroupHeader: Bool = true
 
@@ -65,8 +69,46 @@ final class UnifiedMessageRow: NSTableCellView {
   }
 
   /// Configures a unified message row to display a message.
-  func configure(withMessage message: Message, isGroupHeader: Bool, forMeasurements performingMeasurements: Bool = false) {
-    authorLabel.stringValue = message.author.username
+  func configure(withMessage message: Message, isGroupHeader: Bool, forMeasurements performingMeasurements: Bool = false, replyingToAbove: Bool = false) {
+    var authorNameView = MessageAuthorNameView(authorName: message.author.username)
+    if hostedAuthorView == nil {
+      hostedAuthorView = NSHostingView(rootView: authorNameView)
+    }
+
+    if message.reference != nil, case let .reference(referenced) = message.referencedMessage {
+      let toThemselves = referenced.author.id == message.author.id
+      let target = toThemselves ? "themselves" : referenced.author.username
+
+      authorNameView.referencedAuthorName = target
+      authorNameView.replyingToThemselves = toThemselves
+      authorNameView.replyingToAbove = replyingToAbove
+      if !toThemselves {
+        authorNameView.referencedAvatar = referenced.author.avatar
+      }
+
+      if !replyingToAbove {
+        if hostedPreviewView == nil {
+          let view = ReferencedMessagePreviewView(message: referenced)
+          hostedPreviewView = NSHostingView(rootView: view)
+        } else {
+          hostedPreviewView!.rootView = ReferencedMessagePreviewView(message: referenced)
+        }
+
+        contentStackView.insertArrangedSubview(hostedPreviewView!, at: 0)
+      }
+    }
+
+    hostedAuthorView!.rootView = authorNameView
+
+    // Either a previous `hostedAuthorView`, or the placeholder `NSTextView` set
+    // up in IB.
+    let firstView = headerIdentityStack.arrangedSubviews[0]
+    if let firstView = firstView as? NSTextField {
+      NSLog("Removing \(firstView) (stringValue: \(firstView.stringValue)) because it's a placeholder")
+      headerIdentityStack.removeView(firstView)
+      headerIdentityStack.insertArrangedSubview(hostedAuthorView!, at: 0)
+    }
+
     roundingView.radius = 10
     if let avatar = message.author.avatar {
       avatarImageView.setImage(loadingFrom: avatar.url(withFileExtension: "png"))

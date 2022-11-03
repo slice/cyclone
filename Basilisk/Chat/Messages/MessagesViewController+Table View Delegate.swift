@@ -11,7 +11,14 @@ extension MessagesViewController: NSTableViewDelegate {
       fatalError("failed to create view for row \(row)")
     }
     let (id, message) = self.messages.elements[row]
-    view.configure(withMessage: message, isGroupHeader: self.messageIsFirstInSection(id: id))
+
+    var replyingToAbove = false
+    if let reference = message.reference, row > 0 {
+      let messageAbove = self.messages.elements[row - 1].value
+      replyingToAbove = reference.messageID.id == messageAbove.id
+    }
+
+    view.configure(withMessage: message, isGroupHeader: self.messageIsFirstInSection(id: id), replyingToAbove: replyingToAbove)
     return view
   }
 
@@ -23,7 +30,9 @@ extension MessagesViewController: NSTableViewDelegate {
       return
     }
 
-    let messageID = self.messages.elements[tableView.selectedRow].key
+    let (messageID, message) = self.messages.elements[tableView.selectedRow]
+
+    print(String(describing: message))
 
     let mismatching: String = cachedMessageHeights[messageID] != view.bounds.height ? " *** MISMATCH *** " : ""
     log.debug("*** Selected row #\(self.tableView.selectedRow, privacy: .public), message ID: \(messageID.string, privacy: .public)")

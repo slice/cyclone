@@ -10,6 +10,10 @@
 		12093A5E281BC11000FAE304 /* BasiliskError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12093A5D281BC11000FAE304 /* BasiliskError.swift */; };
 		120A78D82741E9A70099834B /* WebSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 120A78D72741E9A70099834B /* WebSocket.swift */; };
 		120A78DB2741F9BE0099834B /* WebSocketEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 120A78DA2741F9BE0099834B /* WebSocketEvent.swift */; };
+		120BB44E29148C5300AD910D /* ClickHigh.aif in Resources */ = {isa = PBXBuildFile; fileRef = 120BB44C29148C4B00AD910D /* ClickHigh.aif */; };
+		120BB44F29148C5300AD910D /* ClickLow.aif in Resources */ = {isa = PBXBuildFile; fileRef = 120BB44D29148C4B00AD910D /* ClickLow.aif */; };
+		120BB45129148CBF00AD910D /* ClickMid.aif in Resources */ = {isa = PBXBuildFile; fileRef = 120BB45029148CB500AD910D /* ClickMid.aif */; };
+		120BB4532914CA6900AD910D /* QuickSelectOutlineFloater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 120BB4522914CA6900AD910D /* QuickSelectOutlineFloater.swift */; };
 		120E8CFD28AFAE7900AA0EEF /* APIURLTruncationAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 120E8CFC28AFAE7900AA0EEF /* APIURLTruncationAttachment.swift */; };
 		1210E6EA274CC18300BF8C9B /* RoundingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1210E6E9274CC18300BF8C9B /* RoundingView.swift */; };
 		121B6FBB273E32D6000DD150 /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = 121B6FBA273E32D5000DD150 /* ArgumentParser */; };
@@ -101,7 +105,6 @@
 		12EB5FA92866ACB80012F938 /* HTTPInspectorBodyHeadersController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12EB5FA82866ACB80012F938 /* HTTPInspectorBodyHeadersController.swift */; };
 		12F4FD84273DFC1900B6AE64 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12F4FD83273DFC1900B6AE64 /* AppDelegate.swift */; };
 		12F4FD86273DFC1900B6AE64 /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12F4FD85273DFC1900B6AE64 /* ChatViewController.swift */; };
-		12F4FD88273DFC1B00B6AE64 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 12F4FD87273DFC1B00B6AE64 /* Assets.xcassets */; };
 		12F4FD8B273DFC1B00B6AE64 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 12F4FD89273DFC1B00B6AE64 /* Main.storyboard */; };
 		12F4FD96273DFC1B00B6AE64 /* BasiliskTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12F4FD95273DFC1B00B6AE64 /* BasiliskTests.swift */; };
 		12F4FDA0273DFC1B00B6AE64 /* BasiliskUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12F4FD9F273DFC1B00B6AE64 /* BasiliskUITests.swift */; };
@@ -117,6 +120,7 @@
 		12FEDA8729135E72006BA613 /* AvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12FEDA8629135E72006BA613 /* AvatarView.swift */; };
 		12FEDA892913607F006BA613 /* MessageAuthorNameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12FEDA882913607F006BA613 /* MessageAuthorNameView.swift */; };
 		12FEDA8B2913C014006BA613 /* Defaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12FEDA8A2913C014006BA613 /* Defaults.swift */; };
+		12FEDA8D2913CC5E006BA613 /* MessageFieldAccessoriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12FEDA8C2913CC5E006BA613 /* MessageFieldAccessoriesView.swift */; };
 		B8EFC2F6275197ED0010B894 /* PermissionOverwrites.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8EFC2F5275197ED0010B894 /* PermissionOverwrites.swift */; };
 		B8EFC2FA2751A9350010B894 /* CurrentUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8EFC2F92751A9350010B894 /* CurrentUser.swift */; };
 /* End PBXBuildFile section */
@@ -177,6 +181,10 @@
 		12093A5D281BC11000FAE304 /* BasiliskError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasiliskError.swift; sourceTree = "<group>"; };
 		120A78D72741E9A70099834B /* WebSocket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocket.swift; sourceTree = "<group>"; };
 		120A78DA2741F9BE0099834B /* WebSocketEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketEvent.swift; sourceTree = "<group>"; };
+		120BB44C29148C4B00AD910D /* ClickHigh.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = ClickHigh.aif; sourceTree = "<group>"; };
+		120BB44D29148C4B00AD910D /* ClickLow.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = ClickLow.aif; sourceTree = "<group>"; };
+		120BB45029148CB500AD910D /* ClickMid.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = ClickMid.aif; sourceTree = "<group>"; };
+		120BB4522914CA6900AD910D /* QuickSelectOutlineFloater.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickSelectOutlineFloater.swift; sourceTree = "<group>"; };
 		120E8CFC28AFAE7900AA0EEF /* APIURLTruncationAttachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIURLTruncationAttachment.swift; sourceTree = "<group>"; };
 		1210E6E9274CC18300BF8C9B /* RoundingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundingView.swift; sourceTree = "<group>"; };
 		121F930F274CF318007F81CC /* MessagesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesViewController.swift; sourceTree = "<group>"; };
@@ -279,6 +287,7 @@
 		12FEDA8629135E72006BA613 /* AvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarView.swift; sourceTree = "<group>"; };
 		12FEDA882913607F006BA613 /* MessageAuthorNameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageAuthorNameView.swift; sourceTree = "<group>"; };
 		12FEDA8A2913C014006BA613 /* Defaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Defaults.swift; sourceTree = "<group>"; };
+		12FEDA8C2913CC5E006BA613 /* MessageFieldAccessoriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageFieldAccessoriesView.swift; sourceTree = "<group>"; };
 		B8EFC2F5275197ED0010B894 /* PermissionOverwrites.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionOverwrites.swift; sourceTree = "<group>"; };
 		B8EFC2F92751A9350010B894 /* CurrentUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentUser.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -342,6 +351,16 @@
 			path = WebSocket;
 			sourceTree = "<group>";
 		};
+		120BB44A29148AF100AD910D /* Sounds */ = {
+			isa = PBXGroup;
+			children = (
+				120BB44C29148C4B00AD910D /* ClickHigh.aif */,
+				120BB45029148CB500AD910D /* ClickMid.aif */,
+				120BB44D29148C4B00AD910D /* ClickLow.aif */,
+			);
+			path = Sounds;
+			sourceTree = "<group>";
+		};
 		121F9314274CF609007F81CC /* Navigator */ = {
 			isa = PBXGroup;
 			children = (
@@ -371,6 +390,8 @@
 				129B6030286AEBF60096FB67 /* IntrinsicImageView.swift */,
 				12FEDA8329135447006BA613 /* ReferencedMessagePreviewView.swift */,
 				12FEDA882913607F006BA613 /* MessageAuthorNameView.swift */,
+				12FEDA8C2913CC5E006BA613 /* MessageFieldAccessoriesView.swift */,
+				120BB4522914CA6900AD910D /* QuickSelectOutlineFloater.swift */,
 			);
 			path = Messages;
 			sourceTree = "<group>";
@@ -574,6 +595,7 @@
 		12F4FD82273DFC1900B6AE64 /* Basilisk */ = {
 			isa = PBXGroup;
 			children = (
+				120BB44A29148AF100AD910D /* Sounds */,
 				12D23C1D2754126800F3D18D /* Preferences */,
 				128E2A3527540B860098BB84 /* Accounts */,
 				12E80A582752AC1600ACD979 /* Support */,
@@ -823,7 +845,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				12F4FD88273DFC1B00B6AE64 /* Assets.xcassets in Resources */,
+				120BB45129148CBF00AD910D /* ClickMid.aif in Resources */,
+				120BB44E29148C5300AD910D /* ClickHigh.aif in Resources */,
+				120BB44F29148C5300AD910D /* ClickLow.aif in Resources */,
 				12D23C1F2754127000F3D18D /* Preferences.storyboard in Resources */,
 				12EB5FA42866A4200012F938 /* HTTPInspector.storyboard in Resources */,
 				12DAC9DB28611649006B3B1D /* Messages.storyboard in Resources */,
@@ -908,11 +932,13 @@
 				127F3BFB2911A5D200067C6C /* MessagesViewController+Table View Delegate.swift in Sources */,
 				12FEDA892913607F006BA613 /* MessageAuthorNameView.swift in Sources */,
 				12DCEAA52751E60C00A0A626 /* ChannelSorting.swift in Sources */,
+				120BB4532914CA6900AD910D /* QuickSelectOutlineFloater.swift in Sources */,
 				1297448B2857415200CDB201 /* LoadingAttachmentView.swift in Sources */,
 				12B99C1E27410A5A0048D2DB /* LogStore.swift in Sources */,
 				12B99C2227410AD00048D2DB /* LogMessage.swift in Sources */,
 				12DCEAA32751E38500A0A626 /* NavigatorOutlineItem.swift in Sources */,
 				120E8CFD28AFAE7900AA0EEF /* APIURLTruncationAttachment.swift in Sources */,
+				12FEDA8D2913CC5E006BA613 /* MessageFieldAccessoriesView.swift in Sources */,
 				12D23C232754204B00F3D18D /* AccountsViewController.swift in Sources */,
 				12FEDA8729135E72006BA613 /* AvatarView.swift in Sources */,
 				12D23C1A27540BAE00F3D18D /* Account.swift in Sources */,

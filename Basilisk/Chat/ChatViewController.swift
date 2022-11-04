@@ -579,24 +579,39 @@ extension ChatViewController: MessagesViewControllerDelegate {
     messageInputFieldDidChange.send()
   }
 
-  func messagesController(_: MessagesViewController, messageSent message: String) {
+  func messagesController(_ messagesViewController: MessagesViewController, messageSent message: String) {
     guard let focusedChannelID = self.focusedChannelID, let client = self.client else {
       return
     }
 
     Task {
       do {
+        var body: JSON = [
+          "content": message,
+          "tts": false,
+          "nonce": String(Int.random(in: 0 ... 1_000_000_000)),
+        ]
+
+        if let selectedGuildID, let replyingTo = messagesViewController.replyingToMessage {
+          body["message_reference"] = [
+            "channel_id": focusedChannelID.string,
+            "guild_id": selectedGuildID.id.string,
+            "message_id": replyingTo.id.string,
+          ]
+          messagesViewController.replyingToMessage = nil
+        }
+
         let request = try client.http.apiRequest(
           to: "/channels/\(focusedChannelID.string)/messages",
           method: .post,
-          body: [
-            "content": message,
-            "tts": false,
-            "nonce": String(Int.random(in: 0 ... 1_000_000_000)),
-          ]
+          body: body
         )!
         let _ = try await client.http.request(request, withSpoofedHeadersFor: .xhr)
         lastSentTypingTimestamps.removeValue(forKey: focusedChannelID)
+
+        if !messagesViewController.messageFieldAccessoriesHidden {
+          messagesViewController.hideMessageFieldAccessories()
+        }
       } catch {
         log.error("failed to send message: \(error, privacy: .public)")
         messagesViewController.appendToConsole(line: "[system] failed to send message: \(error)")

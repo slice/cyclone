@@ -1,6 +1,13 @@
+import Carbon.HIToolbox.Events
 import Cocoa
 import Combine
 import Serpent
+
+@objc protocol QuickSelection: AnyObject {
+  func quickSelectFinished(_ sender: Any?)
+  func quickSelectOlder(_ sender: Any?)
+  func quickSelectNewer(_ sender: Any?)
+}
 
 @main
 class AppDelegate: NSObject, NSApplicationDelegate {
@@ -13,6 +20,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
   var windowManagementCancellables: Set<AnyCancellable> = []
   var loggingCancellables: Set<AnyCancellable> = []
+
+  var quickSelectEventMonitor: Any?
+  var currentlyQuickSelecting: Bool = false
 
   var activeViewControllers: [ChatViewController] {
     NSApp.windows.compactMap { $0.contentViewController as? ChatViewController }
@@ -58,6 +68,29 @@ class AppDelegate: NSObject, NSApplicationDelegate {
   }
 
   func applicationDidFinishLaunching(_: Notification) {
+    quickSelectEventMonitor = NSEvent.addLocalMonitorForEvents(matching: [.keyDown, .flagsChanged]) { [unowned self] event in
+      var selectorToSend: Selector?
+
+      if event.type == .flagsChanged && currentlyQuickSelecting {
+        selectorToSend = #selector(QuickSelection.quickSelectFinished(_:))
+        currentlyQuickSelecting = false
+      } else if BasiliskDefaults[.quickSelectEnabled] &&
+        event.modifierFlags.contains(.shift) && event.keyCode == kVK_UpArrow || event.keyCode == kVK_DownArrow
+      {
+        selectorToSend = event.keyCode == kVK_UpArrow
+          ? #selector(QuickSelection.quickSelectOlder(_:))
+          : #selector(QuickSelection.quickSelectNewer(_:))
+        currentlyQuickSelecting = true
+      }
+
+      if let selectorToSend {
+        NSApp.sendAction(selectorToSend, to: nil, from: self)
+        return nil
+      }
+
+      return event
+    }
+
     do {
       if FileManager.default.fileExists(atPath: Accounts.defaultAccountsPath.path) {
         NSLog("reading accounts")
@@ -87,6 +120,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
           let _ = await NSApp.presentError(error)
         }
       }
+    }
+  }
+
+  func applicationWillTerminate(_: Notification) {
+    if let quickSelectEventMonitor {
+      NSEvent.removeMonitor(quickSelectEventMonitor)
     }
   }
 

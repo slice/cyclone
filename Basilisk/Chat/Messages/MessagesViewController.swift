@@ -6,6 +6,7 @@ import Kingfisher
 import OrderedCollections
 import os.log
 import Serpent
+import SwiftUI
 
 extension NSUserInterfaceItemIdentifier {
   static let unifiedMessageRow: Self = .init("unified-message-row")
@@ -14,7 +15,23 @@ extension NSUserInterfaceItemIdentifier {
 final class MessagesViewController: NSViewController {
   @IBOutlet var scrollView: NSScrollView!
   @IBOutlet var tableView: NSTableView!
+  @IBOutlet var fieldAccessories: NSView!
   @IBOutlet var messageInputField: NSTextField!
+  @IBOutlet var messageMenu: NSMenu!
+
+  var fieldAccessoriesHostingView: NSHostingView<MessageFieldAccessoriesView>!
+  var fieldAccessoriesHeight: NSLayoutConstraint!
+  public var replyingToMessage: Message?
+
+  lazy var quickSelectOutlineFloater: QuickSelectOutlineFloater = {
+    let floater = QuickSelectOutlineFloater()
+    floater.translatesAutoresizingMaskIntoConstraints = true
+    floater.isHidden = true
+    return floater
+  }()
+
+  var quickSelectedMessageID: Ref<Message>?
+  var quickSelectSound: NSSound?
 
   /// The ordered dictionary of messages this view controller is showing,
   /// ordered from oldest to newest.
@@ -59,6 +76,21 @@ final class MessagesViewController: NSViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
 
+    self.view.addSubview(quickSelectOutlineFloater)
+
+    // Used to animate the message field's accessories view open or closed.
+    fieldAccessoriesHeight = fieldAccessories.heightAnchor.constraint(equalToConstant: 1)
+    fieldAccessoriesHeight.isActive = true
+
+    fieldAccessoriesHostingView = NSHostingView(rootView: MessageFieldAccessoriesView())
+    fieldAccessoriesHostingView.translatesAutoresizingMaskIntoConstraints = false
+    fieldAccessories.addSubview(fieldAccessoriesHostingView)
+    NSLayoutConstraint.activate([
+      fieldAccessoriesHostingView.centerYAnchor.constraint(equalTo: fieldAccessories.centerYAnchor),
+      fieldAccessoriesHostingView.leadingAnchor.constraint(equalTo: fieldAccessories.leadingAnchor, constant: 11),
+      fieldAccessoriesHostingView.trailingAnchor.constraint(equalTo: fieldAccessories.trailingAnchor),
+    ])
+
     setupDataSource()
 
     tableView.delegate = self
@@ -67,7 +99,12 @@ final class MessagesViewController: NSViewController {
     messageSizingTemplate =
       (tableView.makeView(withIdentifier: .unifiedMessageRow, owner: nil)! as! UnifiedMessageRow)
 
-    scrollView.applyInnerInsets(bottom: 10)
+    // Inner insets seem to cause AppKit to behave strangely. Animating the
+    // field accessories view open causes the scroll view to clip weirdly, and
+    // it doesn't seem to scroll to the bottom all the way sometimes. We need to
+    // figure out another way to apply some inner padding to the table view.
+    //
+    // scrollView.applyInnerInsets(bottom: 10)
 
     tableView.postsFrameChangedNotifications = true
     tableViewFrameChangedSink = NotificationCenter.default.publisher(
@@ -116,6 +153,131 @@ final class MessagesViewController: NSViewController {
       .sink { [unowned self] notification in
         self.delegate?.messagesControllerMessageInputFieldDidChange(self, notification: notification)
       }
+  }
+
+  /// Moves the quick select outline floater to outline a rectangle within the
+  /// table view using an animation.
+  func moveFloater(outliningRect rect: NSRect) {
+    self.log.debug("moving floater to \(String(describing: rect))")
+    quickSelectOutlineFloater.isHidden = false
+    tableView.scrollToVisible(rect)
+    NSAnimationContext.runAnimationGroup { context in
+      context.duration = BasiliskDefaults[.quickSelectOutlineFloaterAnimationDuration]
+      quickSelectOutlineFloater.animator().frame = tableView.convert(rect, to: self.view).insetBy(dx: -3, dy: -6)
+    }
+  }
+
+  /// Moves the quick select outline floater to outline a row in the table view
+  /// using an animation.
+  func moveFloater(outliningRow: Int) {
+    moveFloater(outliningRect: tableView.rect(ofRow: outliningRow))
+  }
+
+  @objc func quickSelectFinished(_: Any?) {
+    guard let quickSelectedMessageID else { return }
+    beginReplyingTo(message: messages[quickSelectedMessageID.id]!)
+    quickSelectOutlineFloater.isHidden = true
+    messageInputField.becomeFirstResponder()
+    self.quickSelectedMessageID = nil
+  }
+
+  @objc override func cancelOperation(_ sender: Any?) {
+    if replyingToMessage != nil {
+      finishReplying()
+    }
+  }
+
+  func playQuickSelectSound() {
+    guard BasiliskDefaults[.quickSelectPlaysSound] else { return }
+
+    if quickSelectSound == nil, let clickURL = Bundle.main.url(forResource: "ClickMid", withExtension: "aif") {
+      quickSelectSound = NSSound(contentsOf: clickURL, byReference: true)
+      quickSelectSound?.volume = Float(BasiliskDefaults[.quickSelectSoundVolume])
+    }
+
+    guard let sound = quickSelectSound else { return }
+
+    if sound.isPlaying { sound.stop() }
+    sound.play()
+  }
+
+  @objc func quickSelectOlder(_: Any?) {
+    let olderIndex = quickSelectedMessageID == nil
+      ? messages.count - 1
+      : messages.keys.firstIndex(of: quickSelectedMessageID!.id)! - 1
+    guard olderIndex > -1 else { return }
+    moveFloater(outliningRow: olderIndex)
+    quickSelectedMessageID = messages.elements[olderIndex].value.ref
+    playQuickSelectSound()
+  }
+
+  @objc func quickSelectNewer(_: Any?) {
+    guard let quickSelectedMessageID else { return }
+    let newerIndex = messages.keys.firstIndex(of: quickSelectedMessageID.id)! + 1
+    guard newerIndex <= messages.count - 1 else { return }
+    moveFloater(outliningRow: newerIndex)
+    self.quickSelectedMessageID = messages.elements[newerIndex].value.ref
+    playQuickSelectSound()
+  }
+
+  @IBAction func messageMenuReply(_: NSMenuItem) {
+    guard tableView.clickedRow != -1 else { return }
+    let message = messages.elements[tableView.clickedRow].value
+    beginReplyingTo(message: message)
+  }
+
+  /// Begins replying to a message.
+  ///
+  /// The message field's accessories view is animated open if necessary.
+  func beginReplyingTo(message: Message) {
+    replyingToMessage = message
+    fieldAccessoriesHostingView.rootView = MessageFieldAccessoriesView(replyingToMessage: message)
+
+    if messageFieldAccessoriesHidden {
+      showMessageFieldAccessories()
+    }
+  }
+
+  /// Stops replying to a message.
+  ///
+  /// This does not send a message; it merely updates internal state and hides
+  /// the message field's accessories view if necessary.
+  func finishReplying() {
+    replyingToMessage = nil
+
+    if !messageFieldAccessoriesHidden {
+      hideMessageFieldAccessories()
+    }
+  }
+
+  /// A Boolean value that indicates whether the message field's accessories
+  /// view is currently hidden.
+  var messageFieldAccessoriesHidden: Bool {
+    fieldAccessories.isHidden
+  }
+
+  /// Animates the message field's accessories view open.
+  func showMessageFieldAccessories() {
+    fieldAccessories.isHidden = false
+    view.window!.layoutIfNeeded()
+    NSAnimationContext.runAnimationGroup { context in
+      context.allowsImplicitAnimation = true
+      context.duration = BasiliskDefaults[.messageFieldAccessoriesAnimationDuration]
+      fieldAccessoriesHeight.constant = 30
+      view.window!.layoutIfNeeded()
+    }
+  }
+
+  /// Animates the message field's accessories view closed.
+  func hideMessageFieldAccessories() {
+    fieldAccessoriesHeight.constant = 1
+    NSAnimationContext.runAnimationGroup { context in
+      context.allowsImplicitAnimation = true
+      context.duration = BasiliskDefaults[.messageFieldAccessoriesAnimationDuration]
+      view.window!.layoutIfNeeded()
+    } completionHandler: { [unowned self] in
+      fieldAccessories.isHidden = true
+    }
   }
 
   /// Returns a Boolean indicating whether a message is the first in a section
@@ -232,5 +394,14 @@ final class MessagesViewController: NSViewController {
     signposter.endInterval("Message Row Height Measurement", state)
 
     return height
+  }
+}
+
+extension MessagesViewController: NSMenuItemValidation {
+  func validateMenuItem(_ menuItem: NSMenuItem) -> Bool {
+    if menuItem.action == #selector(messageMenuReply), tableView.clickedRow == -1 {
+      return false
+    }
+    return true
   }
 }

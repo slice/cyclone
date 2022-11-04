@@ -7,9 +7,9 @@ struct ReferencedMessagePreviewView: View {
   let content: String?
   let maximumContentLength: Int = 50
 
-  init(message: Message) {
+  init(message: Message, displayArrow: Bool = true) {
     self.hasAttachment = !message.attachments.isEmpty
-    self.displayArrow = true
+    self.displayArrow = displayArrow
     self.content = message.content
   }
 

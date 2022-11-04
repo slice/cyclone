@@ -11,20 +11,20 @@
             <objects>
                 <viewController title="Messages" id="7iU-WW-fy5" customClass="MessagesViewController" customModule="Basilisk" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="0kd-k5-7yA">
-                        <rect key="frame" x="0.0" y="0.0" width="608" height="550"/>
+                        <rect key="frame" x="0.0" y="0.0" width="608" height="646"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="0.0" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7Zj-Lr-gPc">
-                                <rect key="frame" x="0.0" y="0.0" width="608" height="550"/>
+                                <rect key="frame" x="0.0" y="0.0" width="608" height="646"/>
                                 <subviews>
                                     <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="24" horizontalPageScroll="10" verticalLineScroll="24" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="o9v-ft-AeH">
-                                        <rect key="frame" x="0.0" y="50" width="608" height="500"/>
+                                        <rect key="frame" x="0.0" y="50" width="608" height="596"/>
                                         <clipView key="contentView" id="LPF-8J-Eaw">
-                                            <rect key="frame" x="0.0" y="0.0" width="608" height="500"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="608" height="596"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" tableStyle="plain" autosaveColumns="NO" rowHeight="24" usesAutomaticRowHeights="YES" viewBased="YES" floatsGroupRows="NO" id="1u1-fp-Hkn">
-                                                    <rect key="frame" x="0.0" y="0.0" width="608" height="500"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="608" height="596"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <size key="intercellSpacing" width="17" height="0.0"/>
                                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -43,6 +43,9 @@
                                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                         </tableColumn>
                                                     </tableColumns>
+                                                    <connections>
+                                                        <outlet property="menu" destination="Hr6-RT-eMh" id="fmV-xG-MCo"/>
+                                                    </connections>
                                                 </tableView>
                                             </subviews>
                                         </clipView>
@@ -55,6 +58,12 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                         </scroller>
                                     </scrollView>
+                                    <customView hidden="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8mC-wc-DwW">
+                                        <rect key="frame" x="0.0" y="616" width="608" height="30"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="30" placeholder="YES" id="R5b-tR-Xsb"/>
+                                        </constraints>
+                                    </customView>
                                     <box boxType="custom" borderType="line" borderWidth="0.0" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="dm7-Ec-Jfv">
                                         <rect key="frame" x="0.0" y="0.0" width="608" height="50"/>
                                         <view key="contentView" id="c5f-84-Zae">
@@ -93,13 +102,16 @@
                                     </box>
                                 </subviews>
                                 <constraints>
+                                    <constraint firstItem="8mC-wc-DwW" firstAttribute="width" secondItem="7Zj-Lr-gPc" secondAttribute="width" id="TAA-eX-HVC"/>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="300" id="b73-z1-DpT"/>
                                 </constraints>
                                 <visibilityPriorities>
                                     <integer value="1000"/>
                                     <integer value="1000"/>
+                                    <integer value="1000"/>
                                 </visibilityPriorities>
                                 <customSpacing>
+                                    <real value="3.4028234663852886e+38"/>
                                     <real value="3.4028234663852886e+38"/>
                                     <real value="3.4028234663852886e+38"/>
                                 </customSpacing>
@@ -113,12 +125,24 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="fieldAccessories" destination="8mC-wc-DwW" id="tfj-Tc-2PE"/>
                         <outlet property="messageInputField" destination="jkn-6t-Wmr" id="pBf-ks-Nb1"/>
+                        <outlet property="messageMenu" destination="Hr6-RT-eMh" id="qcv-UD-Z4V"/>
                         <outlet property="scrollView" destination="o9v-ft-AeH" id="031-SE-LtJ"/>
                         <outlet property="tableView" destination="1u1-fp-Hkn" id="1Ib-vh-z2r"/>
                     </connections>
                 </viewController>
                 <customObject id="gtA-sw-5eR" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+                <menu id="Hr6-RT-eMh">
+                    <items>
+                        <menuItem title="Reply…" id="ty2-jr-ZXR">
+                            <modifierMask key="keyEquivalentModifierMask"/>
+                            <connections>
+                                <action selector="messageMenuReply:" target="7iU-WW-fy5" id="EUj-hF-WIB"/>
+                            </connections>
+                        </menuItem>
+                    </items>
+                </menu>
             </objects>
             <point key="canvasLocation" x="-107" y="1433"/>
         </scene>

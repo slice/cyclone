@@ -279,6 +279,8 @@ extension GatewayConnection {
     // TODO: Implement resuming.
     // https://discord.com/developers/docs/topics/gateway#resuming
     sequence = 0
+    guildSubscriptions = [:]
+    callConnections = []
     isReconnecting = true
 
     try await Task.sleep(nanoseconds: UInt64(self.reconnectionBackoff * 1_000_000_000))

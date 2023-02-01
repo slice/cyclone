@@ -25,7 +25,7 @@ public enum Opcode: Int, Codable {
   case streamWatch = 20
   case streamPing = 21
   case streamSetPaused = 22
-  case lfgSubscriptions 23
+  case lfgSubscriptions = 23
   case requestGuildApplicationCommands = 24
   case embeddedActivityLaunch = 25
   case embeddedActivityClose = 26

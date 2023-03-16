@@ -181,7 +181,7 @@ final class MessagesViewController: NSViewController {
     self.quickSelectedMessageID = nil
   }
 
-  @objc override func cancelOperation(_ sender: Any?) {
+  @objc override func cancelOperation(_: Any?) {
     if replyingToMessage != nil {
       finishReplying()
     }

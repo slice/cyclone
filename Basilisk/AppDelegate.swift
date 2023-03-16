@@ -71,11 +71,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     quickSelectEventMonitor = NSEvent.addLocalMonitorForEvents(matching: [.keyDown, .flagsChanged]) { [unowned self] event in
       var selectorToSend: Selector?
 
-      if event.type == .flagsChanged && currentlyQuickSelecting {
+      if event.type == .flagsChanged, currentlyQuickSelecting {
         selectorToSend = #selector(QuickSelection.quickSelectFinished(_:))
         currentlyQuickSelecting = false
-      } else if BasiliskDefaults[.quickSelectEnabled] &&
-        event.modifierFlags.contains(.shift) && event.keyCode == kVK_UpArrow || event.keyCode == kVK_DownArrow
+      } else if BasiliskDefaults[.quickSelectEnabled],
+                event.modifierFlags.contains(.shift), event.keyCode == kVK_UpArrow || event.keyCode == kVK_DownArrow
       {
         selectorToSend = event.keyCode == kVK_UpArrow
           ? #selector(QuickSelection.quickSelectOlder(_:))

@@ -11,6 +11,8 @@ struct AvatarView: View {
       // about it.
       if let avatarURL = asset?.url(withFileExtension: "png") {
         KFImage.url(avatarURL)
+          .interpolation(.high)
+          .antialiased(true)
           // TODO: This placeholder is inconsistent with the rest of the UI; it
           // should really be a loading spinner.
           .placeholder { _ in Color.secondary }

@@ -3,6 +3,7 @@ import Foundation
 enum BasiliskError: Int {
   case invalidAccountValues
   case invalidGivenURL
+  case failedToSendMessage
 
   func wrap(underlyingError: Error) -> NSError {
     let userInfo = self.errorUserInfo.merging([NSUnderlyingErrorKey: underlyingError as Any], uniquingKeysWith: { $1 })
@@ -15,6 +16,7 @@ extension BasiliskError: LocalizedError {
     switch self {
     case .invalidAccountValues: return "Couldn't save changes to your accounts."
     case .invalidGivenURL: return "The given URL was invalid."
+    case .failedToSendMessage: return "Couldn't send message."
     }
   }
 
@@ -22,6 +24,7 @@ extension BasiliskError: LocalizedError {
     switch self {
     case .invalidAccountValues: return "Make sure that your account has well-formed data."
     case .invalidGivenURL: return "Make sure that the URL is well-formed."
+    case .failedToSendMessage: return "Try sending the message again."
     }
   }
 }

@@ -615,6 +615,7 @@ extension ChatViewController: MessagesViewControllerDelegate {
       } catch {
         log.error("failed to send message: \(error, privacy: .public)")
         messagesViewController.appendToConsole(line: "[system] failed to send message: \(error)")
+        presentError(BasiliskError.failedToSendMessage.wrap(underlyingError: error))
       }
     }
   }

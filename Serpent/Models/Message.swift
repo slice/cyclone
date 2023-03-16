@@ -23,13 +23,13 @@ public struct Message: Identifiable {
 
   public struct Reference: Decodable {
     public var channelID: Ref<GuildChannel>
-    public var guildID: Ref<Guild>
+    public var guildID: Ref<Guild>?
     public var messageID: Ref<Message>
 
-    enum CodingKeys: String, CodingKey {
-      case channelID = "channel_id"
-      case guildID = "guild_id"
-      case messageID = "message_id"
+    public init(from decoder: Decoder) throws {
+      channelID = try decoder.decode("channel_id")
+      guildID = try decoder.decodeIfPresent("guild_id")
+      messageID = try decoder.decode("message_id")
     }
   }
 

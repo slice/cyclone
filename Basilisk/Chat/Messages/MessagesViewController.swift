@@ -52,7 +52,7 @@ final class MessagesViewController: NSViewController {
   var cachedMessageHeights: [Message.ID: Double] = [:]
 
   /// The ID of the oldest message this view controller is showing.
-  public var oldestMessageID: Message.ID? { messages.elements[0].value.id }
+  public var oldestMessageID: Message.ID? { messages.elements.first?.value.id }
 
   /// The delegate of the messages view controller.
   public weak var delegate: MessagesViewControllerDelegate?

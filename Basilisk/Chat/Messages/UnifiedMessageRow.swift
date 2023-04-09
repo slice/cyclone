@@ -119,14 +119,94 @@ final class UnifiedMessageRow: NSTableCellView {
       time: .shortened
     )
 
-    if message.content == "" {
-      messageContentLabel.isHidden = true
-    } else {
-      messageContentLabel.stringValue = message.content
-    }
-
+    setupMessageContent(message: message)
     setupAppearance(isGroupHeader: isGroupHeader)
     setupAccessories(message: message, forMeasurements: performingMeasurements)
+  }
+
+  func preprocessMessageContent(_ markdown: String) throws -> AttributedString {
+    guard markdown.contains("\n") else {
+      return try AttributedString(markdown: markdown)
+    }
+
+    // Discord shows linebreaks as-is, but Apple's markdown parser will only
+    // start a new paragraph with two newlines. Replace every newline with two
+    // newlines in the source text so that they display correctly.
+    let postprocessedMarkdown = markdown.replacingOccurrences(of: "\n", with: "\n\n")
+    var attributedString = try AttributedString(markdown: postprocessedMarkdown)
+
+    let newline = AttributedString("\n", attributes: .init([:]))
+    var currentParagraph: Int?
+    var insertedNewlines = 0
+
+    // The newlines have been removed during parsing (?); they exist in the
+    // attributed string as paragraph attributes, but we need to reinsert them
+    // for presentation.
+    guard let lastParagraphIdentity =
+      attributedString.runs.compactMap({ $0.presentationIntent?.components.first(where: { $0.kind == .paragraph })?.identity }).last
+    else {
+      return attributedString
+    }
+
+    for run in attributedString.runs {
+      guard let presentationIntent = run.attributes.presentationIntent,
+            let paragraphIntent = presentationIntent.components.first(where: { $0.kind == .paragraph })
+      else {
+        continue
+      }
+
+      guard paragraphIntent.identity != lastParagraphIdentity else {
+        break
+      }
+
+      if currentParagraph != nil, paragraphIntent.identity == currentParagraph {
+        continue
+      }
+
+      // We need to compensate for every newline we insert, since the run
+      // information we're currently iterating over is only accurate for the
+      // unchanged string.
+      let index = attributedString.index(run.range.upperBound, offsetByCharacters: insertedNewlines)
+      attributedString.insert(newline, at: index)
+      insertedNewlines += 1
+      currentParagraph = paragraphIntent.identity
+    }
+
+    return attributedString
+  }
+
+  func setupMessageContent(message: Message) {
+    let markdown = message.content
+    guard !markdown.isEmpty else {
+      messageContentLabel.isHidden = true
+      return
+    }
+
+    messageContentLabel.maximumNumberOfLines = 0
+    messageContentLabel.usesSingleLineMode = false
+
+    do {
+      var attributedString = try preprocessMessageContent(markdown)
+      attributedString.font = .systemFont(ofSize: NSFont.systemFontSize)
+
+      // Strikethroughs are parsed, but not visually applied. Here, visually
+      // apply them for presentation:
+      for run in attributedString.runs where run.inlinePresentationIntent?.contains(.strikethrough) ?? false {
+        attributedString[run.range].strikethroughStyle = NSUnderlineStyle.single
+      }
+
+      // Using an attributed string makes the text field ignore its paragraph
+      // style properties in favor for the ones on the attributed string; which
+      // by default, seemingly doesn't wrap. Fix that here.
+      let paragraphStyle = NSMutableParagraphStyle()
+      paragraphStyle.lineBreakMode = .byWordWrapping
+      attributedString.paragraphStyle = paragraphStyle
+
+      messageContentLabel.attributedStringValue = NSAttributedString(attributedString)
+    } catch {
+      NSLog("failed to parse message content as markdown: \(String(describing: error))")
+      messageContentLabel.stringValue = "(failed to parse message content)"
+    }
   }
 
   private func clampImageDimensions(width: Double, height: Double) -> (width: Double, height: Double) {

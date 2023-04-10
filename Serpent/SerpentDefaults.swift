@@ -7,4 +7,7 @@ enum SerpentDefaults: String {
   /// Dumps the `READY` and `READY_SUPPLEMENTAL` gateway packets to a temporary
   /// directory.
   case dumpReadyPackets = "SRPNDumpReadyPackets"
+
+  /// Dumps all packets individually to a temporary directory.
+  case dumpAllPackets = "SRPNDumpAllPacketsIndividually"
 }

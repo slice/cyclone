@@ -44,6 +44,9 @@ public class GatewayConnection {
   /// The Discord user token to `IDENTIFY` to the gateway with.
   private var token: String
 
+  /// The point in time marking this connection's creation.
+  private var created: Date
+
   /// A Combine subject for all WebSocket state changes.
   ///
   /// This resolves to the same subject that is exposed on the underlying
@@ -95,7 +98,8 @@ public class GatewayConnection {
   init(token: String, disguise: Disguise) {
     self.token = token
     self.disguise = disguise
-    log = Logger(subsystem: "zone.slice.Serpent", category: "gateway")
+    self.created = Date.now
+    self.log = Logger(subsystem: "zone.slice.Serpent", category: "gateway")
   }
 
   /// Connect to the Discord gateway.
@@ -303,6 +307,20 @@ extension GatewayConnection {
 // MARK: Packet Handling
 
 extension GatewayConnection {
+  private func dumpEventData(data: Data, isBinary: Bool = true) throws {
+    let format = Date.ISO8601FormatStyle(
+      dateSeparator: .dash,
+      dateTimeSeparator: .space,
+      timeSeparator: .omitted
+    )
+    let sequence = self.sequence.map { String($0) } ?? Date.now.formatted(format)
+    let fileExtension = isBinary ? "dat" : "txt"
+    let name = "SerpentGatewayEvent-\(self.created.formatted(format))-\(sequence).\(fileExtension)"
+    let path = FileManager.default.temporaryDirectory.appendingPathComponent(name)
+    NSLog("*** Dumping data to %@", path.absoluteString)
+    try data.write(to: path)
+  }
+
   private func handleWebSocketEvent(_ event: WebSocketEvent) async {
     switch event {
     case let .connectionStateUpdate(connectionState):
@@ -350,7 +368,12 @@ extension GatewayConnection {
           "websocket close frame received with close code: \(String(describing: closeCode))"
         )
     case let .message(data):
-      guard let text = String(data: data, encoding: .utf8) else {
+      let text = String(data: data, encoding: .utf8)
+      if UserDefaults.standard.bool(forKey: SerpentDefaults.dumpAllPackets.rawValue) {
+        try! self.dumpEventData(data: data, isBinary: text == nil)
+      }
+
+      guard let text else {
         log.warning("-> received binary (length: \(data.count))")
         return
       }

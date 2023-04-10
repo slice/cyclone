@@ -243,25 +243,25 @@ public class GatewayConnection {
 
     let identifyPayload: JSON = [
       "d": [
-        "capabilities": disguise.capabilities.rawValue,
+        "capabilities": JSON(disguise.capabilities.rawValue),
         "client_state": [
-          "guild_hashes": [:],
+          "guild_hashes": [:] as JSON,
           "highest_last_message_id": "0",
           "read_state_version": 0,
           "user_guild_settings_version": -1,
           "user_settings_version": -1,
-        ],
+        ] as JSON,
         // TODO(skip): Implement compression.
         "compress": false,
         "presence": [
-          "activities": [],
+          "activities": [] as JSON,
           "afk": false,
           "since": 0,
           "status": "online",
-        ],
+        ] as JSON,
         "properties": superProperties,
         "token": token,
-      ],
+      ] as JSON,
       "op": Opcode.identify.rawValue,
     ]
 

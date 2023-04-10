@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		120849FD29E398D1000BAF7D /* Decompression.swift in Sources */ = {isa = PBXBuildFile; fileRef = 120849FC29E398D1000BAF7D /* Decompression.swift */; };
 		12093A5E281BC11000FAE304 /* BasiliskError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12093A5D281BC11000FAE304 /* BasiliskError.swift */; };
 		120A78D82741E9A70099834B /* WebSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 120A78D72741E9A70099834B /* WebSocket.swift */; };
 		120A78DB2741F9BE0099834B /* WebSocketEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 120A78DA2741F9BE0099834B /* WebSocketEvent.swift */; };
@@ -178,6 +179,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		120849FC29E398D1000BAF7D /* Decompression.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Decompression.swift; sourceTree = "<group>"; };
 		12093A5D281BC11000FAE304 /* BasiliskError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasiliskError.swift; sourceTree = "<group>"; };
 		120A78D72741E9A70099834B /* WebSocket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocket.swift; sourceTree = "<group>"; };
 		120A78DA2741F9BE0099834B /* WebSocketEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketEvent.swift; sourceTree = "<group>"; };
@@ -471,6 +473,7 @@
 			isa = PBXGroup;
 			children = (
 				12897BF3273E2BF400403E5B /* Opcode.swift */,
+				120849FC29E398D1000BAF7D /* Decompression.swift */,
 				12897BF1273E25C700403E5B /* GatewayConnection.swift */,
 				129AF794273E653100B3851C /* GatewayPacket.swift */,
 				1259D6E328176E0E006AE1D1 /* AnyGatewayPacket.swift */,
@@ -975,6 +978,7 @@
 				12AB415E28691A0300D54786 /* Cache.swift in Sources */,
 				12880BC528B4E7E400A01238 /* JSON+Reparse.swift in Sources */,
 				12552C9C273F3DDA007D92B1 /* HTTP.swift in Sources */,
+				120849FD29E398D1000BAF7D /* Decompression.swift in Sources */,
 				B8EFC2F6275197ED0010B894 /* PermissionOverwrites.swift in Sources */,
 				12945081274D3A240024C744 /* Message.swift in Sources */,
 				128C7673273DFD0E008FD585 /* Client.swift in Sources */,

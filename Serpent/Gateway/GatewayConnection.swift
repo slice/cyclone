@@ -47,6 +47,9 @@ public class GatewayConnection {
   /// The point in time marking this connection's creation.
   private var created: Date
 
+  private var decompression: Decompression?
+  private var decompressionBuffer: Data?
+
   /// A Combine subject for all WebSocket state changes.
   ///
   /// This resolves to the same subject that is exposed on the underlying
@@ -117,6 +120,16 @@ public class GatewayConnection {
       ("Pragma", "no-cache"),
       ("User-Agent", disguise.userAgent),
     ]
+
+    if gatewayURL.relativeString.contains("zlib-stream") {
+      log.info("setting up decompression context")
+      decompressionBuffer = Data()
+      do {
+        decompression = try Decompression()
+      } catch {
+        fatalError("failed to set up decompression context: \(error)")
+      }
+    }
 
     socket = WebSocket(
       endpoint: gatewayURL,
@@ -367,16 +380,48 @@ extension GatewayConnection {
         .info(
           "websocket close frame received with close code: \(String(describing: closeCode))"
         )
-    case let .message(data):
-      let text = String(data: data, encoding: .utf8)
+    case let .message(wireData):
+      // TODO: Only accept either compressed or raw packets all the time, so we
+      // don't have to waste time checking.
+      var preliminaryText = String(data: wireData, encoding: .utf8)
+      let isBinary = preliminaryText == nil
+
       if UserDefaults.standard.bool(forKey: SerpentDefaults.dumpAllPackets.rawValue) {
-        try! self.dumpEventData(data: data, isBinary: text == nil)
+        try! self.dumpEventData(data: wireData, isBinary: isBinary)
       }
 
-      guard let text else {
-        log.warning("-> received binary (length: \(data.count))")
-        return
+      var decompressedData: Data?
+      if isBinary {
+        guard let decompression else {
+          fatalError("received binary message, but no decompressor was set up")
+        }
+
+        log.debug("received binary packet with len \(wireData.count)")
+
+        // Drop the zlib header (important), because Compression.framework
+        // doesn't recognize it.
+        let wireDataWithoutHeader = wireData.first == 0x78 ? wireData.dropFirst(2) : wireData
+        decompressionBuffer!.append(wireDataWithoutHeader)
+
+        if wireData.suffix(4) == [0x0, 0x0, 0xff, 0xff] {
+          log.debug("noticed Z_SYNC_FLUSH, decompressing")
+          do {
+            decompressedData = try decompression.decompress(completeBuffer: decompressionBuffer!)
+            guard let decompressedText = String(data: decompressedData!, encoding: .utf8) else {
+              fatalError("decompressed data wasn't valid UTF-8")
+            }
+
+            log.debug("decompressed OK (over wire: \(wireData.count), actual: \(decompressedData!.count))")
+            preliminaryText = decompressedText
+          } catch {
+            fatalError("failed to decompress: \(error)")
+          }
+          decompressionBuffer = Data()
+        }
       }
+
+      let text = preliminaryText!
+      let data = isBinary ? decompressedData! : wireData
 
       if UserDefaults.standard.bool(forKey: SerpentDefaults.logReceivedWebSocketMessages.rawValue) {
         log.info("-> \(text)")

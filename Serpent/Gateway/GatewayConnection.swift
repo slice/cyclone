@@ -386,7 +386,7 @@ extension GatewayConnection {
         try await handlePacket(ofJSON: text, raw: data)
       } catch {
         log
-          .error("failed to handle packet: \(error.localizedDescription)")
+          .error("failed to handle packet: \(error.localizedDescription), \(error)")
       }
     }
   }

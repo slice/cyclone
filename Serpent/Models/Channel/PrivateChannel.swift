@@ -3,7 +3,7 @@ private enum PrivateChannelError: Error {
 }
 
 /// An enumeration representing either a group DM or DM channel.
-public enum PrivateChannel: Identifiable, Equatable {
+public enum PrivateChannel: Identifiable, Equatable, Hashable {
   case groupDM(GroupDMChannel)
   case dm(DMChannel)
 

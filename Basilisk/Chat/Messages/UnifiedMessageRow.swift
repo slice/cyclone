@@ -70,13 +70,14 @@ final class UnifiedMessageRow: NSTableCellView {
 
   /// Configures a unified message row to display a message.
   func configure(withMessage message: Message, isGroupHeader: Bool, forMeasurements performingMeasurements: Bool = false, replyingToAbove: Bool = false) {
-    var authorNameView = MessageAuthorNameView(authorName: message.author.username)
+    let author = message.author
+    var authorNameView = MessageAuthorNameView(authorName: author.globalName ?? author.username)
     if hostedAuthorView == nil {
       hostedAuthorView = NSHostingView(rootView: authorNameView)
     }
 
     if message.reference != nil, case let .reference(referenced) = message.referencedMessage {
-      let toThemselves = referenced.author.id == message.author.id
+      let toThemselves = referenced.author.id == author.id
       let target = toThemselves ? "themselves" : referenced.author.username
 
       authorNameView.referencedAuthorName = target
@@ -110,7 +111,7 @@ final class UnifiedMessageRow: NSTableCellView {
     }
 
     roundingView.radius = 10
-    if let avatar = message.author.avatar {
+    if let avatar = author.avatar {
       avatarImageView.setImage(loadingFrom: avatar.url(withFileExtension: "png"))
     }
 

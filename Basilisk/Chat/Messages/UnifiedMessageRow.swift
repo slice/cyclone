@@ -58,14 +58,6 @@ final class UnifiedMessageRow: NSTableCellView {
     super.awakeFromNib()
     authorLabel.font = .systemFont(ofSize: 13.0, weight: .semibold)
     timestampLabel.font = .systemFont(ofSize: 11.0)
-    messageContentLabel.textColor = NSColor(name: nil) { appearance in
-      switch appearance.bestMatch(from: [.aqua, .darkAqua]) {
-      case .some(.darkAqua):
-        return .labelColor.withAlphaComponent(0.65)
-      default:
-        return .labelColor
-      }
-    }
   }
 
   /// Configures a unified message row to display a message.
@@ -186,7 +178,6 @@ final class UnifiedMessageRow: NSTableCellView {
 
     do {
       var attributedString = try preprocessMessageContent(markdown)
-      attributedString.font = .systemFont(ofSize: NSFont.systemFontSize)
 
       // Strikethroughs are parsed, but not visually applied. Here, visually
       // apply them for presentation:
@@ -200,6 +191,9 @@ final class UnifiedMessageRow: NSTableCellView {
       let paragraphStyle = NSMutableParagraphStyle()
       paragraphStyle.lineBreakMode = .byWordWrapping
       attributedString.paragraphStyle = paragraphStyle
+
+      attributedString.foregroundColor = NSColor(named: "messageContentColor")
+      attributedString.font = .systemFont(ofSize: NSFont.systemFontSize)
 
       messageContentLabel.attributedStringValue = NSAttributedString(attributedString)
     } catch {

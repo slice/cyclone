@@ -315,9 +315,9 @@ final class UnifiedMessageRow: NSTableCellView {
     pinIdentityToTopOfHeader.isActive = isGroupHeader
     pinContentToTopOfHeader.isActive = !isGroupHeader
 
-    pinHeaderToTopOfCell.constant = isGroupHeader ? 10 : 2
-    pinHeaderToBottomOfCell.constant = isGroupHeader ? 0 : 2
-    pinAvatarToTopOfCell.constant = isGroupHeader ? 10 : 5
+    pinHeaderToTopOfCell.constant = isGroupHeader ? 5 : 0
+    pinHeaderToBottomOfCell.constant = 5
+    pinAvatarToTopOfCell.constant = 5
 
     headerContentHeightConstraint.isActive = isGroupHeader
     self.isGroupHeader = isGroupHeader

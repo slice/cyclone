@@ -104,6 +104,7 @@
 		12EB5FA42866A4200012F938 /* HTTPInspector.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 12EB5FA32866A41F0012F938 /* HTTPInspector.storyboard */; };
 		12EB5FA62866A46D0012F938 /* HTTPInspectorController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12EB5FA52866A46D0012F938 /* HTTPInspectorController.swift */; };
 		12EB5FA92866ACB80012F938 /* HTTPInspectorBodyHeadersController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12EB5FA82866ACB80012F938 /* HTTPInspectorBodyHeadersController.swift */; };
+		12EC06CC2A319B8300053133 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 12F4FD87273DFC1B00B6AE64 /* Assets.xcassets */; };
 		12F4FD84273DFC1900B6AE64 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12F4FD83273DFC1900B6AE64 /* AppDelegate.swift */; };
 		12F4FD86273DFC1900B6AE64 /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12F4FD85273DFC1900B6AE64 /* ChatViewController.swift */; };
 		12F4FD8B273DFC1B00B6AE64 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 12F4FD89273DFC1B00B6AE64 /* Main.storyboard */; };
@@ -848,6 +849,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				12EC06CC2A319B8300053133 /* Assets.xcassets in Resources */,
 				120BB45129148CBF00AD910D /* ClickMid.aif in Resources */,
 				120BB44E29148C5300AD910D /* ClickHigh.aif in Resources */,
 				120BB44F29148C5300AD910D /* ClickLow.aif in Resources */,

@@ -38,7 +38,7 @@ extension Attachment: Decodable {
     } else {
       contentType = nil
     }
-    size = Measurement(value: try decoder.decode("size", as: Double.self), unit: UnitInformationStorage.bytes)
+    size = try Measurement(value: decoder.decode("size", as: Double.self), unit: UnitInformationStorage.bytes)
     url = try decoder.decode("url")
     proxyURL = try decoder.decode("proxy_url")
     height = try decoder.decodeIfPresent("height")

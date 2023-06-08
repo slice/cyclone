@@ -11,8 +11,8 @@ enum PacketDirection {
   /// A corresponding SF Symbol image name for the direction.
   var systemImageName: String {
     switch self {
-    case .received: return "arrow.down"
-    case .sent: return "paperplane.fill"
+    case .received: "arrow.down"
+    case .sent: "paperplane.fill"
     }
   }
 }

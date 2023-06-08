@@ -10,11 +10,11 @@ struct TypingView: View {
   static func separator(offset: Int, total: Int) -> String {
     switch offset {
     case total - 2:
-      return total > 2 ? ", and " : " and "
+      total > 2 ? ", and " : " and "
     case total - 1:
-      return ""
+      ""
     default:
-      return ", "
+      ", "
     }
   }
 

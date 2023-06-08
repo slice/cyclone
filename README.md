@@ -17,5 +17,5 @@ Goals, in order of descending priority:
 
 ## Requirements
 
-Swift 5.7 (Xcode 14.0) or later is required to build. Basilisk targets macOS
+Swift 5.9 (Xcode 15.0) or later is required to build. Basilisk targets macOS
 12.4 (Monterey) or newer, and will not launch on older versions.

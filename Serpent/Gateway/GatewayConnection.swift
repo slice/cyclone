@@ -8,9 +8,9 @@ extension NWConnection.State {
   /// A Boolean indicating whether the connection was severed.
   var didDisconnect: Bool {
     switch self {
-    case .failed: return true
-    case .cancelled: return true
-    default: return false
+    case .failed: true
+    case .cancelled: true
+    default: false
     }
   }
 }
@@ -217,7 +217,7 @@ public class GatewayConnection {
   public func updateGuildSubscription(for guildID: Guild.ID, subscription: GuildSubscription) async throws {
     let json: JSON = [
       "op": Opcode.guildSubscriptions.rawValue,
-      "d": JSON(try subscription.encoded()),
+      "d": try JSON(subscription.encoded()),
     ]
     try await send(json: json)
     guildSubscriptions[guildID] = subscription
@@ -252,7 +252,7 @@ public class GatewayConnection {
   /// `IDENTIFY` to the Discord gateway.
   public func identify() async throws {
     // Last update: 2021-11-11
-    let superProperties = JSON(try disguise.superProperties.encoded())
+    let superProperties = try JSON(disguise.superProperties.encoded())
 
     let identifyPayload: JSON = [
       "d": [

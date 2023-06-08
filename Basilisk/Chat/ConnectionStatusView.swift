@@ -7,9 +7,9 @@ enum ConnectionStatus {
 
   var color: NSColor {
     switch self {
-    case .connecting: return .systemOrange
-    case .connected: return .systemGreen
-    case .disconnected: return .systemRed
+    case .connecting: .systemOrange
+    case .connected: .systemGreen
+    case .disconnected: .systemRed
     }
   }
 }

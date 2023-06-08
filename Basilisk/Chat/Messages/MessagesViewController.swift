@@ -306,19 +306,17 @@ final class MessagesViewController: NSViewController {
         return
       }
 
-      let newPosition: Double
-
-      switch behavior {
+      let newPosition: Double = switch behavior {
       case .addingHeightDifference:
         // Scroll to where we were before, but also accounting for the new
         // messages at the top.
-        newPosition = savedScrollPosition + (newHeight - savedContentHeight)
+        savedScrollPosition + (newHeight - savedContentHeight)
       case .usingSavedPosition:
         // Scroll to where we were before.
-        newPosition = savedScrollPosition
+        savedScrollPosition
       case .toBottom:
         // Scroll to the bottom of the scroll view.
-        newPosition = scrollView.bottomYCoordinate
+        scrollView.bottomYCoordinate
       }
 
       scrollView.contentView.scroll(to: NSPoint(x: 0.0, y: newPosition))

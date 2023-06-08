@@ -14,17 +14,17 @@ enum BasiliskError: Int {
 extension BasiliskError: LocalizedError {
   var errorDescription: String? {
     switch self {
-    case .invalidAccountValues: return "Couldn't save changes to your accounts."
-    case .invalidGivenURL: return "The given URL was invalid."
-    case .failedToSendMessage: return "Couldn't send message."
+    case .invalidAccountValues: "Couldn't save changes to your accounts."
+    case .invalidGivenURL: "The given URL was invalid."
+    case .failedToSendMessage: "Couldn't send message."
     }
   }
 
   var recoverySuggestion: String? {
     switch self {
-    case .invalidAccountValues: return "Make sure that your account has well-formed data."
-    case .invalidGivenURL: return "Make sure that the URL is well-formed."
-    case .failedToSendMessage: return "Try sending the message again."
+    case .invalidAccountValues: "Make sure that your account has well-formed data."
+    case .invalidGivenURL: "Make sure that the URL is well-formed."
+    case .failedToSendMessage: "Try sending the message again."
     }
   }
 }

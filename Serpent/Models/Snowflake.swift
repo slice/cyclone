@@ -48,7 +48,7 @@ extension Snowflake: Encodable {
 extension Snowflake: Decodable {
   public init(from decoder: Decoder) throws {
     let value = try decoder.singleValueContainer()
-    guard let numeric = UInt64(try value.decode(String.self)) else {
+    guard let numeric = try UInt64(value.decode(String.self)) else {
       fatalError("snowflake couldn't fit into uint64, is the year 2154?")
     }
     uint64 = numeric

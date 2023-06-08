@@ -19,7 +19,7 @@ public struct AnyGatewayPacket {
   /// data payload, returning the event data.
   public func reparse<T: Decodable>() throws -> T {
     let decoder = SerpentJSONDecoder()
-    guard let data = (try decoder.decode(GatewayPacket<T>.self, from: raw)).eventData else {
+    guard let data = try (decoder.decode(GatewayPacket<T>.self, from: raw)).eventData else {
       throw Error.missingEventData
     }
     return data

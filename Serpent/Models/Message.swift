@@ -5,7 +5,7 @@ public enum MessageReferenceWrapper {
 
 extension MessageReferenceWrapper: Decodable {
   public init(from decoder: Decoder) throws {
-    self = .reference(try decoder.decodeSingleValue())
+    self = try .reference(decoder.decodeSingleValue())
   }
 }
 

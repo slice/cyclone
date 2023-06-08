@@ -46,7 +46,7 @@ struct Permissions: OptionSet {
 
 extension Permissions: Decodable {
   public init(from decoder: Decoder) throws {
-    self = Permissions(rawValue: try decoder.decodeSingleIntString())
+    self = try Permissions(rawValue: decoder.decodeSingleIntString())
   }
 }
 

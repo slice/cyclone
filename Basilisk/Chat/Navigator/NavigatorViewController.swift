@@ -109,10 +109,10 @@ extension NavigatorViewController: NSOutlineViewDataSource {
   func outlineView(_: NSOutlineView, isItemExpandable item: Any) -> Bool {
     switch item {
     case is NavigatorOutlineItem:
-      return true
+      true
     case let channel as ChannelRef:
-      return channel.type == .category
-    default: return false
+      channel.type == .category
+    default: false
     }
   }
 
@@ -154,15 +154,15 @@ private extension ChannelType {
   var systemSymbolName: String {
     switch self {
     case .category:
-      return "folder.fill"
+      "folder.fill"
     case .dm:
-      return "person.crop.circle.fill"
+      "person.crop.circle.fill"
     case .groupDM:
-      return "person.2.circle.fill"
+      "person.2.circle.fill"
     case .voice:
-      return "speaker.wave.2.fill"
+      "speaker.wave.2.fill"
     default:
-      return "number"
+      "number"
     }
   }
 }
@@ -175,14 +175,13 @@ extension NavigatorViewController: NSOutlineViewDelegate {
       case .section:
         let view = outlineView.makeView(withIdentifier: .navigatorSection, owner: nil) as! NSTableCellView
 
-        let name: String
-        switch item.id {
+        let name: String = switch item.id {
         case "pinned":
-          name = "Pinned"
+          "Pinned"
         case "dms":
-          name = "Direct Messages"
+          "Direct Messages"
         case "guilds":
-          name = "Servers"
+          "Servers"
         default:
           preconditionFailure()
         }

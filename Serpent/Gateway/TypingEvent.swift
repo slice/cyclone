@@ -14,6 +14,6 @@ extension TypingEvent: Decodable {
     channel = try decoder.decode("channel_id")
     guild = try decoder.decodeIfPresent("guild_id")
     user = try decoder.decode("user_id")
-    timestamp = Date(timeIntervalSince1970: try decoder.decode("timestamp", as: Double.self))
+    timestamp = try Date(timeIntervalSince1970: decoder.decode("timestamp", as: Double.self))
   }
 }

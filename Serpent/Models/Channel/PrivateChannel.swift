@@ -23,8 +23,8 @@ public enum PrivateChannel: Identifiable, Equatable, Hashable {
 
   public var type: ChannelType {
     switch self {
-    case .groupDM: return ChannelType.groupDM
-    case .dm: return ChannelType.dm
+    case .groupDM: ChannelType.groupDM
+    case .dm: ChannelType.dm
     }
   }
 
@@ -42,12 +42,12 @@ public enum PrivateChannel: Identifiable, Equatable, Hashable {
 
 extension PrivateChannel: Decodable {
   public init(from decoder: Decoder) throws {
-    let type = ChannelType(rawValue: try decoder.decode("type"))
+    let type = try ChannelType(rawValue: decoder.decode("type"))
 
     if type == .dm {
-      self = .dm(try DMChannel(from: decoder))
+      self = try .dm(DMChannel(from: decoder))
     } else if type == .groupDM {
-      self = .groupDM(try GroupDMChannel(from: decoder))
+      self = try .groupDM(GroupDMChannel(from: decoder))
     } else {
       throw PrivateChannelError.channelWasNotDMOrGroupDM
     }

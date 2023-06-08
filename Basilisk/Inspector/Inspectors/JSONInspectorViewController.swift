@@ -87,10 +87,10 @@ struct JSONArrayValue {
 /// Downcasts `Any` into some kind of optionally keyed JSON value.
 private func downcastJSON(_ item: Any) -> (key: String?, value: JSON)? {
   switch item {
-  case let json as JSON: return (key: nil, value: json)
-  case let objectPair as JSONObjectPair: return (key: objectPair.key, value: objectPair.value)
-  case let arrayValue as JSONArrayValue: return (key: String(arrayValue.index), value: arrayValue.value)
-  default: return nil
+  case let json as JSON: (key: nil, value: json)
+  case let objectPair as JSONObjectPair: (key: objectPair.key, value: objectPair.value)
+  case let arrayValue as JSONArrayValue: (key: String(arrayValue.index), value: arrayValue.value)
+  default: nil
   }
 }
 
@@ -117,13 +117,13 @@ private extension JSON {
   /// Returns a system image name representing this JSON value.
   var systemImage: String {
     switch type {
-    case .array: return "list.number"
-    case .dictionary: return "curlybraces"
-    case .string: return "textformat.size"
-    case .bool: return "seal.fill"
-    case .number: return "textformat.123"
-    case .null: return "sparkle"
-    default: return "questionmark.circle.fill"
+    case .array: "list.number"
+    case .dictionary: "curlybraces"
+    case .string: "textformat.size"
+    case .bool: "seal.fill"
+    case .number: "textformat.123"
+    case .null: "sparkle"
+    default: "questionmark.circle.fill"
     }
   }
 }

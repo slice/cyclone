@@ -4,6 +4,7 @@ public struct CurrentUser: Identifiable {
   public let id: Snowflake
   public let discriminator: String
   public let avatar: Asset?
+  public let globalName: String?
 }
 
 extension CurrentUser: Decodable {
@@ -17,5 +18,6 @@ extension CurrentUser: Decodable {
     } else {
       avatar = nil
     }
+    globalName = try decoder.decodeIfPresent("global_name")
   }
 }

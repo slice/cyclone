@@ -4,6 +4,7 @@ public struct User: Identifiable {
   public let id: Snowflake
   public let discriminator: String
   public let avatar: Asset?
+  public let globalName: String?
 
   public init(fakeWithName name: String, id: Snowflake) {
     username = name
@@ -11,6 +12,7 @@ public struct User: Identifiable {
     self.id = id
     discriminator = "0001"
     avatar = nil
+    globalName = nil
   }
 }
 
@@ -32,5 +34,6 @@ extension User: Decodable {
     self.id = id
     discriminator = try decoder.decode("discriminator")
     avatar = try decoder.decodeIfPresent("avatar").map { Asset(type: .avatar, parent: id, hash: $0) }
+    globalName = try decoder.decodeIfPresent("global_name")
   }
 }

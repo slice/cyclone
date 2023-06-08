@@ -34,6 +34,7 @@ struct ReferencedMessagePreviewView: View {
       if displayArrow {
         Image(systemName: "arrowshape.turn.up.left.circle.fill")
           .imageScale(.large)
+          .foregroundStyle(.secondary)
       }
       Group {
         if hasContent {

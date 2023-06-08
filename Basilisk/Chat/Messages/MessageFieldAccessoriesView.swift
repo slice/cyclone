@@ -10,7 +10,7 @@ struct MessageFieldAccessoriesView: View {
         HStack(spacing: 5) {
           Image(systemName: "arrowshape.turn.up.left.circle.fill")
           Text("Replying to")
-          AvatarView(asset: replyingToMessage.author.avatar)
+          AvatarView(asset: replyingToMessage.author.displayAvatar)
             .frame(width: 16, height: 16)
           Text(verbatim: replyingToMessage.author.username)
             .fontWeight(.medium)

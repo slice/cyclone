@@ -27,7 +27,7 @@ struct TypingView: View {
         let separator = Self.separator(offset: pair.offset, total: total)
 
         HStack(spacing: 4.0) {
-          AvatarView(asset: pair.element.avatar)
+          AvatarView(asset: pair.element.displayAvatar)
             .frame(width: 15, height: 15)
 
           HStack(spacing: 0) {

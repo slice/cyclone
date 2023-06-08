@@ -232,7 +232,7 @@ extension NavigatorViewController: NSOutlineViewDelegate {
           view.roundingView.radius = 0
 
           if let recipient = participants?.first {
-            if let recipientAvatarURL = participants?.first?.avatar?.url(withFileExtension: "png") {
+            if let recipientAvatarURL = participants?.first?.displayAvatar.url(withFileExtension: "png") {
               imageView.setImage(loadingFrom: recipientAvatarURL)
               view.roundingView.radius = 6.0
             }

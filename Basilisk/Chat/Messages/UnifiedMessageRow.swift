@@ -84,7 +84,7 @@ final class UnifiedMessageRow: NSTableCellView {
       authorNameView.replyingToThemselves = toThemselves
       authorNameView.replyingToAbove = replyingToAbove
       if !toThemselves {
-        authorNameView.referencedAvatar = referenced.author.avatar
+        authorNameView.referencedAvatar = referenced.author.displayAvatar
       }
 
       if !replyingToAbove {
@@ -111,9 +111,7 @@ final class UnifiedMessageRow: NSTableCellView {
     }
 
     roundingView.radius = 10
-    if let avatar = author.avatar {
-      avatarImageView.setImage(loadingFrom: avatar.url(withFileExtension: "png"))
-    }
+    avatarImageView.setImage(loadingFrom: author.displayAvatar.url(withFileExtension: "png"))
 
     timestampLabel.stringValue = message.id.timestamp.formatted(
       date: Calendar.current.isDate(message.id.timestamp, inSameDayAs: Date.now) ? .omitted : .numeric,

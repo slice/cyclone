@@ -5,6 +5,17 @@ public struct User: Identifiable {
   public let discriminator: String
   public let avatar: Asset?
   public let globalName: String?
+  public var displayAvatar: Asset {
+    avatar ?? Asset(defaultAvatarForUser: self)
+  }
+
+  /// Returns a boolean indicating whether the user has migrated to Discord's
+  /// 2023 username system.
+  ///
+  /// For more information, see: https://support.discord.com/hc/en-us/articles/12620128861463
+  public var pomelo: Bool {
+    discriminator == "0"
+  }
 
   public init(fakeWithName name: String, id: Snowflake) {
     username = name

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="22113.1" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21507"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22113.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -783,7 +783,7 @@
                                                             <rect key="frame" x="11" y="0.0" width="136" height="17"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
-                                                                <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="4lS-tX-HbW">
+                                                                <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="4lS-tX-HbW">
                                                                     <rect key="frame" x="-2" y="0.0" width="140" height="17"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="height" constant="17" placeholder="YES" id="Zxr-4r-c7h"/>
@@ -805,8 +805,8 @@
                                                                 <outlet property="textField" destination="4lS-tX-HbW" id="K4O-nx-8ev"/>
                                                             </connections>
                                                         </tableCellView>
-                                                        <tableCellView identifier="navigator-guild" misplaced="YES" id="DkZ-ri-6FU" customClass="NavigatorGuildCellView" customModule="Basilisk" customModuleProvider="target">
-                                                            <rect key="frame" x="11" y="17" width="136" height="22"/>
+                                                        <tableCellView identifier="navigator-guild" id="DkZ-ri-6FU" customClass="NavigatorGuildCellView" customModule="Basilisk" customModuleProvider="target">
+                                                            <rect key="frame" x="11" y="17" width="136" height="29"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <customView translatesAutoresizingMaskIntoConstraints="NO" id="ou4-J3-pYV" customClass="RoundingView" customModule="Basilisk" customModuleProvider="target">
@@ -815,6 +815,7 @@
                                                                         <imageView translatesAutoresizingMaskIntoConstraints="NO" id="wCk-VF-9GW">
                                                                             <rect key="frame" x="0.0" y="-5" width="20" height="32"/>
                                                                             <imageCell key="cell" refusesFirstResponder="YES" imageScaling="proportionallyDown" image="NSActionTemplate" id="v0N-0J-iIt"/>
+                                                                            <color key="contentTintColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                                                         </imageView>
                                                                     </subviews>
                                                                     <constraints>
@@ -826,7 +827,7 @@
                                                                         <constraint firstItem="wCk-VF-9GW" firstAttribute="top" secondItem="ou4-J3-pYV" secondAttribute="top" id="vma-nr-yph"/>
                                                                     </constraints>
                                                                 </customView>
-                                                                <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="4gS-ZA-v9i">
+                                                                <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="4gS-ZA-v9i">
                                                                     <rect key="frame" x="25" y="7" width="103" height="16"/>
                                                                     <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="lns-ab-AnD">
                                                                         <font key="font" metaFont="system"/>
@@ -907,7 +908,7 @@
                                         <stackView distribution="fill" orientation="horizontal" alignment="centerY" spacing="2" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wj9-Ig-jWf">
                                             <rect key="frame" x="7" y="0.0" width="438" height="30"/>
                                             <subviews>
-                                                <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="oyw-fz-ciD">
+                                                <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="oyw-fz-ciD">
                                                     <rect key="frame" x="-2" y="7" width="385" height="16"/>
                                                     <textFieldCell key="cell" lineBreakMode="clipping" title=":3" id="OUc-70-WFn">
                                                         <font key="font" metaFont="system"/>
@@ -915,7 +916,7 @@
                                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                     </textFieldCell>
                                                 </textField>
-                                                <textField horizontalHuggingPriority="751" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="oTL-04-r6T">
+                                                <textField focusRingType="none" horizontalHuggingPriority="751" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="oTL-04-r6T">
                                                     <rect key="frame" x="381" y="8" width="33" height="14"/>
                                                     <textFieldCell key="cell" lineBreakMode="clipping" title="Label" id="xNJ-wY-wbj">
                                                         <font key="font" metaFont="smallSystem"/>

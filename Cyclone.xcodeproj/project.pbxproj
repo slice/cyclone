@@ -109,8 +109,8 @@
 		12F4FD86273DFC1900B6AE64 /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12F4FD85273DFC1900B6AE64 /* ChatViewController.swift */; };
 		12F4FD8B273DFC1B00B6AE64 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 12F4FD89273DFC1B00B6AE64 /* Main.storyboard */; };
 		12F4FD96273DFC1B00B6AE64 /* CycloneTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12F4FD95273DFC1B00B6AE64 /* CycloneTests.swift */; };
-		12F4FDA0273DFC1B00B6AE64 /* BasiliskUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12F4FD9F273DFC1B00B6AE64 /* BasiliskUITests.swift */; };
-		12F4FDA2273DFC1B00B6AE64 /* BasiliskUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12F4FDA1273DFC1B00B6AE64 /* BasiliskUITestsLaunchTests.swift */; };
+		12F4FDA0273DFC1B00B6AE64 /* CycloneUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12F4FD9F273DFC1B00B6AE64 /* CycloneUITests.swift */; };
+		12F4FDA2273DFC1B00B6AE64 /* CycloneUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12F4FDA1273DFC1B00B6AE64 /* CycloneUITestsLaunchTests.swift */; };
 		12F4FDB7273DFCD000B6AE64 /* Tempest.docc in Sources */ = {isa = PBXBuildFile; fileRef = 12F4FDB6273DFCD000B6AE64 /* Tempest.docc */; };
 		12F4FDBD273DFCD000B6AE64 /* Tempest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 12F4FDB3273DFCD000B6AE64 /* Tempest.framework */; };
 		12F4FDC4273DFCD000B6AE64 /* TempestTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12F4FDC3273DFCD000B6AE64 /* TempestTests.swift */; };
@@ -278,8 +278,8 @@
 		12F4FD91273DFC1B00B6AE64 /* CycloneTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CycloneTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		12F4FD95273DFC1B00B6AE64 /* CycloneTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CycloneTests.swift; sourceTree = "<group>"; };
 		12F4FD9B273DFC1B00B6AE64 /* CycloneUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CycloneUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		12F4FD9F273DFC1B00B6AE64 /* BasiliskUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasiliskUITests.swift; sourceTree = "<group>"; };
-		12F4FDA1273DFC1B00B6AE64 /* BasiliskUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasiliskUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		12F4FD9F273DFC1B00B6AE64 /* CycloneUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CycloneUITests.swift; sourceTree = "<group>"; };
+		12F4FDA1273DFC1B00B6AE64 /* CycloneUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CycloneUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		12F4FDB3273DFCD000B6AE64 /* Tempest.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Tempest.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		12F4FDB5273DFCD000B6AE64 /* Tempest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Tempest.h; sourceTree = "<group>"; };
 		12F4FDB6273DFCD000B6AE64 /* Tempest.docc */ = {isa = PBXFileReference; lastKnownFileType = folder.documentationcatalog; path = Tempest.docc; sourceTree = "<group>"; };
@@ -624,8 +624,8 @@
 		12F4FD9E273DFC1B00B6AE64 /* CycloneUITests */ = {
 			isa = PBXGroup;
 			children = (
-				12F4FD9F273DFC1B00B6AE64 /* BasiliskUITests.swift */,
-				12F4FDA1273DFC1B00B6AE64 /* BasiliskUITestsLaunchTests.swift */,
+				12F4FD9F273DFC1B00B6AE64 /* CycloneUITests.swift */,
+				12F4FDA1273DFC1B00B6AE64 /* CycloneUITestsLaunchTests.swift */,
 			);
 			path = CycloneUITests;
 			sourceTree = "<group>";
@@ -962,8 +962,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				12F4FDA2273DFC1B00B6AE64 /* BasiliskUITestsLaunchTests.swift in Sources */,
-				12F4FDA0273DFC1B00B6AE64 /* BasiliskUITests.swift in Sources */,
+				12F4FDA2273DFC1B00B6AE64 /* CycloneUITestsLaunchTests.swift in Sources */,
+				12F4FDA0273DFC1B00B6AE64 /* CycloneUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

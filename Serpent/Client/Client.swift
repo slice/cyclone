@@ -121,7 +121,7 @@ public class Client {
 
   func dumpPacket(_ packet: AnyGatewayPacket, named name: String) throws {
     let formattedDate = Date.now.formatted(.iso8601)
-    let temporaryFilePath = FileManager.default.temporaryDirectory.appendingPathComponent("Basilisk\(name)Packet-\(formattedDate).json")
+    let temporaryFilePath = FileManager.default.temporaryDirectory.appendingPathComponent("Cyclone\(name)Packet-\(formattedDate).json")
     try packet.raw.write(to: temporaryFilePath)
     log.info("dumped \(name) packet to \(temporaryFilePath)")
   }

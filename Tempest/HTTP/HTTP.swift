@@ -33,7 +33,7 @@ public class HTTP {
     self.token = token
     self.disguise = disguise
 
-    log = Logger(subsystem: "zone.slice.Serpent", category: "http")
+    log = Logger(subsystem: "zone.slice.Tempest", category: "http")
 
     let configuration = URLSessionConfiguration.default
     configuration.httpCookieAcceptPolicy = .always

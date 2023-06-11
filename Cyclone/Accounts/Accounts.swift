@@ -1,11 +1,11 @@
 import Foundation
-import Serpent
+import Tempest
 
 actor Accounts {
   /// The array of saved accounts.
   static var accounts: [Account.ID: Account] = [:]
 
-  /// The active Serpent `Client` objects for each account.
+  /// The active Tempest `Client` objects for each account.
   static var clients: [Account: Client] = [:]
 
   static func dataDirectory() -> URL {

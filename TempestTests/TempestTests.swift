@@ -1,4 +1,4 @@
-@testable import Serpent
+@testable import Tempest
 import XCTest
 
 class SerpentTests: XCTestCase {

@@ -88,7 +88,7 @@ public class Client {
     // TODO(skip): Don't hardcode these. Scrape the necessary values at runtime.
     disguise = Self.defaultDisguise
 
-    log = Logger(subsystem: "zone.slice.Serpent", category: "client")
+    log = Logger(subsystem: "zone.slice.Tempest", category: "client")
     gatewayConnection = GatewayConnection(
       token: self.token,
       disguise: disguise

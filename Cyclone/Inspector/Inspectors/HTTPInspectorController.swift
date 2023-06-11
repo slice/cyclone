@@ -1,6 +1,6 @@
 import Cocoa
 import OrderedCollections
-import Serpent
+import Tempest
 
 class HTTPInspectorController: NSViewController {
   @IBOutlet var requestSummaryLabel: NSTextField!

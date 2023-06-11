@@ -1,4 +1,5 @@
-import Serpent
+import Foundation
+import Tempest
 
 /// A channel reference wrapper.
 ///

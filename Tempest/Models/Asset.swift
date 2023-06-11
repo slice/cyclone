@@ -1,3 +1,5 @@
+import Foundation
+
 public enum AssetType: String, CaseIterable {
   case icon = "icons"
   case avatar = "avatars"

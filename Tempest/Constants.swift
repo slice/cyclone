@@ -1,3 +1,5 @@
+import Foundation
+
 /// Important constants and URLs.
 public enum Constants {
   /// The Discord epoch.

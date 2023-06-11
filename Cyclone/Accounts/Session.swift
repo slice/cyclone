@@ -1,10 +1,10 @@
-import Serpent
+import Tempest
 
 class Session {
   /// The details of the account such as token and disguise.
   var account: Account
 
-  /// The Serpent client associated with this account, which facilitates API
+  /// The Tempest client associated with this account, which facilitates API
   /// and gateway interactions, along with reconnections and state tracking.
   var client: Client
 

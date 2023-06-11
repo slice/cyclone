@@ -1,4 +1,5 @@
 import SwiftyJSON
+import Foundation
 
 /// A gateway packet assumed to have any event data structure.
 public struct AnyGatewayPacket {

@@ -1,5 +1,5 @@
 import Cocoa
-import Serpent
+import Tempest
 
 private extension NSUserInterfaceItemIdentifier {
   static let navigatorSection: Self = .init("navigator-section")

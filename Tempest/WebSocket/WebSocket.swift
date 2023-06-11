@@ -41,7 +41,7 @@ class WebSocket {
 
   private var messageHandlingWorkItem: DispatchWorkItem?
 
-  private let log = Logger(subsystem: "zone.slice.Serpent", category: "low-level-websocket")
+  private let log = Logger(subsystem: "zone.slice.Tempest", category: "low-level-websocket")
 
   init(endpoint: URL, additionalHeaders: [(String, String)] = []) {
     self.endpointURL = endpoint

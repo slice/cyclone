@@ -1,7 +1,7 @@
 import Carbon.HIToolbox.Events
 import Cocoa
 import Combine
-import Serpent
+import Tempest
 
 @objc protocol QuickSelection: AnyObject {
   func quickSelectFinished(_ sender: Any?)

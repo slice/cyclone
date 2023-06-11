@@ -1,7 +1,7 @@
 import Cocoa
 import Kingfisher
 import os.log
-import Serpent
+import Tempest
 import SwiftUI
 
 final class UnifiedMessageRow: NSTableCellView {

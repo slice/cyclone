@@ -33,7 +33,7 @@ public class GatewayConnection {
 
   /// The dispatch queue for handling Discord gateway messages.
   private var dispatchQueue =
-    DispatchQueue(label: "serpent-gateway-connection")
+    DispatchQueue(label: "tempest-gateway-connection")
 
   /// The timer used to manage periodic heartbeating.
   private var heartbeatTimer: AnyCancellable?
@@ -102,7 +102,7 @@ public class GatewayConnection {
     self.token = token
     self.disguise = disguise
     self.created = Date.now
-    self.log = Logger(subsystem: "zone.slice.Serpent", category: "gateway")
+    self.log = Logger(subsystem: "zone.slice.Tempest", category: "gateway")
   }
 
   /// Connect to the Discord gateway.
@@ -328,7 +328,7 @@ extension GatewayConnection {
     )
     let sequence = self.sequence.map { String($0) } ?? Date.now.formatted(format)
     let fileExtension = isBinary ? "dat" : "txt"
-    let name = "SerpentGatewayEvent-\(self.created.formatted(format))-\(sequence).\(fileExtension)"
+    let name = "TempestGatewayEvent-\(self.created.formatted(format))-\(sequence).\(fileExtension)"
     let path = FileManager.default.temporaryDirectory.appendingPathComponent(name)
     NSLog("*** Dumping data to %@", path.absoluteString)
     try data.write(to: path)

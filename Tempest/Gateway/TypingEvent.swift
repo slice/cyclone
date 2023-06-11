@@ -1,3 +1,5 @@
+import Foundation
+
 /// A singular instance of a user beginning to type.
 ///
 /// This is received from the gateway in the form of ``TYPING_START`` dispatch

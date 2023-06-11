@@ -1,3 +1,5 @@
+import Foundation
+
 /// A group direct message channel.
 public struct GroupDMChannel: Identifiable {
   public let id: Snowflake

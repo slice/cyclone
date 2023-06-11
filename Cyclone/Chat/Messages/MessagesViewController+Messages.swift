@@ -1,6 +1,6 @@
 import Cocoa
 import OrderedCollections
-import Serpent
+import Tempest
 
 enum ScrollingBehavior {
   /// Preserves the scroll position by summing the added height of the scroll

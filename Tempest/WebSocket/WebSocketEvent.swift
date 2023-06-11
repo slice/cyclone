@@ -1,4 +1,5 @@
 import Network
+import Foundation
 
 public enum WebSocketEvent {
   /// A state update occurred.

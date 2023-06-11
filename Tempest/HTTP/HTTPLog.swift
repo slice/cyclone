@@ -1,3 +1,5 @@
+import Foundation
+
 /// A structure that encapsulates various data about an HTTP request for logging
 /// purposes.
 public struct HTTPLog {

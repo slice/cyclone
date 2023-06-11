@@ -1,5 +1,5 @@
 import AppKit
-import Serpent
+import Tempest
 
 @MainActor protocol NavigatorViewControllerDelegate: AnyObject {
   /// Invoked whenever a channel was selected.

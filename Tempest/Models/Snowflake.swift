@@ -1,4 +1,6 @@
-/// A uniquely identifier used by Discord that doubles as a timestamp.
+import Foundation
+
+/// A unique identifier used by Discord that doubles as a timestamp.
 ///
 /// For more information, see [Discord's documentation](https://discord.com/developers/docs/reference#snowflakes).
 public struct Snowflake: Hashable {

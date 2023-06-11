@@ -1,6 +1,7 @@
 import Combine
 import OrderedCollections
 import SwiftyJSON
+import Foundation
 
 public enum CacheError: Error {
   case readyPacketLacksEventData

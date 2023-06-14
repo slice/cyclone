@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="21219" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="0vV-Mi-Yr9">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="22113.1" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="0vV-Mi-Yr9">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21219"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22113.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--JSON Inspector-->
         <scene sceneID="Rno-FV-Kkj">
             <objects>
-                <viewController title="JSON Inspector" storyboardIdentifier="jsonInspector" id="0vV-Mi-Yr9" customClass="JSONInspectorViewController" customModule="Basilisk" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="JSON Inspector" storyboardIdentifier="jsonInspector" id="0vV-Mi-Yr9" customClass="JSONInspectorViewController" customModule="Cyclone" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="WYk-jY-cf4">
                         <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -47,10 +47,10 @@
                                                                     <rect key="frame" x="0.0" y="5" width="433" height="14"/>
                                                                     <subviews>
                                                                         <imageView horizontalHuggingPriority="300" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="sNR-CV-0ua">
-                                                                            <rect key="frame" x="0.0" y="0.5" width="16" height="14"/>
+                                                                            <rect key="frame" x="0.0" y="1" width="16" height="14"/>
                                                                             <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="leaf.fill" catalog="system" id="bXX-V4-Z0i"/>
                                                                         </imageView>
-                                                                        <textField horizontalHuggingPriority="252" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="ZY2-Xy-d6z">
+                                                                        <textField focusRingType="none" horizontalHuggingPriority="252" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="ZY2-Xy-d6z">
                                                                             <rect key="frame" x="17" y="0.0" width="418" height="14"/>
                                                                             <textFieldCell key="cell" controlSize="small" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" usesSingleLineMode="YES" id="8ck-ZC-as0">
                                                                                 <font key="font" metaFont="smallSystem"/>

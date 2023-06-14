@@ -48,7 +48,7 @@ struct MessageAuthorNameView_Previews: PreviewProvider {
       MessageAuthorNameView(authorName: "skip")
         .padding()
 
-      let avatar = Asset(avatarForUser: Ref<User>(id: 718_974_758_406_062_142), hash: "c2c1f4ade6b508e73bf65c4ae9d9501c")
+      let avatar = Asset(avatarForUser: Ref<User>(id: 718974758406062142), hash: "c2c1f4ade6b508e73bf65c4ae9d9501c")
       MessageAuthorNameView(authorName: "skip", referencedAuthorName: "ilya", referencedAvatar: avatar, replyingToAbove: true)
         .padding()
     }

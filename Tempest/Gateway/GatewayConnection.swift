@@ -265,7 +265,7 @@ public class GatewayConnection {
           "user_settings_version": -1,
         ] as JSON,
         // TODO(skip): Implement compression.
-        "compress": false,
+        "compress": true,
         "presence": [
           "activities": [] as JSON,
           "afk": false,
@@ -397,13 +397,9 @@ extension GatewayConnection {
         }
 
         log.debug("received binary packet with len \(wireData.count)")
+        decompressionBuffer!.append(wireData)
 
-        // Drop the zlib header (important), because Compression.framework
-        // doesn't recognize it.
-        let wireDataWithoutHeader = wireData.first == 0x78 ? wireData.dropFirst(2) : wireData
-        decompressionBuffer!.append(wireDataWithoutHeader)
-
-        if wireData.suffix(4) == [0x0, 0x0, 0xff, 0xff] {
+        if wireData.suffix(4) == [0, 0, 0xff, 0xff] {
           log.debug("noticed Z_SYNC_FLUSH, decompressing")
           do {
             decompressedData = try decompression.decompress(completeBuffer: decompressionBuffer!)

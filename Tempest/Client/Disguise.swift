@@ -11,8 +11,12 @@ internal struct SuperProperties: Codable {
     case clientVersion = "client_version"
     case osVersion = "os_version"
     case osArch = "os_arch"
+    case appArch = "app_arch"
     case systemLocale = "system_locale"
+    case browserUserAgent = "browser_user_agent"
+    case browserVersion = "browser_version"
     case clientBuildNumber = "client_build_number"
+    case nativeBuildNumber = "native_build_number"
     case clientEventSource = "client_event_source"
   }
 
@@ -22,8 +26,12 @@ internal struct SuperProperties: Codable {
   let clientVersion: String
   let osVersion: String
   let osArch: String
+  let appArch: String
   let systemLocale: String
+  let browserUserAgent: String
+  let browserVersion: String
   let clientBuildNumber: Int
+  let nativeBuildNumber: Int?
   let clientEventSource: String?
 
   func encode(to encoder: Encoder) throws {
@@ -34,8 +42,11 @@ internal struct SuperProperties: Codable {
     try container.encode(clientVersion, forKey: .clientVersion)
     try container.encode(osVersion, forKey: .osVersion)
     try container.encode(osArch, forKey: .osArch)
+    try container.encode(appArch, forKey: .appArch)
     try container.encode(systemLocale, forKey: .systemLocale)
+    try container.encode(browserUserAgent, forKey: .browserUserAgent)
     try container.encode(clientBuildNumber, forKey: .clientBuildNumber)
+    try container.encode(nativeBuildNumber, forKey: .nativeBuildNumber)
 
     // Encode the optional event source directly, so it's present with a `null`
     // value.
@@ -78,19 +89,23 @@ public struct Disguise: Codable {
   /// every request, and is sent as another private header.
   let systemLocale: String
 
+  /// The Electron version number.
+  let browserVersion: String
+
   /// The client build number. Discord ostensibly increments this number with
   /// each build of the client.
   let clientBuildNumber: Int
-
-  /// Unknown field.
-  let clientEventSource: String?
 
   var superProperties: SuperProperties {
     SuperProperties(
       os: os, browser: browser, releaseChannel: releaseChannel.rawValue,
       clientVersion: clientVersion, osVersion: osVersion, osArch: osArch,
-      systemLocale: systemLocale, clientBuildNumber: clientBuildNumber,
-      clientEventSource: clientEventSource
+      appArch: osArch,
+      systemLocale: systemLocale,
+      browserUserAgent: userAgent,
+      browserVersion: browserVersion,
+      clientBuildNumber: clientBuildNumber,
+      nativeBuildNumber: nil, clientEventSource: nil
     )
   }
 }

@@ -5,6 +5,22 @@ import Network
 import os
 import SwiftyJSON
 
+private extension Capabilities {
+  static let currentlySupported: Self = [
+    .noNotesInReady,
+    .versionedReadStates,
+    .versionedUserGuildSettings,
+    .dehydratedReady,
+    .readySupplemental,
+    .guildExperimentPopulation,
+    .enhancedReadStates,
+    .authTokenSupport,
+    // skip(2022-11-02): I want to avoid implementing Protocol Buffers :+1:
+    // .removeOldUserSettings,
+    .clientCachingV2
+  ]
+}
+
 // MARK: Client
 
 /// A Discord user client.
@@ -48,33 +64,19 @@ public class Client {
   /// A Combine `Publisher` that publishes new typing events.
   public private(set) var typingEvents = PassthroughSubject<TypingEvent, Never>()
 
-  static let defaultCapabilities: Capabilities = [
-    .noNotesInReady,
-    .versionedReadStates,
-    .versionedUserGuildSettings,
-    .dehydratedReady,
-    .readySupplemental,
-    .guildExperimentPopulation,
-    .enhancedReadStates,
-    .authTokenSupport,
-    // skip(2022-11-02): I want to avoid implementing Protocol Buffers :+1:
-    // .removeOldUserSettings,
-    .clientCachingV2,
-  ]
-
-  // Last update: 2022-08-26
+  // Last update: 2023-10-26
   static let defaultDisguise = Disguise(
-    userAgent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) discord/0.0.278 Chrome/91.0.4472.164 Electron/13.4.0 Safari/537.36",
-    capabilities: defaultCapabilities,
+    userAgent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) discord/0.0.82 Chrome/108.0.5359.215 Electron/22.3.26 Safari/537.36",
+    capabilities: .currentlySupported,
     os: "Mac OS X",
     browser: "Discord Client",
     releaseChannel: .canary,
-    clientVersion: "0.0.63",
-    osVersion: "21.6.0",
+    clientVersion: "0.0.82",
+    osVersion: "23.1.0",
     osArch: "arm64",
     systemLocale: "en-US",
-    clientBuildNumber: 144_188,
-    clientEventSource: nil
+    browserVersion: "22.3.26",
+    clientBuildNumber: 240956
   )
 
   public init(baseURL: URL, token: String) {

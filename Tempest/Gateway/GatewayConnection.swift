@@ -366,9 +366,6 @@ extension GatewayConnection {
 
           isReconnecting = false
         }
-
-        // If we make a successful connection, reset the backoff.
-        reconnectionBackoff = Self.defaultReconnectionBackoff
       }
 
       log.info("websocket connection state is now: \(String(describing: connectionState))")
@@ -460,7 +457,10 @@ extension GatewayConnection {
 
     switch op {
     case .dispatch:
-      break
+      if packet.eventName == "READY" {
+        // If we make a successful connection, reset the backoff.
+        reconnectionBackoff = Self.defaultReconnectionBackoff
+      }
     case .hello:
       guard let heartbeatIntervalMilliseconds = data?["heartbeat_interval"].double else {
         fatalError("gateway didn't send a `heartbeat_interval` in HELLO")

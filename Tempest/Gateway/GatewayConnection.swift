@@ -124,11 +124,7 @@ public class GatewayConnection {
     if gatewayURL.relativeString.contains("zlib-stream") {
       log.info("setting up decompression context")
       decompressionBuffer = Data()
-      do {
-        decompression = try Decompression()
-      } catch {
-        fatalError("failed to set up decompression context: \(error)")
-      }
+      decompression = Decompression()
     }
 
     socket = WebSocket(

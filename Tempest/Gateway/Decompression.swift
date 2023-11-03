@@ -10,7 +10,7 @@ private func kibibytes(_ kb: Int) -> Int {
 /// Wraps a long-lived zlib decompression stream to decompress Discord gateway
 /// packets that are compressed with `zlib-stream`.
 final class Decompression {
-  var stream: z_stream
+  var stream = z_stream()
   var hasInitializedStream: Bool = false
   static var log = Logger(subsystem: "zone.slice.Tempest", category: "decompression")
 
@@ -38,25 +38,6 @@ final class Decompression {
     case initialization
     case incomplete
     case zlib(ZlibCode, String?)
-  }
-
-  init() {
-    // The zlib manual says:
-    //
-    // > All other fields are set by the compression library and must not be
-    // > updated by the application.
-    //
-    // But whatever.
-    stream = .init(
-      next_in: nil, avail_in: 0, total_in: 0,
-      next_out: nil, avail_out: 0, total_out: 0,
-      msg: nil, state: nil,
-      // The following two fields being nil means that zlib will use malloc and
-      // free for memory management.
-      zalloc: nil,
-      zfree: nil,
-      opaque: nil, data_type: 0, adler: 0, reserved: 0
-    )
   }
 
   // Not using a buffer pointer here, since we'd like to point zlib into the

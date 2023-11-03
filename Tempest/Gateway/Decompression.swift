@@ -7,9 +7,10 @@ private func kibibytes(_ kb: Int) -> Int {
   kb * 1024
 }
 
-/// Wraps a zlib `z_stream` to decompress Discord gateway packets.
+/// Wraps a long-lived zlib decompression stream to decompress Discord gateway
+/// packets that are compressed with `zlib-stream`.
 final class Decompression {
-  var stream: UnsafeMutablePointer<z_stream>
+  var stream: z_stream
   var hasInitializedStream: Bool = false
   static var log = Logger(subsystem: "zone.slice.Tempest", category: "decompression")
 
@@ -24,6 +25,13 @@ final class Decompression {
     case memory = -4
     case buffer = -5
     case version = -6
+
+    init(rawValueErroring rawValue: Int32) {
+      guard let code = ZlibCode(rawValue: rawValue) else {
+        fatalError("zlib gave an unknown return code")
+      }
+      self = code
+    }
   }
 
   enum Error: Swift.Error {
@@ -33,53 +41,94 @@ final class Decompression {
   }
 
   init() {
-    stream = .allocate(capacity: 1)
+    // The zlib manual says:
+    //
+    // > All other fields are set by the compression library and must not be
+    // > updated by the application.
+    //
+    // But whatever.
+    stream = .init(
+      next_in: nil, avail_in: 0, total_in: 0,
+      next_out: nil, avail_out: 0, total_out: 0,
+      msg: nil, state: nil,
+      // The following two fields being nil means that zlib will use malloc and
+      // free for memory management.
+      zalloc: nil,
+      zfree: nil,
+      opaque: nil, data_type: 0, adler: 0, reserved: 0
+    )
   }
 
   // Not using a buffer pointer here, since we'd like to point zlib into the
   // middle of the output buffer (handy after resizing).
   private func pointDestination(to buffer: UnsafeMutableRawPointer, available: Int) {
-    stream.pointee.next_out = UnsafeMutablePointer(mutating: buffer.assumingMemoryBound(to: UInt8.self))
-    stream.pointee.avail_out = UInt32(available)
+    stream.next_out = UnsafeMutablePointer(mutating: buffer.assumingMemoryBound(to: UInt8.self))
+    stream.avail_out = UInt32(available)
   }
 
   // OK to use a buffer pointer here, since we have access to all of the input
   // upfront.
-  private func pointSource(to buffer: UnsafeRawBufferPointer, available: Int) {
+  private func pointSource(to buffer: UnsafeRawBufferPointer) {
     // N.B. The zlib Swift interface wants a mutable pointer here despite the
     // actual C pointer being const. idk
-    stream.pointee.next_in = UnsafeMutablePointer(mutating: buffer.baseAddress!.assumingMemoryBound(to: UInt8.self))
-    stream.pointee.avail_in = UInt32(available)
+    stream.next_in = UnsafeMutablePointer(mutating: buffer.baseAddress!.assumingMemoryBound(to: UInt8.self))
+    stream.avail_in = UInt32(buffer.count)
   }
 
-  private func initializeStream(decompressing: UnsafeRawBufferPointer) throws {
-    // nil means that zlib will use malloc and free for (de)allocating.
-    stream.pointee.zalloc = nil
-    stream.pointee.zfree = nil
-    stream.pointee.opaque = nil
-
-    guard ZlibCode(rawValue: inflateInit_(stream, ZLIB_VERSION, Int32(MemoryLayout<z_stream>.size))) == .ok else {
-      throw Error.initialization
+  private func initializeStream() throws {
+    try withUnsafeMutablePointer(to: &stream) { pointer in
+      guard ZlibCode(rawValue: inflateInit_(pointer, ZLIB_VERSION, Int32(MemoryLayout<z_stream>.size))) == .ok else {
+        throw Error.initialization
+      }
     }
   }
 
-  /// Decompress a raw buffer of `DEFLATE` compressed bytes, returning the
-  /// original data.
-  func decompress(completeBuffer input: Data) throws -> Data {
+  /// Resets the internal state of the decompression stream.
+  ///
+  /// If your gateway connection is severed for any reason, call this method so
+  /// stale internal state isn't reused for a future connection.
+  func reset() throws {
+    try withUnsafeMutablePointer(to: &stream) { pointer in
+      let code = ZlibCode(rawValueErroring: inflateReset(pointer))
+
+      guard code == .ok else {
+        throw Error.zlib(code, nil)
+      }
+    }
+  }
+
+  /// Decompresses a complete buffer of `zlib`-compressed bytes as part of an
+  /// ongoing stream, returning the decompressed data.
+  ///
+  /// This function is designed to decompress `zlib`-wrapped data compressed
+  /// with `DEFLATE`. The first binary message sent by the Discord gateway will
+  /// necessarily contain a `zlib` header, and subsequent packets are contingent
+  /// on previous ones being decompressed in order to be processed correctly.
+  /// This is because it is assumed that a single decompression context is
+  /// shared for the lifetime of the entire connection.
+  ///
+  /// The trailing end of the input data you provide must terminate with
+  /// `00 00 ff ff`. It is assumed that the input passed to this method, when
+  /// fully decompressed, will constitute a fully formed Discord gateway packet.
+  func decompress(_ input: Data) throws -> Data {
     guard !input.isEmpty else {
       throw Error.incomplete
     }
 
-    return try input.withUnsafeBytes { (inputBuffer: UnsafeRawBufferPointer) -> Data in
+    // Reset the out total after every packet so we can use it to offset the
+    // output buffer accordingly after resizes.
+    stream.total_out = 0
+
+    return try input.withUnsafeBytes { inputBuffer in
+      pointSource(to: inputBuffer)
+
+      // Stream initialization is deferred until we're able to point the stream
+      // to the input buffer, because zlib wants that.
       if !hasInitializedStream {
         Self.log.debug("initializing stream for the first time")
-        try initializeStream(decompressing: inputBuffer)
+        try initializeStream()
         hasInitializedStream = true
       }
-
-      pointSource(to: inputBuffer, available: inputBuffer.count)
-      stream.pointee.total_out = 0
-      stream.pointee.total_in = 0
 
       // Default to 256 KiB. The READY payload can be quite large.
       var output = Data(count: kibibytes(256))
@@ -89,29 +138,30 @@ final class Decompression {
         // destination.
         let outputSize = output.count
 
-        try output.withUnsafeMutableBytes { (outputBuffer: UnsafeMutableRawBufferPointer) in
+        try output.withUnsafeMutableBytes { outputBuffer in
           // Point zlib to our output buffer, offsetting the pointer and
           // available count by how much we've decompressed already.
-          let amountDecompressed = Int(stream.pointee.total_out)
+          let amountDecompressed = Int(stream.total_out)
           pointDestination(to: outputBuffer.baseAddress! + amountDecompressed, available: outputSize - amountDecompressed)
 
-          switch ZlibCode(rawValue: inflate(stream, Z_SYNC_FLUSH)) {
-          case .ok:
-            break
-          case .none:
-            fatalError("zlib gave an unknown return code")
-          case .data:
-            throw Error.zlib(.data, String(cString: stream.pointee.msg))
-          case .some(let code):
-            throw Error.zlib(code, nil)
+          try withUnsafeMutablePointer(to: &stream) { streamPointer in
+            let code = ZlibCode(rawValueErroring: inflate(streamPointer, Z_SYNC_FLUSH))
+            switch code {
+            case .ok:
+              break
+            case .data:
+              throw Error.zlib(.data, String(cString: streamPointer.pointee.msg))
+            default:
+              throw Error.zlib(code, nil)
+            }
           }
         }
 
-        if stream.pointee.avail_out != 0 {
+        if stream.avail_out != 0 {
           // If we have space remaining in the output buffer, then we're done.
           // Truncate the size of the output to how much we truly decompressed
           // so the caller won't read zeros.
-          output.count = Int(stream.pointee.total_out)
+          output.count = Int(stream.total_out)
           break
         } else {
           // Grow the capacity of the output buffer, maxing out to 8 MiB.
@@ -121,7 +171,7 @@ final class Decompression {
             output.count = newCapacity
           }
 
-          Self.log.debug("exhausted output buffer, continuing (remaining: \(self.stream.pointee.avail_in), growing size from \(outputSize) to \(newCapacity))")
+          Self.log.debug("exhausted output buffer, continuing (remaining: \(self.stream.avail_in), growing size from \(outputSize) to \(newCapacity))")
         }
       }
 
@@ -131,10 +181,10 @@ final class Decompression {
 
   deinit {
     Self.log.debug("decompression deinit")
-    guard ZlibCode(rawValue: inflateEnd(stream)) == .ok else {
-      fatalError("inflateEnd failed")
+    withUnsafeMutablePointer(to: &stream) { pointer in
+      guard ZlibCode(rawValue: inflateEnd(pointer)) == .ok else {
+        fatalError("inflateEnd failed")
+      }
     }
-    stream.deinitialize(count: 1)
-    stream.deallocate()
   }
 }

@@ -402,7 +402,7 @@ extension GatewayConnection {
         if wireData.suffix(4) == [0, 0, 0xff, 0xff] {
           log.debug("noticed Z_SYNC_FLUSH, decompressing")
           do {
-            decompressedData = try decompression.decompress(completeBuffer: decompressionBuffer!)
+            decompressedData = try decompression.decompress(decompressionBuffer!)
             guard let decompressedText = String(data: decompressedData!, encoding: .utf8) else {
               fatalError("decompressed data wasn't valid UTF-8")
             }

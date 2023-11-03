@@ -295,6 +295,7 @@ extension GatewayConnection {
     guildSubscriptions = [:]
     callConnections = []
     isReconnecting = true
+    try decompression?.reset()
 
     try await Task.sleep(nanoseconds: UInt64(self.reconnectionBackoff * 1_000_000_000))
     log.notice("sleep finished; reconnecting now")
